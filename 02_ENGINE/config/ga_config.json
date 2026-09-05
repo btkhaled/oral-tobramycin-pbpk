@@ -1,0 +1,39 @@
+{
+  "physio": {
+    "Vd": 17,
+    "CL": 5.5,
+    "t_half": 2.5,
+    "Ke": 0.2773,
+    "Ka_ref": 1.5,
+    "BW": 70,
+    "Dose_ref": 400,
+    "MIC": 1,
+    "CLCR_ref": 81
+  },
+  "params": {
+    "gene_id": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "name": ["logP_modified", "particle_size", "surfactant_pct", "cosurfactant_pct", "oil_pct", "pe_concentration", "polymer_loading", "chitosan_coating", "enteric_coating", "dose_mg"],
+    "min_val": [-2.9, 50, 10, 5, 20, 0, 0, 0, 0, 200],
+    "max_val": [1.6, 500, 60, 30, 70, 50, 30, 1, 1, 1000],
+    "type": ["continuous", "continuous", "continuous", "continuous", "continuous", "continuous", "continuous", "binary", "binary", "continuous"]
+  },
+  "weights": {
+    "w_F": 0.4,
+    "w_CmaxMIC": 0.25,
+    "w_AUCMIC": 0.25,
+    "w_safety": 0.1
+  },
+  "ga": {
+    "popSize": 100,
+    "maxiter": 200,
+    "run": 20,
+    "crossoverRate": 0.8,
+    "mutationRate": 0.1,
+    "pcrossover": 0.8,
+    "pmutation": 0.1,
+    "elitism": 10,
+    "seed": 42,
+    "parallel": true,
+    "n_cores": 7
+  }
+}
