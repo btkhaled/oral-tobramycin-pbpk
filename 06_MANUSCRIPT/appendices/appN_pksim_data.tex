@@ -1,0 +1,103 @@
+% =====================================================================
+% Appendix N — PK-Sim Study Data
+% =====================================================================
+\chapter{PK-Sim Study Data}
+\label{chap:app-pksim-data}
+
+Complete numerical outputs of the Phase II studies (sources: \texttt{results/studies/} and \texttt{results/validation/}).
+
+\section{S01: IV dose $\times$ renal function (20 scenarios)}
+\begin{longtable}{rrrrrr}
+\caption{Complete S01 sweep (dose, CLCR, native PK-Sim batch).}\label{tab:app-s01}\\
+\toprule
+Dose (mg) & CLCR (mL/min) & Cmax (mg/L) & AUC24 & Trough 24 h & CL implied \\
+\midrule
+\endfirsthead
+\toprule
+Dose (mg) & CLCR (mL/min) & Cmax (mg/L) & AUC24 & Trough 24 h & CL implied \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\input{tables/s01_rows.tex}
+\end{longtable}
+
+\section{S02: Oral permeability calibration (11 points)}
+\begin{table}[htbp]
+\centering
+\caption{Complete $F(P_{int})$ calibration table (96-h extent convention; the native calibration $F = 1.75\%$ is reported on the 24-h window --- see \cref{sec:res-calibration}).}
+\label{tab:app-s02}
+\begin{tabular}{rrr}
+\toprule
+$P_{int}$ (dm/min) & $P_{int}$ (cm/s) & $F$ (\%) \\
+\midrule
+\tabinput{tables/s02_rows.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{S03: Virtual population (n = 100)}
+\begin{table}[htbp]
+\centering
+\caption{S03 population summary (550 mg, nominal platform $\times$20).}
+\label{tab:app-s03}
+\begin{tabular}{lccc}
+\toprule
+Metric & Median & 5th pct & 95th pct \\
+\midrule
+Cmax (mg/L) & 4.46 & 1.45 & 13.17 \\
+Cmax/MIC & 4.46 & 1.45 & 13.17 \\
+AUC24 (mg·h/L) & 35.86 & 13.86 & 81.56 \\
+Ctrough (mg/L) & 0.72 & 0.36 & 1.73 \\
+$f_{T>\mathrm{MIC}}$ (\%) & 44.8 & 8.7 & 97.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{S07: Winner characterization}
+The S07 battery was superseded by the standard 10-block battery (\cref{sec:res-battery}); the tables below report the final battery values for the PK-Sim GA winner (TOBP-001, $\times$125.0, 1000 mg) and the re-evaluated legacy winner (TOB-161-A, $\times$73.9, 550.6 mg).
+
+\begin{table}[htbp]
+\centering
+\caption{Dose scan at the winner's multiplier (steady-state peak attainment, MIC 1 mg/L; linear dose scaling of the measured $\mathrm{Cmax}_{ss} = 32.2$ at 1000 mg).}
+\label{tab:app-s07-dosescan}
+\begin{tabular}{rr}
+\toprule
+Dose (mg) & Cmax$_{ss}$/MIC \\
+\midrule
+\tabinput{tables/s07_dosescan_rows.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Winner steady state (true 7-day dosing; B4 block of the battery).}
+\label{tab:app-s07}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Regimen & Cmax$_{ss}$/MIC & AUC$_{ss}$/MIC & Cmin$_{ss}$ & fT$>$MIC \\
+\midrule
+TOB-161-A QD 550.6 & 13.6 & 87.3 & 1.05 & 99.6\% \\
+TOBP-001 QD 1000   & 32.2 & 172.3 & 1.21 & 99.6\% \\
+TOBP-001 BID 500   & 17.6 & 172.2 & 2.34 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Winner population (n = 100, 1000 mg QD; B6 block of the battery).}
+\label{tab:app-s07-pop}
+\begin{tabular}{lccc}
+\toprule
+Metric & Median & 5th pct & 95th pct \\
+\midrule
+Cmax/MIC & 40.86 & 15.79 & 88.81 \\
+AUC/MIC & 238.1 & 111.6 & 579.9 \\
+PTA ($\CMIC \geq 8$) & \multicolumn{3}{c}{100\% of subjects} \\
+PTA ($\AMIC \geq 80$) & \multicolumn{3}{c}{97\% of subjects} \\
+\bottomrule
+\end{tabular}
+\end{table}

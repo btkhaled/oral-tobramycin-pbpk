@@ -1,0 +1,28 @@
+% =====================================================================
+% Appendix D — Cross-validation program
+% =====================================================================
+\chapter{Cross-Validation Archive}
+\label{chap:app-validation}
+
+Cross-validation program ($\pm$20\% simultaneous perturbation of all model inputs; 50 designed runs, of which 26 produced informative outputs; script \code{12\_sensitivity\_validation.R}; source \code{validation\_cv\_data.csv}). $\F$ in \%; concentrations in mg/L; $\AMIC$ in mg$\cdot$h/L.
+
+\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{rrrrrrr}
+\caption{All 26 informative cross-validation runs.}\label{tab:cv-full}\\
+\toprule
+Run & $\F$ (\%) & $C_{\max}$ & AUC & $\CMIC$ & $\AMIC$ & $\fmic$ (\%)\\
+\midrule
+\endfirsthead
+\toprule
+Run & $\F$ (\%) & $C_{\max}$ & AUC & $\CMIC$ & $\AMIC$ & $\fmic$ (\%)\\
+\midrule
+\endhead
+\midrule
+\multicolumn{7}{r}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\tabinput{tables/cv_rows.tex}
+\end{longtable}
+
+\noindent\textbf{Robustness reading.} $\F$ stays within 27.2--32.7\% and $C_{\min}$-driven safety conclusions hold in all runs; $\CMIC \geq 8$ in 20/26 runs (77\%); candidate ranking of the top-3 is preserved in 26/26 runs. These results quantify the strength of hypotheses H3 (supported) and H4 (partially supported; \cref{tab:verdicts}).

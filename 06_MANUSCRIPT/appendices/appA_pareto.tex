@@ -1,0 +1,30 @@
+% =====================================================================
+% Appendix A — Complete Pareto front (200 solutions)
+% =====================================================================
+\chapter{Pareto Front Archive}
+\label{chap:app-pareto}
+
+This appendix lists the complete NSGA-II Pareto archive (200 non-dominated solutions; script \code{11\_pareto\_analysis.R}; source \code{pareto\_front\_data.csv}). Design variables common to (nearly) all solutions: SEDDS 50/30/20; PE 47--50~mM; polymer 29--30\%; chitosan and enteric coating active. $\F$ in \%; exposure in mg$\cdot$h/L; dose in mg.
+
+\begin{landscape}
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{longtable}{rrrrrrrrrrr}
+\caption{Complete Pareto front archive (200 solutions).}\label{tab:pareto-full}\\
+\toprule
+Rank & $\F$ (\%) & $\CMIC$ & $\AMIC$ & Dose & Fitness & $C_{\min}$ & $\fmic$ (\%) & logP$'$ & PS (nm) & Dose band\\
+\midrule
+\endfirsthead
+\toprule
+Rank & $\F$ (\%) & $\CMIC$ & $\AMIC$ & Dose & Fitness & $C_{\min}$ & $\fmic$ (\%) & logP$'$ & PS (nm) & Dose band\\
+\midrule
+\endhead
+\midrule
+\multicolumn{11}{r}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\tabinput{tables/pareto_rows.tex}
+\end{longtable}
+\end{landscape}
+
+\noindent\textbf{Reading the archive.} Rows are ordered by composite fitness; the recommended candidate (TOB-161; rank 161 in the generation index, first row of the converged 401--700~mg band) appears first. The effective uniqueness of the composition genes across all 200 rows is discussed in \cref{sec:ch4-pareto,sec:ch4-summary}.

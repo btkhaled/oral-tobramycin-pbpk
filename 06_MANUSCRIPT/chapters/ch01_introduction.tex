@@ -1,0 +1,129 @@
+% =====================================================================
+% Chapter 1 — Introduction
+% =====================================================================
+\chapter{Introduction}
+\label{chap:introduction}
+
+\section{Background}
+
+\subsection{The challenge of oral drug delivery}
+Oral administration remains the preferred route for drug delivery owing to patient acceptability, convenience of chronic therapy, and cost-effectiveness. Yet many potent drugs cannot exploit this route: their physicochemical properties --- low aqueous solubility, low intestinal permeability, or both --- preclude sufficient gastrointestinal absorption \citep{Amidon1995}. The gap between therapeutic potential and delivery feasibility is particularly acute for anti-infectives, where oral options determine whether patients can be treated outside hospital infrastructure.
+
+\subsection{The Biopharmaceutics Classification System}
+The BCS, introduced by \citet{Amidon1995}, classifies drug substances by two fundamental properties --- aqueous solubility and intestinal permeability (\cref{tab:bcs-classes}). The system underpins modern regulatory science: immediate-release products of class~I and class~III drugs qualify for biowaivers under FDA and ICH M9 guidance \citep{FDA2021, ICH2019}.
+
+\begin{table}[htbp]
+\centering
+\caption{The four BCS classes with prototype drugs \citep{Amidon1995}. Tobramycin belongs to class III (\cref{sec:bcs-resolution}).}
+\label{tab:bcs-classes}
+\begin{tabular}{clll}
+\toprule
+Class & Solubility & Permeability & Prototype example\\
+\midrule
+I   & High & High & Metoprolol\\
+II  & Low  & High & Diclofenac\\
+\rowcolor{tobblue!12}
+III & High & Low  & \textbf{Tobramycin} (also ranitidine)\\
+IV  & Low  & Low  & Furosemide\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Why classification matters strategically}
+Class membership is not a descriptive footnote: it dictates the \emph{formulation strategy}. For class II compounds, solubility and dissolution enhancement (micronization, amorphous solid dispersions, lipid vehicles) is the lever. For class III compounds, solubility is already abundant and \emph{permeability enhancement} --- tight-junction modulation, lipophilisation, carrier-mediated transport --- is the sole rational target. A wrong classification therefore wastes development effort on the wrong problem. The case of tobramycin illustrates this sharply: it is widely but incorrectly assumed to be class IV \citep{Asad2023}.
+
+\section{Tobramycin: a case study}
+\label{sec:tob-case}
+
+\subsection{Therapeutic importance}
+Tobramycin is a potent aminoglycoside bactericidal against Gram-negative bacilli, listed on the WHO Model List of Essential Medicines \citep{WHO2023}. Its clinical anchor is \textit{Pseudomonas aeruginosa}: pulmonary exacerbations of cystic fibrosis (CF), hospital-acquired pneumonia (HAP), complicated urinary tract infections, and febrile neutropenia. Its mechanism --- irreversible binding to the 30S ribosomal subunit, with concentration-dependent killing and a 1--3~h post-antibiotic effect \citep{Craig1998} --- makes peak exposure ($\CMIC \geq 8$) the efficacy driver.
+
+\subsection{Current routes of administration}
+Despite five decades of clinical use, tobramycin is approved only for two non-oral routes (\cref{tab:routes}): intravenous dosing at 5--7~mg/kg once daily (or 1.5--2~mg/kg every 8~h), and inhalation (TOBI\textsuperscript{\textregistered}, 300~mg twice daily, 4~weeks on/4~weeks off) \citep{Ramsey1999, Smyth2005}. Both routes impose burdens: IV requires hospitalization, trained personnel and catheters; inhaled therapy addresses the lung compartment only and does not resolve systemic needs.
+
+\begin{table}[htbp]
+\centering
+\caption{Current tobramycin administration routes and their limitations.}
+\label{tab:routes}
+\begin{tabular}{p{2.2cm}p{4.6cm}p{6.6cm}}
+\toprule
+Route & Standard regimen & Principal limitations\\
+\midrule
+Intravenous & 5--7 mg/kg q24h (extended interval) or 1.5--2 mg/kg q8h & Hospitalization; catheter burden; nephro-/ototoxicity monitoring; cost; access inequity in low-resource settings\\
+Inhalation & 300 mg BID, 4 weeks on/4 weeks off (TOBI\textsuperscript{\textregistered}) & Local lung delivery only; device dependency; no systemic coverage; high airway resistance in young children\\
+Oral & \textbf{--- none exists} & Bioavailability $\approx$1--2\%; polycationic, low-permeability molecule\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The oral delivery gap}
+No oral formulation exists. The reasons are physicochemical (\cref{chap:literature}): a molecular weight of 467.5~g/mol, five ionizable amines ($pK_a$ 6.7--9.1) rendering the molecule polycationic at intestinal pH, an octanol/water logP of $-2.9$, and consequently apparent permeability below $1\times10^{-6}$~cm/s with absolute oral bioavailability of only $\approx$1--2\% \citep{Asad2023, PubChem2026}.
+
+\subsection{Classification resolution}
+\label{sec:bcs-resolution}
+The widely repeated assignment of tobramycin to BCS class IV is contradicted by primary evidence. Its water solubility of 94--100~mg/mL exceeds the highest single dose criterion (400~mg soluble in $\leq$250~mL over pH~1.2--6.8) by roughly two orders of magnitude, while permeability is demonstrably the limiting step \citep{Asad2023}. Asad and colleagues state explicitly: ``Tobramycin (TOB) is a BCS class III drug.'' \cref{chap:literature} develops the full evidence synthesis; the strategic consequence is immediate --- the formulation problem is \emph{permeability-only}, and the entire arsenal of solubility technologies is unnecessary.
+
+\section{Research rationale}
+\label{sec:rationale}
+
+\subsection{Clinical need}
+CF patients require chronic, intermittent anti-\textit{Pseudomonas} therapy; each exacerbation currently implies IV admission. An oral alternative would (i) shift care to the outpatient setting, (ii) preserve IV access options for severe disease, (iii) extend tobramycin's reach to resource-limited settings lacking infusion infrastructure, and (iv) enable oral combination regimens.
+
+\subsection{Formulation opportunities}
+The permeability-targeting toolbox is populated with validated technologies: hydrophobic ion pairing (HIP) raising logP by three orders of magnitude \citep{Asad2023, Griesser2017}; SEDDS that spontaneously emulsify in GI fluids \citep{Muhammad2022}; polymeric and colloidal nanoparticles \citep{Hill2019, BlancoCabra2022, Khaled2026}; and permeation enhancers with clinical safety track records \citep{Maher2009, Bohley2024}. What is missing is a quantitative framework that combines these levers and asks: \emph{which combination, at what dose, plausibly attains antibacterial exposure targets?}
+
+\subsection{The modeling opportunity}
+PBPK platforms such as \pkg{PK-Sim}/\pkg{ospsuite} enable mechanistic absorption modeling (ACAT), virtual populations, and sensitivity analysis without clinical trials \citep{OSP2024, Willmann2007}. Coupled to evolutionary optimization (GA; NSGA-II) \citep{Holland1975, Deb2002, Scrucca2013}, the ten-dimensional formulation design space can be searched exhaustively, in silico, before any experiment is commissioned.
+
+\section{Research questions and hypotheses}
+\label{sec:hypotheses}
+
+\begin{description}[labelwidth=3.6cm, style=nextline]
+\item[RQ1] Is tobramycin BCS class III or IV, and what does the evidence say?
+\item[RQ2] Which formulation strategies --- HIP, SEDDS, nanoparticles, permeation enhancers, or combinations --- raise oral bioavailability to viable levels?
+\item[RQ3] Which ten formulations are optimal under simultaneous pharmacokinetic, pharmacodynamic, and dose minimization objectives?
+\item[RQ4] Are the predictions robust to parameter uncertainty, and what are the manufacturing and regulatory implications?
+\item[RQ5] Do two independent computational engines --- a purpose-built fast engine and a validated whole-body PBPK platform --- converge on the same formulation conclusion?
+\end{description}
+
+\begin{description}[labelwidth=3.6cm, style=nextline]
+\item[H1] Tobramycin is BCS class III: solubility is not limiting; permeability is the sole barrier.
+\item[H2] Combined HIP~+~SEDDS~+~permeation enhancer strategies can raise oral bioavailability from $\approx$1--2\% to $\approx$30\%.
+\item[H3] A single oral dose in the 500--600~mg range can attain $\CMIC \geq 8$ at MIC~1~mg/L.
+\item[H4] Predictions of the optimal candidates remain informative under $\pm$20--30\% parameter perturbation.
+\item[H5] The two engines agree on the platform bioavailability within 5\% relative.
+\end{description}
+
+\section{Objectives and thesis structure}
+
+\subsection{Primary objective}
+To evaluate the feasibility of oral tobramycin administration through systematic bibliographic analysis, PBPK-based PK/PD simulation, and multi-objective formulation optimization using the Open Systems Pharmacology suite and evolutionary algorithms.
+
+\subsection{Specific objectives}
+\begin{enumerate}
+\item Resolve the BCS classification of tobramycin through a structured evidence synthesis (\cref{chap:literature}).
+\item Develop and parameterize a two-compartment population PK model validated against published intravenous data (\cref{chap:methodology,chap:results}).
+\item Construct a mechanistic oral bioavailability model with eight multiplicative enhancement factors.
+\item Optimize ten formulation variables by GA and NSGA-II against four objectives, and extract the Pareto front.
+\item Quantify uncertainty: one-at-a-time sensitivity, Monte Carlo ($n=200$), cross-validation ($n=50$, $\pm$20\%).
+\item Assess manufacturing feasibility, cost, regulatory pathway, and risks for the ranked candidates (\cref{chap:results,chap:discussion}).
+\end{enumerate}
+
+\subsection{Thesis structure}
+\begin{table}[htbp]
+\centering
+\caption{Structure of the thesis.}
+\label{tab:structure}
+\begin{tabular}{p{2.2cm}p{11.2cm}}
+\toprule
+Chapter & Content\\
+\midrule
+1 & Introduction: clinical problem, BCS framework, rationale, hypotheses (this chapter)\\
+2 & Literature review: BCS science, tobramycin profile, PK/PD targets, formulation strategies, PBPK, knowledge gaps\\
+3 & Methodology: PBPK parameterization, PK/PD mathematical model, GA and NSGA-II design, uncertainty program\\
+4 & Results: validation, convergence, Pareto front, top-10 candidates, sensitivity, Monte Carlo, manufacturing, regulatory\\
+5 & Discussion: hypothesis verdicts, benchmarking, clinical translation, limitations, future perspectives\\
+6 & Conclusion: contributions, clinical implications, experimental roadmap\\
+\bottomrule
+\end{tabular}
+\end{table}

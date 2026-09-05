@@ -1,0 +1,76 @@
+% ---------------- Title page (v1.1 — modern cover, no institution) ----------------
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+  % ================= background geometry =================
+  % deep blue panel (top ~62% of the page)
+  \fill[tobblue] (current page.north west) rectangle ([yshift=-13.2cm]current page.north east);
+  % darker diagonal accent at the bottom edge of the panel
+  \fill[tobblue!80!black] ([yshift=-13.2cm]current page.north west) -- ([yshift=-13.2cm]current page.north east) -- ([yshift=-14.15cm]current page.north east) -- ([yshift=-13.55cm]current page.north west) -- cycle;
+  % subtle molecule motif (faint circles, right side of the panel)
+  \begin{scope}[shift={([xshift=-5.2cm, yshift=-11.0cm]current page.north east)}, opacity=0.12]
+    \draw[white, line width=1.2pt] (0,0) circle (2.6);
+    \draw[white, line width=1.2pt] (1.85,1.25) circle (1.45);
+    \draw[white, line width=1.2pt] (-1.7,1.05) circle (1.15);
+    \draw[white, line width=1.2pt] (0.65,-1.7) circle (0.95);
+    \foreach \p in {(0,0),(1.85,1.25),(-1.7,1.05),(0.65,-1.7)}
+      \fill[white] \p circle (0.11);
+  \end{scope}
+  % thin light rule under the panel text
+  \draw[white!70!tobblue, line width=1.2pt] ([xshift=1.7cm, yshift=-9.05cm]current page.north west) -- ([xshift=12.4cm, yshift=-9.05cm]current page.north west);
+
+  % ================= panel text =================
+  \node[anchor=north west, text=white!75!tobblue, font=\fontsize{11}{13}\selectfont]
+    at ([xshift=1.7cm, yshift=-2.05cm]current page.north west)
+    {\textsc{Personal Research \;\textperiodcentered\; Computational Pharmaceutics}};
+
+  \node[anchor=north west, text=white, font=\fontsize{41}{46}\selectfont\bfseries]
+    at ([xshift=1.65cm, yshift=-2.9cm]current page.north west)
+    {\begin{minipage}{15.5cm}Oral Tobramycin\end{minipage}};
+
+  \node[anchor=north west, text=white, font=\fontsize{24}{30}\selectfont]
+    at ([xshift=1.7cm, yshift=-4.5cm]current page.north west)
+    {\begin{minipage}{15.8cm}From BCS III to a\\ Viable Oral Formulation\end{minipage}};
+
+  \node[anchor=north west, text=white!85!tobblue, font=\fontsize{13}{17}\selectfont]
+    at ([xshift=1.7cm, yshift=-7.15cm]current page.north west)
+    {\begin{minipage}{15.2cm}A bibliographic study with physiologically based pharmacokinetic modeling\\ in PK-Sim and multi-objective formulation optimization\end{minipage}};
+
+  % ================= key-result stat cards (vertical stack, fixed width) =================
+  \node[anchor=north west, draw=white, line width=0.9pt, rounded corners=7pt,
+        fill=white, inner xsep=12pt, inner ysep=6pt,
+        text width=8.2cm, align=left,
+        font=\fontsize{11}{14}\selectfont] (chip1)
+    at ([xshift=1.7cm, yshift=-9.45cm]current page.north west)
+    {\fontsize{8.5}{10}\selectfont\textsc{\textcolor{GREY!70!black}{Oral bioavailability}}\quad{\fontsize{12.5}{14}\selectfont\textbf{\textcolor{tobblue}{F = 97.1\%}}}};
+
+  \node[anchor=north west, draw=white, line width=0.9pt, rounded corners=7pt,
+        fill=white, inner xsep=12pt, inner ysep=6pt,
+        text width=8.2cm, align=left,
+        font=\fontsize{11}{14}\selectfont, below=0.30cm of chip1] (chip2)
+    {\fontsize{8.5}{10}\selectfont\textsc{\textcolor{GREY!70!black}{IV validation gate}}\quad{\fontsize{12.5}{14}\selectfont\textbf{\textcolor{tobblue}{6/6 PASS}}}};
+
+  \node[anchor=north west, draw=white, line width=0.9pt, rounded corners=7pt,
+        fill=white, inner xsep=12pt, inner ysep=6pt,
+        text width=8.2cm, align=left,
+        font=\fontsize{11}{14}\selectfont, below=0.30cm of chip2] (chip3)
+    {\fontsize{8.5}{10}\selectfont\textsc{\textcolor{GREY!70!black}{Exposure}}\quad{\fontsize{12.5}{14}\selectfont\textbf{\textcolor{tobblue}{AUC/MIC 172}}}};
+
+  % ================= lower (white) zone =================
+  \node[anchor=north west, text=DARK, font=\fontsize{17}{21}\selectfont\bfseries]
+    at ([xshift=1.7cm, yshift=-16.0cm]current page.north west)
+    {Khaled Ben Taieb};
+
+  \node[anchor=north west, text=GREY!85!black, font=\fontsize{12}{15}\selectfont]
+    at ([xshift=1.7cm, yshift=-17.05cm]current page.north west)
+    {Independent research program --- computational pharmaceutics};
+
+  % bottom rule + meta
+  \draw[tobblue, line width=1.1pt] ([xshift=1.7cm, yshift=-22.6cm]current page.north west) -- ([xshift=12.0cm, yshift=-22.6cm]current page.north west);
+  \node[anchor=south west, text=DARK, font=\fontsize{13}{16}\selectfont]
+    at ([xshift=1.7cm, yshift=1.55cm]current page.south west)
+    {September 2026};
+  \node[anchor=south west, text=GREY!80!black, font=\fontsize{10.5}{13}\selectfont]
+    at ([xshift=1.7cm, yshift=1.05cm]current page.south west)
+    {Repository: \texttt{oral-tobramycin-pbpk} --- snapshots, validated model, studies, optimization};
+\end{tikzpicture}
+\end{titlepage}

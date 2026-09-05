@@ -1,0 +1,59 @@
+% =====================================================================
+% Appendix P — NSGA-II In-the-Loop Archive
+% =====================================================================
+\chapter{NSGA-II In-the-Loop Archive}
+\label{chap:app-ga-data}
+
+Optimization archive of the Phase II run (population 100, 100 generations planned, seed 42, converged by generation 20---30; run terminated at the converged state, checkpoint generation 40). Sources: \texttt{results/ga/}.
+
+\section{Configuration}
+\begin{table}[htbp]
+\centering
+\caption{In-the-loop optimization configuration.}
+\label{tab:app-ga-config}
+\footnotesize
+\begin{tabular}{p{4.6cm}p{9.2cm}}
+\toprule
+Item & Value \\
+\midrule
+Engine & PK-Sim 12.4 (validated oral model, \cref{chap:methodology-pksim}) \\
+Run values per chromosome & Dose (kg) + $P_{int}$ (dm/min, multiplier on $3\times10^{-9}$) \\
+Batching & One \texttt{SimulationBatch} per generation (100 runs/call) \\
+Objectives & max $F$; max $\CMIC$; max $\AMIC$; min dose \\
+Operators & SBX ($\eta_c = 20$), polynomial mutation ($\eta_m = 20$), tournament on (rank, crowding) \\
+Seed & 42 (full reproducibility) \\
+Checkpoints & every 10 generations (\texttt{checkpoint\_genNNN.rds}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Convergence}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{s06_pta.png}
+\caption{PTA of the peak target for the winner's fractionation options (also \cref{fig:res-ga-pta}).}
+\label{fig:app-ga-pta}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Convergence of the in-the-loop run (best-of-generation).}
+\label{tab:app-ga-conv}
+\begin{tabular}{rccc}
+\toprule
+Generation & best $F_{96}$ (\%) & best $\CMIC$ & median dose (mg) \\
+\midrule
+1 & 92.17 & 20.40 & 834 \\
+5 & 95.53 & 27.00 & 993 \\
+10 & 96.64 & 30.19 & 1000 \\
+20 & 96.93 & 30.88 & 1000 \\
+30 & 96.99 & 30.96 & 1000 \\
+40 & 97.03 & 31.05 & 1000 \\
+50 & 97.07 & 31.12 & 1000 \\
+60 & 97.11 & 31.18 & 1000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Converged front}
+The converged front (generation 60 checkpoint; best $F$ within 0.1\% of final since generation 20) contains 3 near-identical non-dominated candidates at the component maxima --- the corner analyzed in \cref{sec:res-ga-convergence}. Rank-1 candidate: \textbf{TOBP-001} (999.8 mg, multiplier $\times$125.0, $F_{96} = 97.11\%$, $\CMIC = 31.18$, $\AMIC = 172.33$). The dose-scan analysis (\cref{tab:app-s07-dosescan}) provides the interior-region answer the corner cannot: the minimal peak-target-attaining dose is 250 mg once daily (Cmax$_{ss}$/MIC 8.0), and the 80--120 exposure band is attained from 467 mg.

@@ -1,0 +1,39 @@
+% =====================================================================
+% Appendix B — Monte Carlo program
+% =====================================================================
+\chapter{Monte Carlo Simulation Archive}
+\label{chap:app-montecarlo}
+
+Uncertainty program of \cref{sec:ch4-uq}: $n=200$ log-normal perturbations of CL, $V_1$, $V_2$ (CV 20--30\%) around the optimal formulation (script \code{12\_sensitivity\_validation.R}; source \code{monte\_carlo\_data.csv}). $\F$ is held at the formulation value by construction.
+
+\section{Summary statistics}
+\begin{table}[htbp]
+\centering
+\caption{Monte Carlo summary ($n=200$; TOB-161 formulation, 550 mg).}
+\label{tab:mc-summary}
+\begin{tabular}{lcccc}
+\toprule
+Endpoint & Median & 5th--95th pct & Range & Target status\\
+\midrule
+$\CMIC$ (MIC 1 mg/L) & 8.8 & 7.0--10.2 & 6.9--10.2 & $\geq$8 in 55\%\\
+$\AMIC$ (mg$\cdot$h/L) & 32.5 & 25.0--43.5 & 24.6--44.1 & 80--120 in 0\%\\
+$C_{\max}$ (mg/L) & 8.8 & 7.0--10.2 & 6.9--10.2 & ---\\
+$C_{\min}$ (mg/L) & $\ll$1 & --- & $<$0.3 & $<$1 in 100\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{First 25 simulation runs}
+\begin{table}[htbp]
+\centering
+\caption{Monte Carlo runs 1--25 (of 200). CL, $V_1$, $V_2$ in L and L/h as labeled.}
+\label{tab:mc-rows}
+\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular}{rrrrrrrr}
+\toprule
+Run & CL (L/h) & $V_1$ (L) & $V_2$ (L) & $\F$ & $C_{\max}$ & $\AMIC$ & $\CMIC$\\
+\midrule
+\tabinput{tables/mc_rows.tex}
+\bottomrule
+\end{tabular}
+\end{table}

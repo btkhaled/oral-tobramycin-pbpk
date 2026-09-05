@@ -1,0 +1,36 @@
+% =====================================================================
+% Appendix O — Debugging Journal: the macOS Snapshot-Conversion Crash
+% =====================================================================
+\chapter{Debugging Journal: The macOS Snapshot-Conversion Crash}
+\label{chap:app-debug}
+
+This appendix records the complete diagnosis of the platform defect encountered and resolved during Phase II --- both for reproducibility and as a methodological case study in debugging compiled-model ecosystems. Upstream reference: Open Systems Pharmacology, OSPSuite-R issue \#1622 (fix scheduled for v13).
+
+\section{Timeline of evidence}
+\begin{enumerate}
+\item \textbf{Symptom.} \texttt{loadProjectFromSnapshot()} crashes R (SIGSEGV, \texttt{EXC\_BAD\_ACCESS / KERN\_PROTECTION\_FAILURE}) immediately after ``Converting 1 file to project format''. The wrapper \texttt{runSimulationsFromSnapshot()} is additionally hard-blocked on Darwin.
+\item \textbf{Crash report analysis.} The macOS \texttt{.ips} report (faulting thread, 130 frames) places the fault inside \texttt{SQLite.Interop.dylib}:
+\begin{verbatim}
+sqlite3_log <- lookupName <- resolveExprStep <- sqlite3WalkExprNN
+             <- resolveSelectStep <- sqlite3ViewGetColumnNames
+             <- selectExpander  (x2 view levels, ~90 inlined frames)
+\end{verbatim}
+The crash address lies in the thread stack region (guard page): a stack overflow during SQLite's view-name resolution, while \emph{emitting a warning} (\texttt{sqlite3\_log}). The faulting thread is a .NET worker thread (\texttt{ThreadNative::KickOffThread}) with a small stack budget.
+\item \textbf{Hypothesis tests.} (i) The failing view's SQL executes in 0.08 s in the \texttt{sqlite3} CLI (305 rows) --- the query is valid. (ii) View-nesting depth across all 91 views is at most 2 --- no deep recursion. (iii) The bundled native interop is arm64-native (not an architecture mismatch). Conclusion: prepare-time view resolution exhausts the interop thread stack on macOS.
+\item \textbf{Fix.} Materialize every view into a table (topological order; content-preserving). Sanity: zero views remain; hot views return identical row counts.
+\item \textbf{Verification.} After the patch: snapshot $\rightarrow$ project conversion succeeds (8.7 MB project, 11 simulations); all 11 simulations execute natively; per-simulation CSV + current-version PKML export works; \texttt{createIndividual}/\texttt{createPopulation} (DB-backed) work.
+\end{enumerate}
+
+\section{Dead ends documented (for the record)}
+\begin{itemize}
+\item Aciclovir template reuse without parameter override: scientifically invalid (wrong molecule) --- rejected before execution.
+\item Docker linux/amd64 conversion via Rosetta: viable but unnecessary once the root cause was understood (and slow under emulation).
+\item The converted project's historical Walker-1979 PKMLs declare schema version 0 and are rejected by the v12 loader (``install version 8.0'') --- irrelevant in the end: the pipeline regenerates current-version PKMLs via the CLI export path.
+\end{itemize}
+
+\section{Lessons}
+\begin{enumerate}
+\item Platform crash reports (\texttt{.ips} + symbolicated frames) localize interop defects faster than any black-box retry loop.
+\item ``Silent'' build failures in snapshot converters leave no log by default --- enabling the CLI's log-file option (\texttt{LogFilesFullPath}) is essential for diagnosing JSON-schema mismatches (three were found and fixed: process-name binding, formulation type naming \texttt{Formulation\_Dissolved}, and formulation references inside the simulation's protocol selection).
+\item Empirical knob verification matters: \texttt{Organism|Kidney|GFR} is \emph{not} the renal-clearance knob (the process references \texttt{GFR (specific)} $\times$ kidney volume) --- verified by batch perturbation.
+\end{enumerate}

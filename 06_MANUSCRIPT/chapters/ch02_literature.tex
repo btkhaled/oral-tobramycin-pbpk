@@ -1,0 +1,151 @@
+% =====================================================================
+% Chapter 2 — Literature Review
+% =====================================================================
+\chapter{Literature Review}
+\label{chap:literature}
+
+This chapter synthesizes the bibliographic foundation of the thesis: BCS science (\cref{sec:lit-bcs}), tobramycin's physicochemical and pharmacological profile (\cref{sec:lit-profile}), its pharmacokinetics and PK/PD targets (\cref{sec:lit-pk}), the permeability-targeting formulation toolbox (\cref{sec:lit-formulations}), and PBPK methodology (\cref{sec:lit-pbpk}). The complete 20-article evidence table is reproduced in \cref{chap:app-evidence}; physicochemical datasets are detailed in \cref{chap:app-physchem}.
+
+\section{The Biopharmaceutics Classification System}
+\label{sec:lit-bcs}
+
+\subsection{Historical development and criteria}
+\citet{Amidon1995} proposed classifying drug substances along two axes: dose-equivalent solubility (highest dose soluble in $\leq$250~mL over pH~1.0--6.8) and intestinal permeability (extent of absorption $\geq$85\%) (\cref{tab:bcs-criteria}). The framework became the scientific basis of biowaiver policy: immediate-release products of class~I and class~III drugs may waive bioequivalence studies \citep{FDA2021, ICH2019}.
+
+\begin{table}[htbp]
+\centering
+\caption{BCS classification criteria \citep{Amidon1995, FDA2021}.}
+\label{tab:bcs-criteria}
+\begin{tabular}{p{3cm}p{5.4cm}p{5.4cm}}
+\toprule
+Parameter & High & Low\\
+\midrule
+Solubility & Highest single dose soluble in $\leq$250~mL over pH 1.0--6.8 & Criterion not met\\
+Permeability & $\geq$85\% extent of absorption (or absolute $\F \geq$85\%) & $<$85\% absorbed\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Extensions}
+The \emph{biopharmaceutics drug disposition classification system} (BDDCS) of \citet{Wu2005} substitutes metabolism for permeability to predict disposition, and quantitative refinements (QBCS) grade the margin by which a compound meets each criterion. These extensions matter here: tobramycin's criterion margins are enormous on the solubility axis and strongly negative on the permeability axis, making the class assignment robust to methodology.
+
+\section{Tobramycin: physicochemical and pharmacological profile}
+\label{sec:lit-profile}
+
+\subsection{Structural properties}
+Tobramycin (CAS 32986-56-4; C$_{18}$H$_{37}$N$_{5}$O$_{9}$; MW 467.515~g/mol) is an aminoglycoside with ten stereocenters and five ionizable amines ($pK_a$ = 6.7, 7.6, 7.7, 7.8, 9.1), yielding a polycationic species across the entire physiological pH range \citep{PubChem2026, DrugBank2026}. Its logP of $-2.9$ places it among the most hydrophilic antibiotics in clinical use.
+
+\subsection{Solubility evidence}
+\label{sec:lit-solubility}
+Across sixteen literature determinations (\cref{chap:app-physchem}), aqueous solubility spans 50--100~mg/mL (Chen et al.: 94~mg/mL at 25~\textdegree C; USP monograph for tobramycin sulfate: 100~mg/mL), with miscibility-level dissolution in biorelevant media (FaSSIF, FeSSIF, SGF, SIF) \citep{Chen2009}. The BCS ``high solubility'' criterion (highest dose, 400~mg, soluble in $\leq$250~mL $\Rightarrow$ 1.6~mg/mL) is exceeded by a factor of 20--200. \textbf{Solubility is not the problem.}
+
+\subsection{Permeability evidence}
+Caco-2 apparent permeability is reported below $1\times10^{-6}$~cm/s, absolute oral bioavailability is $\approx$1--2\%, and the molecule's polycationicity precludes passive transcellular diffusion \citep{Asad2023}. Efflux transporter involvement (P-gp, BCRP) is minimal or undetermined; renal OCT2-mediated handling is documented but does not govern intestinal absorption \citep{Asad2023}. \textbf{Permeability is the problem} (\cref{chap:app-physchem}, permeability table).
+
+\subsection{Classification resolution}
+\label{sec:lit-classification}
+Triangulating the above: (i) explicit statement by \citet{Asad2023} --- ``tobramycin is a BCS class III drug''; (ii) solubility margin 20--200$\times$ above criterion; (iii) permeability margin consistent with class III; (iv) mechanistic coherence --- the sole rational formulation lever is permeability enhancement. \textbf{Verdict: tobramycin is BCS class III.} The widely assumed class~IV label conflates ``difficult'' with ``doubly limited''; the distinction, quantified in \cref{tab:strategy-comparison}, redirects all subsequent strategy choices in this thesis.
+
+\subsection{Pharmacology}
+Tobramycin binds the 30S ribosomal subunit (16S rRNA), causing mistranslation and bactericidal protein-synthesis arrest with a 1--3~h post-antibiotic effect \citep{Craig1998}. Primary spectrum: \textit{P.~aeruginosa}, \textit{E.~coli}, \textit{Klebsiella}, \textit{Proteus}, \textit{Enterobacter}, \textit{Serratia}. Resistance is driven mainly by aminoglycoside-modifying enzymes and efflux pumps \citep{DrugBank2026}.
+
+\section{Tobramycin pharmacokinetics and PK/PD targets}
+\label{sec:lit-pk}
+
+\subsection{Intravenous population pharmacokinetics}
+The reference intravenous model is the two-compartment PopPK analysis of \citet{Li2021} in 140 ICU patients (nonparametric population modeling): CL = 3.27~L/h (range 2.1--4.5), $V_1$ = 21.3~L, $V_2$ = 16.3~L, $Q$ = 2.4~L/h, $t_{1/2}$ = 4.5--6.0~h, with creatinine clearance entering clearance as a power covariate, $\mathrm{CL} = \theta_{\mathrm{CL}}\,(\mathrm{CLCR}/81)^{0.72}$, and residual error 28.5\%. Normal-adult reference values are CL = 6.03~L/h and $V_1$ = 15.1~L \citep{Li2021}. Pediatric CF data (Hennig et al.: CL 6.37~L/h/70~kg, $V_1$ 18.7~L/70~kg, 10~mg/kg/day once daily; Massie et al.; Touw et al.) confirm the two-compartment structure across ages (\cref{chap:app-pklit} for the complete dataset).
+
+\subsection{Population variability}
+\begin{table}[htbp]
+\centering
+\caption{Tobramycin PK across populations \citep{Li2021} and standard references. CF: cystic fibrosis; ICU: intensive care unit.}
+\label{tab:pk-populations}
+\begin{tabular}{lccccl}
+\toprule
+Parameter & Normal adult & CF adult & ICU & Elderly & Unit\\
+\midrule
+CL (L/h)       & 6.03 & 4.5--6.37 & 3.27--3.83 & 4.5 & L/h\\
+$V_1$ (L)      & 15.1 & 18.7      & 21.3--25.5 & 15.1 & L\\
+$t_{1/2}$ (h)  & 2.5  & 2--3      & 4--6       & 3--4 & h\\
+$V_{d,ss}$ (L/kg) & 0.26 & 0.27   & 0.30       & 0.26 & L/kg\\
+CLCR (mL/min)  & 120  & 100       & 65         & 65   & mL/min\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+CF patients exhibit hyperdynamic renal clearance (higher CLCR), ICU patients show expanded volumes of distribution from fluid resuscitation, and the elderly show reduced clearance --- all captured by the CLCR power model \citep{Li2021, Struiken2024}.
+
+\subsection{Oral pharmacokinetics: the data void}
+No clinical oral PK dataset exists for tobramycin. Estimated absolute bioavailability is 1--2\% (point estimate within a literature envelope of $<$5\%: the two figures reconcile as a point estimate within an envelope; see footnote\footnote{The oral bioavailability literature states both ``$<$5\%'' (generic estimates) and ``1--2\%'' (referenced point estimates). This thesis uses 1--2\% as the point estimate embedded within a conservative $<$5\% envelope; the choice affects only the baseline, which the optimization raises by $>$20-fold in any case.}), with variable $T_{\max}$ and negligible $C_{\max}$ \citep{Asad2023}. This void is precisely the predictive space PBPK modeling must fill (\cref{chap:methodology}).
+
+\subsection{PK/PD targets}
+\begin{table}[htbp]
+\centering
+\caption{PK/PD targets for aminoglycosides \citep{Craig1998, Li2021, Bauer2008}. MIC$_{90}$ of \textit{P. aeruginosa} for tobramycin: 0.5--2 mg/L (EUCAST/CLSI).}
+\label{tab:pd-targets}
+\begin{tabular}{p{3.4cm}p{3.2cm}p{6.4cm}}
+\toprule
+Target & Value & Rationale\\
+\midrule
+$\CMIC$ & $\geq$8--10 & Concentration-dependent killing threshold \citep{Craig1998}\\
+$\AMIC$ & 80--120 & Exposure--response (24 h total) \citep{Li2021}\\
+$C_{\max}$ & 20--30 mg/L & Target peak, IV once-daily dosing \citep{Bauer2008}\\
+$C_{\min}$ (trough) & $<$1 mg/L & Nephro-/ototoxicity prevention\\
+$\fmic$ & $>$30--40\% & Supporting index for concentration-dependent agents\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Formulation strategies for permeability-limited drugs}
+\label{sec:lit-formulations}
+
+\subsection{Hydrophobic ion pairing (HIP)}
+HIP complexes a polycationic drug with a lipophilic counter-ion (here, anionic surfactants such as sodium docusate), masking charge and raising apparent lipophilicity. For tobramycin, \citet{Asad2023} reported a logP shift from $-2.9$ to $\approx+1.6$ --- a 1500-fold improvement --- enabling incorporation into SEDDS at high payload; the complex dissociates $\approx$20\% at intestinal pH, an accepted liability. The method is generic for hydrophilic actives \citep{Griesser2017} and has shown in-vivo translational promise (octreotide HIP in pigs, $\F$ increases of 3--5$\times$) \citep{Bonengel2018}.
+
+\subsection{Self-emulsifying drug delivery systems (SEDDS)}
+SEDDS/SMEDDS are isotropic mixtures of oils, surfactants and co-surfactants that spontaneously emulsify in GI fluids, presenting the drug as solubilized microdroplets with large interfacial area, chylomicron-mediated lymphatic access, and protection from luminal degradation \citep{Muhammad2022}. For a HIP complex, SEDDS provides the lipid phase in which the lipophilised drug dissolves --- the two technologies are synergistic by design \citep{Asad2023, Griesser2017}.
+
+\subsection{Nanoparticles}
+PLGA nanoparticles complexed with AOT maintained MIC-level activity (1.25~$\mu$g/mL) against \textit{P.~aeruginosa} \citep{Hill2019}. Dextran-based single-chain nanoparticles (KuDa) neutralize surface charge and improve diffusion into mature biofilms \citep{BlancoCabra2022}. Most recently, nano-sized colloidal assemblies (NCAs) incorporating hydrophobic tobramycin ion pairs showed enhanced lipophilicity and antimicrobial activity \citep{Khaled2026}. Nanoparticles contribute mucoadhesion, sustained release, and tight-junction interaction.
+
+\subsection{Permeation enhancers}
+Sodium caprate (C$_{10}$) is the gold-standard transient paracellular enhancer with clinical safety experience \citep{Maher2009}; SNAC is FDA-approved (oral semaglutide); next-generation enhancers (PPZ, SDC) carry emerging 30-day safety data \citep{Bohley2024}. Typical effective concentrations are 10--50~mM with mucosal irritation as the dose-limiting concern.
+
+\subsection{Strategy comparison}
+\begin{table}[htbp]
+\centering
+\caption{Formulation strategy comparison for oral tobramycin (synthesis of \citealt{Asad2023, Hill2019, BlancoCabra2022, Bohley2024, Khaled2026, Maher2009, Griesser2017}).}
+\label{tab:strategy-comparison}
+\small
+\begin{tabular}{p{2.6cm}p{3.4cm}p{3.2cm}p{2.2cm}p{2.2cm}}
+\toprule
+Strategy & Mechanism & Evidence level & Scalability & Role in this thesis\\
+\midrule
+HIP + SEDDS & Lipophilisation + emulsification & In vitro (1500$\times$ logP) \citep{Asad2023} & Moderate & Core platform (genes 1, 3--5)\\
+PLGA NPs & Mucoadhesion, sustained release & In vitro (MIC maintained) \citep{Hill2019} & Good & Combinable layer (gene 2, 7)\\
+C$_{10}$ / PEs & Tight-junction opening & Clinical (other drugs) \citep{Maher2009, Bohley2024} & Good & Direct enhancer (gene 6)\\
+Chitosan coating & Mucoadhesion, TJ modulation & Preclinical & Good & Binary switch (gene 8)\\
+Enteric coating & GI protection & Standard technology & Excellent & Binary switch (gene 9)\\
+NCAs & Lipophilisation, colloidal & In vitro \citep{Khaled2026} & Moderate & Alternative platform\\
+KuDa SCPNs & Charge neutralization (biofilm) & In vitro \citep{BlancoCabra2022} & Moderate & Biofilm niche option\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{PBPK modeling in drug development}
+\label{sec:lit-pbpk}
+PBPK models describe absorption and disposition mechanistically: anatomical compartments, regional GI transit and permeability, dissolution, first-pass extraction, and renal elimination. The \pkg{PK-Sim} ACAT model resolves the GI tract into seven segments with region-specific transit, pH, and surface area \citep{Willmann2007, OSP2024}. PBPK for antibiotics has reached regulatory acceptance levels for exposure prediction \citep{Ferreira2021}, and a tobramycin-specific PBPK history exists for the pulmonary route \citep{Lukacova2010}. The \emph{oral} application --- coupling ACAT with permeability enhancement factors --- has not been published for tobramycin.
+
+\section{Knowledge gaps and thesis positioning}
+\label{sec:lit-gaps}
+Five gaps emerge from the synthesis:
+\begin{enumerate}
+\item \textbf{No in-vivo oral PK data} exist for tobramycin; the bioavailability void is unfilled.
+\item \textbf{No PBPK oral absorption model} has been published; only IV/pulmonary models exist \citep{Li2021, Lukacova2010}.
+\item \textbf{No multi-objective formulation optimization} has been attempted: the literature tests strategies one at a time, never searching the combinatorial design space.
+\item \textbf{Food effect and regional absorption} are uncharacterized.
+\item \textbf{Population variability} (CF, ICU, renal impairment) is unquantified for any hypothetical oral dosing.
+\end{enumerate}
+A sixth gap is computational: a structured search for a published tobramycin model in the Open Systems Pharmacology ecosystem (model library, repository artefacts, literature) returned \emph{zero} shareable PK-Sim models --- the closest validated model being amikacin, an aminoglycoside of the same disposition class. The search protocol and results are archived in the project repository (\texttt{data/bibliography/search\_strategy.md}) and justify the model construction strategy of \cref{chap:methodology-pksim}.
+
+This thesis addresses gaps 1--3 quantitatively (model + optimization), gaps 4--5 via the uncertainty program, and provides the experimental roadmap (\cref{chap:discussion,chap:conclusion}) that resolves all five.

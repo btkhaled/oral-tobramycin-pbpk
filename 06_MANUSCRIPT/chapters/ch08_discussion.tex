@@ -1,0 +1,137 @@
+% =====================================================================
+% Chapter 8 — Discussion
+% =====================================================================
+\chapter{Discussion}
+\label{chap:discussion}
+
+\section{Hypothesis verdicts}
+\label{sec:hypothesis-verdicts}
+The hypotheses of \cref{chap:introduction} --- including the fifth, added when the two-platform design emerged --- are confronted with the complete evidence:
+
+\begin{table}[htbp]
+\centering
+\caption{Hypothesis verdicts against the full evidence base.}
+\label{tab:verdicts}
+\small
+\begin{tabular}{p{1.4cm}p{6.4cm}p{2.2cm}p{4.0cm}}
+\toprule
+Hyp. & Evidence & Verdict & Key result \\
+\midrule
+H1 & Solubility 94--100 mg/mL (20--200$\times$ criterion); $P_{app} < 10^{-6}$ cm/s; explicit class III statement \citep{Asad2023} & \textbf{Supported} & \cref{sec:lit-classification} \\
+H2 & Platform $\times$20: $F = 34.6\%$ (PK-Sim) vs 34.0\% (legacy, both 24-h) --- 23$\times$ native, top of the 20--35\% triple-combination band & \textbf{Supported} & \cref{sec:res-calibration} \\
+H3 & 1000 mg QD (TOBP-001): population median $\CMIC = 40.9$; PTA peak 100\%, AUC 97\%; TOB-161-A: 95\%/79\% & \textbf{Supported} & \cref{sec:res-battery} \\
+H4 & $\pm$20\% perturbations and 100-subject variability preserve peak attainment on the optimized platform; elasticities identify the control levers & \textbf{Supported} & \cref{sec:res-s04,sec:res-ga-winner} \\
+H5 & Two independent engines agree at the platform multiplier: 34.0\% vs 34.6\% ($\Delta$ 1.9\% relative) & \textbf{Supported} & \cref{sec:res-ga-crosscheck} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{The optimization story: from free scalar to cited bounds}
+The three computational phases tell one coherent story --- and the final chapter of that story was written by the methodology audit. The \emph{exploratory} phase (Chapter \ref{chap:results}) established the composition concept with its own engine and honestly reported the exposure boundary. The \emph{calibrated PK-Sim curve} (Chapter \ref{chap:results-pksim}) revealed the headroom: bioavailability is a saturating function of intestinal permeability. The \emph{in-the-loop} optimization (Chapter \ref{chap:results-ga}) initially exploited a free multiplier to a $\times$313 corner --- a result that said more about the parameterization than about any formulation. The audit then rebuilt the gene-to-permeability mapping as a \emph{cited, bounded, emergent} model:
+
+\begin{itemize}
+\item \textbf{Every component factor now carries its evidence}: the HIP logP shift (measured, Asad 2023), SEDDS solubilization (Muhammad 2022; Griesser 2017), nanoparticle carriers (Hill 2019; Khaled 2026), C10 (Maher 2009; Bohley 2024), mucoadhesive polymers and chitosan (Bohley 2024) --- each bounded, each graded A/B/C, each with a lognormal uncertainty.
+\item \textbf{The multiplier is emergent}, capped at $\times$126.3 by the evidence; the logP gene cannot exceed the measured complex. The optimizer explores \emph{within} the literature.
+\item \textbf{The cross-engine divergence became a result}: the same legacy-winner chromosome prices at $\times$23 on the exploratory engine but $\times$73.9 on the calibrated mapping --- a 3-fold transfer-function sensitivity that only a head-to-head re-evaluation could expose.
+\item \textbf{Steady states are now computed by true repeated dosing}, validated by mass balance (AUC$_{\tau}$ = $F \cdot$ dose/CL within 0.1\%), replacing superposition (which agrees within $\approx$3\%).
+\end{itemize}
+
+The residual clinical question is a \emph{trough-management} problem --- both candidates sit at the 1 mg/L line (Cmin$_{ss}$ 1.05--1.21 mg/L once daily) --- handled by Bayesian TDM, not by more permeability. This inversion, from ``can we absorb enough?'' to ``how do we safely dose what we can now absorb?'', is the central translational finding of the thesis.
+
+\section{Benchmarking against key studies}
+\begin{table}[htbp]
+\centering
+\caption{This work versus the key formulation and modeling studies.}
+\label{tab:benchmark}
+\small
+\begin{tabular}{p{2.6cm}p{3.8cm}p{3.4cm}p{3.8cm}}
+\toprule
+Study & What they showed & What they did not do & What this thesis adds \\
+\midrule
+\citet{Asad2023} (HIP+SEDDS) & 1500$\times$ logP; class III statement; 20\% dissociation & In-vivo or PBPK prediction; dose; targets & Quantified $F$ curve; saturation ceiling; $\CMIC$/$\AMIC$ attainment; dose options \\
+\citet{Hill2019} (PLGA NPs) & MIC maintained at 1.25 $\mu$g/mL & PK modeling & NP lever inside the platform; saturation logic \\
+\citet{BlancoCabra2022} (KuDa) & Charge neutralization; biofilm diffusion & Systemic PK & Biofilm niche positioning \\
+\citet{Bohley2024} (PEs) & Next-gen PE safety landscape & Tobramycin application & C$_{10}$ lever within safety bounds \\
+\citet{Khaled2026} (NCAs) & Ion-pair colloidal assemblies & Optimization; targets & Combinatorial framing; 23--66$\times$ total enhancement \\
+\citet{Li2021} (PopPK) & 2-ct model, ICU population & Oral route; formulation & Validated PBPK oral program on the same physiology \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+No prior work combines the tobramycin formulation literature with a validated whole-body PBPK platform, an in-the-loop multi-objective optimization, and two completely characterized candidates. Conversely, the 97\%-bioavailability prediction is \emph{model-based}: its experimental test is precisely the HIP complex permeability measurement proposed in the roadmap.
+
+\section{Clinical implications}
+\label{sec:clinical-impl}
+
+\subsection{Where oral tobramycin now fits}
+The optimized platform changes the positioning conversation:
+\begin{enumerate}
+\item \textbf{Cystic fibrosis outpatient therapy}: QD 250 mg covers the peak at MIC 1 mg/L with troughs $\approx$ 0.4 mg/L (below the safety line); QD 550.6 mg covers both targets with troughs at 1.05 mg/L --- a TDM-guided oral maintenance option between inhaled courses. BID fractionation halves peaks but raises troughs above the line (2.34 mg/L at 1000 mg daily).
+\item \textbf{Exposure-critical settings}: at 1000 mg QD, systemic exposure matches and exceeds IV targets ($\AMIC = 172.3$) --- at the price of troughs at the monitoring line (1.21 mg/L), requiring TDM.
+\item \textbf{Dose flexibility}: the platform's saturation means the 250--1000 mg range spans peak-only to full-exposure regimens; MIC-guided selection (PTA tables, \cref{chap:results-ga}) becomes practical.
+\item \textbf{Resource-limited settings}: an oral essential-medicine aminoglycoside without infusion infrastructure remains a global-health argument independent of regimen choice.
+\end{enumerate}
+
+\subsection{Therapeutic drug monitoring is not optional}
+The candidates' troughs sit at (QD: 1.05--1.21 mg/L) or above (BID: 1.61--2.34 mg/L) the 1 mg/L nephrotoxicity line, which makes TDM \emph{structural}, not advisory: Bayesian AUC- and trough-guided dosing from day one, as for IV aminoglycosides \citep{Bauer2008, Li2021}. The virtual population provides the prior.
+
+\subsection{Safety}
+Classical aminoglycoside toxicity is trough- and duration-driven \citep{Craig1998}; the oral route's peak-driven design with monitored troughs is intrinsically favorable. The formulation-level risks remain those of \cref{chap:results} (\cref{tab:risks}): C$_{10}$ mucosal tolerance, nanoparticle accidental inhalation, chitosan quality --- each with its mitigation.
+
+\section{Manufacturing, cost and regulatory position}
+The exploratory phase's manufacturing assessment (grade B, \$4.25--4.35 per dose, ten standard unit operations) and 505(b)(2) pathway (7 years, \$4.8 M, \cref{chap:results}) remain valid for the platform architecture; the optimized candidate's higher permeability multiplier does not change the unit operations, only the quality targets for the HIP complex (payload and stability at higher ion-pair loading). The regulatory precedent of oral permeation-enhancer platforms (SNAC/semaglutide) supports the 505(b)(2) framing.
+
+\section{Is the bounded maximum real? An integrity audit}
+\label{sec:integrity}
+
+An oral bioavailability of 97\% for a molecule whose clinical baseline is 1--2\% demands scrutiny even when every component is individually cited. The honest answer: \textbf{each link is cited or validated; the chain as a whole is a hypothesis with a defined experimental test} --- and separating the two is the difference between this thesis and an overclaim.
+
+\subsection{What is validated vs what is assumed}
+\begin{itemize}
+\item \textbf{Validated (reproducible):} the intravenous model (6/6 gate against published clinical data); the native baseline (F = 1.75\% at the 24-h convention, inside the clinical 1--2\%); the response curve $F(P_{int})$ computed natively by PK-Sim; the steady-state machinery (true repeated dosing, mass-balance-checked); the requirement map --- \emph{if} apparent permeability is enhanced by a factor $m$, \emph{then} the model yields the $F$, peak, and exposure of \cref{tab:res-reqmap}.
+\item \textbf{Assumed (cited but unmeasured for tobramycin):} the component factors themselves. No experiment has yet demonstrated a $\times$126 (or even $\times$20) apparent-permeability enhancement for a tobramycin formulation. The cited maxima are ceilings of analogy, not measurements.
+\end{itemize}
+
+\subsection{Three plausibility stresses on the chain}
+\begin{enumerate}
+\item \textbf{Complex dissociation.} Asad et al.\ measure 20\% dissociation of the HIP complex at intestinal pH --- 80\% releases the polycation, whose intrinsic permeability is near zero. The model prices the complex as delivered; stabilization chemistry beyond the current prototype is implicitly required.
+\item \textbf{logP shift $\neq$ permeability multiplier.} The literature's ``1500$\times$'' is a partition-coefficient shift; in-vivo HIP data (octreotide in pigs) show bioavailability gains of 3--5$\times$. The calibrated slope absorbed this tension at one anchor point ($\times$20 at the measured complex); the extrapolation to $\times$126 inherits its uncertainty (S09: $F_{96}$ CI 51--100\%).
+\item \textbf{The paracellular baseline.} The clinical 1--2\% likely rides paracellular and carrier-mediated routes that do not respond to lipophilicity at all; the calibrated transcellular override absorbs them into one parameter.
+\end{enumerate}
+
+\subsection{What survives the audit}
+Everything essential. The requirement map is tiered: \textbf{$\times$20 at 993 mg/day already attains both targets} --- a multiplier the formulation literature can defend, with the direct experimental test defined (Caco-2/Ussing of the HIP complex across ion-pair loading). The cited maximum ($\times$126) is what the evidence \emph{permits}, not what it guarantees; TOBP-001 is therefore best read as the \emph{upper design point}, TOB-161-A as the \emph{conservative one}, and the space between as the experimental program's search interval. The numerical conventions are documented: $F$ is reported on a 96-h window (extent, capturing the flip-flop tail) alongside the 24-h window used for the native calibration; the clamping of $F$ at 100\% affects a single grid point (S02 at $10^{-6}$ dm/min), not the design conclusions. In short: \emph{the model is a validated exposure calculator carrying an unvalidated --- but bounded, cited, and testable --- formulation hypothesis; the thesis says which is which.}
+
+\section{Limitations}
+\label{sec:ch5-limits}
+\subsection{Model limitations}
+\begin{enumerate}
+\item The P$_{int}$ baseline is \emph{calibrated} to clinical F (1--2\%), and the platform multiplier maps formulation genes to apparent permeability through a documented but phenomenological transfer function. The $\times$125 optimum is a \emph{cited-bounds maximum}, not a measured reality: its experimental test (HIP complex permeability in Caco-2/Ussing) is the first roadmap item.
+\item The paracellular pathway is not represented by default in PK-Sim's absorption model; the calibrated transcellular override absorbs its contribution.
+\item The 3-pKa building-block limit (three of five amines) is inherited from the platform schema; impact is negligible for the endpoints used (solubility never limiting; distribution pKa-independent under PK-Sim Standard).
+\item PK parameters are not attached to CLI-exported simulations, so the sensitivity analysis uses batch perturbations (equivalent design, documented).
+\item Trough liability at exposure-attaining doses was \emph{discovered} by the model; the nephrotoxicity implications require the standard clinical monitoring program, not simulation alone.
+\end{enumerate}
+
+\subsection{Literature limitations}
+\begin{enumerate}
+\item No in-vivo oral tobramycin PK exists; every oral figure is inferred.
+\item HIP in-vivo data come from other drugs (octreotide in pigs, \citealp{Bonengel2018}).
+\item No published tobramycin PBPK model existed to compare against (search documented, \cref{chap:literature}).
+\item Food effect, regional absorption and long-term mucosal tolerance of the full platform are uncharacterized.
+\end{enumerate}
+
+\subsection{Study limitations}
+\begin{enumerate}
+\item Purely in-silico; the framework predicts, it cannot confirm.
+\item The NSGA-II front converged to the cited-bounds corner: with three of four objectives favoring exposure, the multi-objective problem as posed does not sample the moderate-dose region --- answered by the dose scan and the 467 mg in-band option, though a constrained re-formulation (minimize dose s.t.\ $\CMIC \geq 8$) would be the cleaner next iteration.
+\item Single software platform; the cross-check (H5) validates against the custom engine, not against a second PBPK suite.
+\item The population simulation assumes ICRP physiology without disease-specific (CF) structure; CF-specific clearance and volume alterations enter through the CLCR covariate only.
+\end{enumerate}
+
+\section{Future perspectives}
+\begin{enumerate}
+\item \textbf{Experimental validation (priority 1)}: Caco-2/Ussing permeability of the HIP complex as a function of ion-pair loading --- the direct test of the $\times$20 (targets) and $\times$125 (ceiling) requirements; prototype HIP--SEDDS--NP capsule with in-vitro release; rat/dog oral PK with model refinement.
+\item \textbf{Advanced modeling (priority 2)}: constrained re-optimization (minimize dose s.t.\ targets); CF-specific virtual populations; PBPK/PD co-simulation with nephrotoxicity (trough-time) endpoints; MIC-distribution Monte Carlo at the population level.
+\item \textbf{Clinical translation (priority 3)}: Phase~I SAD/food-effect; Phase~II CF outpatient trial with Bayesian TDM; 505(b)(2) pre-submission meeting.
+\end{enumerate}

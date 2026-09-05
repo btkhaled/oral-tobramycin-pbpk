@@ -1,0 +1,96 @@
+% =====================================================================
+% Appendix K — Traceability matrix
+% =====================================================================
+\chapter{Traceability Matrix}
+\label{chap:app-traceability}
+
+Every quantitative element of this thesis maps to a generating script (R, scripts 00--13) and a source data file. This matrix is the audit trail of the in-silico record.
+
+\section{Figures}
+\begin{table}[htbp]
+\centering
+\caption{Figure traceability (all figures 300-dpi PNG in \code{MANUSCRIT/figures/}, generated from \code{Formulation\_Candidate/GA\_OPTIMIZATION/}).}
+\label{tab:trace-figs}
+\small
+\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{3.1cm}p{7.6cm}p{3.2cm}}
+\toprule
+Thesis figure(s) & File & Script\\
+\midrule
+\ref{fig:synopsis-workflow}, \ref{fig:workflow} & TikZ (this manuscript) & ---\\
+\ref{fig:convergence} (left) & convergence\_plot.png & 05 (analysis 04)\\
+\ref{fig:convergence} (right), \ref{fig:convergence-comparison} & fig5\_convergence\_comparison.png; fitness\_ranking.png & 13; 05\\
+\ref{fig:pareto-evolution-F} & pareto\_evolution\_F.png; pareto\_evolution\_AUC.png & 11, 13\\
+\ref{fig:pareto-front}, \ref{fig:pareto-dose} & fig2\_pareto\_front.png; pareto\_front\_2d.png; pareto\_facet\_dose.png & 11, 13\\
+\ref{fig:pareto-params} & pareto\_params\_distribution.png; pareto\_correlation.png & 11\\
+\ref{fig:top3} & fig1\_pk\_profiles\_top3.png; fig6\_radar\_top3.png & 13\\
+\ref{fig:heatmap-enhancement} & heatmap\_top10.png; fig4\_enhancement\_factors.png & 13; 07, 13\\
+\ref{fig:sens} & sensitivity\_tornado.png; sensitivity\_spider.png & 12\\
+\ref{fig:mc} & monte\_carlo\_tornado.png; correlation\_matrix.png & 12\\
+\ref{fig:cv} & validation\_cv\_boxplot.png; validation\_cv\_distribution.png & 12\\
+\ref{fig:mfg}, \ref{fig:cost-efficacy} & manufacturing\_cost.png; feasibility\_score.png; cost\_vs\_efficacy.png & 07\\
+\ref{fig:reg} & regulatory\_timeline.png; regulatory\_cost.png & 08\\
+\ref{fig:lit-comp} & fig3\_literature\_comparison.png; top3\_comparison.png & 13\\
+(archive) & pareto\_front.png; radar\_chart.png; pareto\_heatmap\_top10.png; cluster\_dendrogram.png; similarity\_matrix.png & 11; 06\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Tables}
+\begin{table}[htbp]
+\centering
+\caption{Table traceability.}
+\label{tab:trace-tabs}
+\small
+\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{3.4cm}p{8.2cm}p{2.8cm}}
+\toprule
+Thesis table & Content source & Script / origin\\
+\midrule
+\ref{tab:bcs-classes}, \ref{tab:bcs-criteria} & \citealt{Amidon1995}, M9 guidance & Literature\\
+\ref{tab:routes}, \ref{tab:pk-populations}, \ref{tab:pd-targets} & TOBRAMYCIN\_DATA.md; pd\_targets.md; iv\_pk.csv & Literature synthesis\\
+\ref{tab:strategy-comparison}, \ref{tab:benchmark} & evidence\_table.csv & Literature synthesis\\
+\ref{tab:software}, \ref{tab:ga-config} & session\_info.txt; ga\_config.json & Config\\
+\ref{tab:compound-params} & table2\_simulation\_parameters.csv & 00\\
+\ref{tab:bounds} & parameter\_bounds.csv & 00\\
+\ref{tab:top10}, \ref{tab:top10-advanced} & manuscript\_table\_final.csv; top10\_advanced.csv & 11, 13\\
+\ref{tab:clusters} & cluster\_summary.csv & 06, 11\\
+\ref{tab:sens} & sensitivity\_data.csv; table4\_sensitivity\_ranking.csv & 12; 04\\
+\ref{tab:uq} & monte\_carlo\_data.csv; validation\_cv\_data.csv & 12\\
+\ref{tab:mfg} & manufacturing\_summary.csv; manufacturing\_steps.csv & 07\\
+\ref{tab:reg}, \ref{tab:risks} & regulatory\_framework.csv; risk\_analysis.csv & 08\\
+\ref{tab:bioavail-estimates} & table5\_bioavailability\_estimates.csv & 04\\
+\ref{tab:targets} & Synthesis of \cref{sec:ch4-top10,sec:ch4-uq} & This manuscript\\
+App. A--D, H--J & pareto\_front\_data.csv; monte\_carlo\_data.csv; sensitivity\_data.csv; validation\_cv\_data.csv; solubility/permeability/iv/oral PK CSVs; scenarios.csv & 11, 12; PBPK module\\
+App. E & evidence\_table.csv & Literature synthesis\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Scripts}
+\begin{table}[htbp]
+\centering
+\caption{Script manifest (\code{Formulation\_Candidate/GA\_OPTIMIZATION/scripts/}).}
+\label{tab:trace-scripts}
+\small
+\begin{tabular}{lp{9.6cm}}
+\toprule
+Script & Purpose\\
+\midrule
+00\_ga\_setup.R & Configuration, packages, bounds, physiology constants\\
+01\_ga\_objective\_function.R & PK simulation + enhancement model + weighted fitness\\
+02\_ga\_operators.R & Selection, SBX, polynomial mutation\\
+03\_ga\_run.R & GA execution (seed 42, parallel)\\
+04\_ga\_results\_analysis.R & Convergence, elite extraction, sensitivity ranking\\
+05\_ga\_visualization.R & Convergence, fitness, heatmaps (300 dpi)\\
+06\_comparison\_analysis.R & Clustering, similarity, comparison tables\\
+07\_manufacturing\_feasibility.R & Costing, feasibility scoring\\
+08\_regulatory\_feasibility.R & 505(b)(2) framework, timeline, cost, risks\\
+09\_advanced\_pk\_model.R & 2-compartment + transit + Hill PK/PD engine\\
+10\_nsga2\_optimization.R & NSGA-II engine (4 objectives)\\
+11\_pareto\_analysis.R & Front extraction, stratification, distributions\\
+12\_sensitivity\_validation.R & OAT, Monte Carlo, cross-validation\\
+13\_manuscript\_figures.R & Publication figures (fig1--fig6 series)\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,85 @@
+% =====================================================================
+% Appendix R — Complete candidate evaluation data (S-battery)
+% =====================================================================
+\chapter{Candidate Evaluation: Battery Data}
+\label{chap:app-battery}
+
+Both candidate formulations were evaluated with the standard battery of \cref{sec:res-battery} (script \texttt{molecule\_battery.R} under \texttt{pksim/studies/}; outputs under \texttt{results/molecule\_A/} and \texttt{results/molecule\_B/}). This appendix collects the per-block tables that do not appear in the main text.
+
+\section{Identity cards (cited component factors)}
+
+\begin{table}[htbp]
+\centering
+\caption{Component factors at the candidate compositions (decoded via the shared enhancement model).}
+\label{tab:app-identity}
+\resizebox{0.96\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Component & TOB-161-A value & factor & TOBP-001 value & factor \\
+\midrule
+logP$'$ (HIP complex)        & +1.5  & 18.7$\times$ & +1.6 (measured cap) & 20.0$\times$ \\
+SEDDS fraction (sum)         & 100\% & 1.00$\times$ & 160\% & 1.60$\times$ \\
+Nanoparticle size            & 50 nm & 1.50$\times$ & 50 nm & 1.50$\times$ \\
+C10 loading                  & 50\%  & 1.60$\times$ & 50\%  & 1.60$\times$ \\
+Polymer loading              & 30\%  & 1.30$\times$ & 29.3\% & 1.29$\times$ \\
+Chitosan coating             & on    & 1.15$\times$ & on    & 1.15$\times$ \\
+Enteric coating              & on    & 1.10$\times$ & on    & 1.10$\times$ \\
+\midrule
+\textbf{Emergent multiplier} & \multicolumn{2}{c}{$\times$73.9} & \multicolumn{2}{c}{$\times$125.0} \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\section{Dose proportionality}
+Single-dose Cmax and AUC24 scale linearly with dose across 138--1100 mg (TOB-161-A) and 250--2000 mg (TOBP-001); deviation from proportionality $<$2\% at all tested doses (linear kinetics, no solubility limitation at these doses: 2000 mg $\approx$ 21 mL of the 94 mg/mL solution).
+
+\section{PK/PD targets vs the MIC panel (steady state, QD)}
+
+\begin{table}[htbp]
+\centering
+\caption{Steady-state target attainment vs MIC (true 7-day once-daily dosing).}
+\label{tab:app-mic-panel}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc|cccc}
+\toprule
+ & \multicolumn{4}{c|}{TOB-161-A (550.6 mg)} & \multicolumn{4}{c}{TOBP-001 (1000 mg)} \\
+MIC (mg/L) & Cmax/MIC & AUC$_{\tau}$/MIC & Cmin (mg/L) & fT$>$MIC & Cmax/MIC & AUC$_{\tau}$/MIC & Cmin (mg/L) & fT$>$MIC \\
+\midrule
+0.25 & 54.3 & 349  & 4.21 & 99.6\% & 129.2 & 690  & 4.81 & 99.6\% \\
+0.5  & 27.2 & 175  & 2.11 & 99.6\% & 64.6  & 345  & 2.41 & 99.6\% \\
+1    & 13.6 & 87.3 & 1.05 & 99.6\% & 32.3  & 172  & 1.20 & 99.6\% \\
+2    & 6.8  & 43.6 & 0.53 & 78.4\% & 16.1  & 86.2 & 0.60 & 99.6\% \\
+4    & 3.4  & 21.8 & 0.26 & 42.9\% & 8.1   & 43.1 & 0.30 & 87.6\% \\
+8    & 1.7  & 10.9 & 0.13 & 20.5\% & 4.0   & 21.6 & 0.15 & 61.4\% \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\section{Uncertainty propagation (S09)}
+
+\begin{table}[htbp]
+\centering
+\caption{Component-uncertainty propagation (20\,000 draws, graded lognormal sigmas; S09).}
+\label{tab:app-s09}
+\small
+\begin{tabular}{lcc}
+\toprule
+ & TOB-161-A & TOBP-001 \\
+\midrule
+Multiplier (point [CI95])   & 73.9 [12.5--431] & 125.0 [21.1--730] \\
+$F_{96}$ (\%) [CI95]        & 88.0 [35.3--100] & 96.2 [50.6--100] \\
+AUC$_{ss}$/MIC [CI95]       & 87 [39--99]      & 172 [97--179] \\
+PTA Cmax/MIC $\geq$8        & 81\%             & 99\% \\
+PTA AUC$_{ss}$/MIC in 80--120 & 65\%           & 99\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Methodological notes}
+\begin{enumerate}
+\item \textbf{True repeated dosing} is implemented by replicating the application event group in the PKML (one \texttt{Application\_k} per dose, exactly as PK-Sim itself represents multiple dosing; \texttt{make\_repeated\_pkml.py}), then setting the per-application dose and the calibrated permeability at simulation level.
+\item \textbf{Mass balance check}: at steady state AUC$_{\tau}$ = $F \cdot$ dose/CL. TOB-161-A: 87.25 vs 87.38 mg$\cdot$h/L predicted (0.15\%); TOBP-001: 172.28 vs 172.20 (0.05\%).
+\item \textbf{Superposition cross-check}: the screening-study superposition agrees with true dosing within $\approx$3\% (48.0 vs 49.6 mg$\cdot$h/L at the probe point), validating its use in the fast sweeps.
+\item \textbf{Component OAT degeneracy}: under a purely multiplicative enhancement model, $\pm$20\% on any single factor shifts the multiplier identically --- the differentiated risk lives in the per-component sigmas (S09), not in the OAT ranges. Both are reported for transparency.
+\item \textbf{Renal impairment}: $F$ is not identifiable when clearance changes (the oral AUC scales with CL); the B7 block therefore reports AUC, not $F$.
+\end{enumerate}

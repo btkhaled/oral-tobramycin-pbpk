@@ -1,0 +1,41 @@
+% =====================================================================
+% Chapter 9 — Conclusion
+% =====================================================================
+\chapter{Conclusion}
+\label{chap:conclusion}
+
+\section{Principal findings}
+This thesis asked whether tobramycin --- an essential, IV-only aminoglycoside --- could plausibly become an oral medicine, and what the first oral formulations should look like. Five findings stand:
+
+\begin{enumerate}
+\item \textbf{Tobramycin is BCS class III.} Solubility (94--100 mg/mL, 20--200$\times$ the criterion) is not the barrier; permeability is ($P_{app} < 10^{-6}$ cm/s, $F \approx 1$--2\%) \citep{Asad2023}. Every formulation decision follows from this correction.
+\item \textbf{A permeability-targeting combination platform raises oral bioavailability 23-fold at its nominal setting} ($F = 34.6\%$: hydrophobic ion pairing at logP$'$ 1.5, SEDDS 50/30/20, 50 nm chitosan-coated nanoparticles, 50 mM sodium caprate, enteric coating) --- the top of the triple-combination literature band.
+\item \textbf{The bioavailability ceiling is far higher than the nominal platform --- and the optimizer now explores only within cited bounds.} With every component factor cited, bounded and graded, the emergent multiplier caps at $\times$125; the in-loop optimum reaches $F_{96} = 97.1\%$ there. The integrity audit (\cref{sec:integrity}) separates the validated machinery from the cited-but-unmeasured factors.
+\item \textbf{Both PK/PD targets are attainable orally, demonstrated on two complete candidate evaluations.} TOB-161-A (legacy winner re-evaluated): AUC$_{ss}$/MIC 87.3 --- inside the band --- at 550.6 mg once daily, troughs 1.05 mg/L, population attainment 95\% peak / 79\% exposure. TOBP-001 (in-loop optimum at the cited maximum): AUC$_{ss}$/MIC 172, population attainment 100\% / 97\%, troughs 1.21 mg/L, with a 467 mg option at the band floor. Both steady states are true seven-day dosings, mass-balance-checked to 0.1\%.
+\item \textbf{Two independent engines agree.} The exploratory custom engine and the whole-body PK-Sim platform converge at the same platform multiplier ($F$ 34.0\% vs 34.6\%, $\Delta$ 1.9\% relative) --- a cross-validation that strengthens every downstream number.
+\end{enumerate}
+
+\section{Scientific contributions}
+\begin{enumerate}
+\item \textbf{BCS classification resolution} with direct strategy consequences (\cref{chap:literature}).
+\item \textbf{A validated oral tobramycin PBPK model in PK-Sim} --- built from the validated amikacin model, gated 6/6 against published clinical data; the first oral tobramycin PBPK program (no prior model exists --- search documented). The methodology audit converted a free multiplier into a cited, bounded, emergent enhancement model with graded uncertainty propagation, and replaced superposition by true repeated dosing validated by mass balance.
+\item \textbf{A documented platform defect workaround}: the macOS snapshot-conversion crash (OSPSuite-R \#1622) root-caused to SQLite view-resolution stack overflow and fixed by view materialization --- reusable by the OSP community until the v13 fix.
+\item \textbf{An in-the-loop multi-objective optimization} linking a formulation chromosome directly to PK-Sim batch executions, with the cited-bounds analysis that converts the enhancement assumption into a testable formulation requirement ($\times$125 maximum) and the dose--target answer (250--1000 mg).
+\item \textbf{A reproducible, cross-validated repository}: snapshots, scripts, results and this manuscript, fresh-clone testable.
+\end{enumerate}
+
+\section{Clinical implications}
+The optimized platform repositions oral tobramycin: CF outpatient maintenance at QD 250--550 mg under TDM (peak covered to MIC 1 mg/L at 250 mg; both targets inside the band at 550.6 mg with troughs at 1.05 mg/L); full-exposure oral regimens (1000 mg) where IV-equivalent dosing is needed (troughs 1.21 mg/L, TDM mandatory); MIC-guided regimen selection from the PTA tables. TDM is structural, not optional: troughs sit at the monitoring line. The formulation requirement --- $\geq\times$20 for targets at 993 mg, $\times$125 as the cited-bounds ceiling --- is testable by Caco-2/Ussing measurement of the HIP complex.
+
+\section{Limitations}
+The decisive limitations --- calibrated (not measured) permeability, absence of oral validation data, the 3-pKa schema limit, the degenerated front, single-suite modeling --- are catalogued in \cref{sec:ch5-limits}. None is structural: each is exactly what the experimental program resolves.
+
+\section{Future directions}
+\begin{description}[labelwidth=4.2cm, style=nextline]
+\item[Immediate (0--6 months)] Caco-2/Ussing permeability of the HIP complex across ion-pair loading (the $\times$20/$\times$125 test); prototype capsule manufacture and release; constrained re-optimization (minimize dose s.t.\ targets).
+\item[Short term (6--12 months)] Rat/dog oral PK with learning--confirming model updates; CF-specific virtual populations; GLP toxicology of the full platform.
+\item[Long term (1--3 years)] Phase~I SAD/food-effect; Phase~II CF outpatient trial with Bayesian TDM; 505(b)(2) submission strategy.
+\end{description}
+
+\section{Final statement}
+This thesis began with a classification controversy and ends with a dosing answer. The BCS III resolution identified the enemy --- permeability, not solubility. The exploratory engine forged the combinatorial weapon and measured its first yield (34\%). The PK-Sim platform --- repaired where the ecosystem was broken, validated where the clinic had spoken --- revealed the true ceiling: near-complete oral absorption. The optimizer, running inside the engine it trusted, converted that ceiling into regimens: a minimal 250 mg dose that guards the peak, and a 1000 mg dose that rivals the intravenous bag --- with troughs at the monitoring line that keep therapeutic drug monitoring, appropriately, in the driver's seat. What remains is what only experiments can deliver. The scientific foundation for the first oral tobramycin is complete.

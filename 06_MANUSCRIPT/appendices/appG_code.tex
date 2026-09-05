@@ -1,0 +1,45 @@
+% =====================================================================
+% Appendix G — Annotated R code (core scripts)
+% =====================================================================
+\chapter{Annotated Source Code (Core Scripts)}
+\label{chap:app-code}
+
+The optimization pipeline comprises 14 versioned R scripts (00--13), stored in the project repository under \code{Formulation\_Candidate/} \code{GA\_OPTIMIZATION/} \code{scripts/}. This appendix reproduces the five core scripts in full (00 setup; 01 objective function; 02 operators; 09 advanced PK model; 10 NSGA-II engine); scripts 03--08 and 11--13 (run, analysis, visualization, manufacturing, regulatory, Pareto analysis, uncertainty, manuscript figures) follow the same conventions and are archived with the project. Configuration: \code{ga\_config.json} (population, generations, weights, seed) is quoted in \cref{tab:ga-config}.
+
+\begin{table}[htbp]
+\centering
+\caption{Optimizer configuration (\code{ga\_config.json}).}
+\label{tab:ga-config}
+\small
+\small
+\begin{tabular}{p{3.6cm}p{3.4cm}p{6.4cm}}
+\toprule
+Key & Value & Meaning\\
+\midrule
+popSize & 100 (GA) / 200 (NSGA-II) & Population size\\
+maxiter & 200 (GA) / 300 (NSGA-II) & Maximum generations\\
+run & 20 & GA stopping (generations without improvement)\\
+pcrossover / pmutation & 0.8 / 0.1 & Operator probabilities\\
+elitism & 10 (GA) / 20 (NSGA-II) & Elite carry-over\\
+seed & 42 & Full reproducibility\\
+n\_cores & 7 & Parallel fitness evaluation\\
+weights & 0.40 / 0.25 / 0.25 / 0.10 & $\F$ / $\CMIC$ / $\AMIC$ / safety (\cref{eq:fitness})\\
+Physiology & CL 5.5; $V_1$ 17; $t_{1/2}$ 2.5; BW 70; MIC 1; CLCR$_{\mathrm{ref}}$ 81 & Model constants (\cref{tab:compound-params})\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Script 00 --- GA setup}
+\lstinputlisting[style=rstyle, caption={Script 00 --- packages, configuration loading, parameter bounds.}]{code/00_ga_setup.R}
+
+\section{Script 01 --- objective function}
+\lstinputlisting[style=rstyle, caption={Script 01 --- fitness evaluation: PK simulation, enhancement model, weighted composite (\cref{eq:fitness}).}]{code/01_ga_objective_function.R}
+
+\section{Script 02 --- genetic operators}
+\lstinputlisting[style=rstyle, caption={Script 02 --- selection, SBX crossover, polynomial mutation.}]{code/02_ga_operators.R}
+
+\section{Script 09 --- advanced PK model}
+\lstinputlisting[style=rstyle, caption={Script 09 --- two-compartment model with transit compartments and Hill PD (\cref{sec:pk-model}); RK4 integration.}]{code/09_advanced_pk_model.R}
+
+\section{Script 10 --- NSGA-II optimization}
+\lstinputlisting[style=rstyle, caption={Script 10 --- non-dominated sorting, crowding distance, tournament selection, SBX, polynomial mutation (\cref{sec:nsga2}).}]{code/10_nsga2_optimization.R}

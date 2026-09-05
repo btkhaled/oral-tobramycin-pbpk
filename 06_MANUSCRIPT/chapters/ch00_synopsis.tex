@@ -1,0 +1,47 @@
+% =====================================================================
+% Chapter 0 — Synopsis / Reader's Guide (v1.0 — two-platform structure)
+% =====================================================================
+\chapter{Synopsis: How to Read This Thesis}
+\label{chap:synopsis}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  node distance=0.55cm and 0.7cm,
+  box/.style={rectangle, rounded corners=2pt, draw=tobblue, fill=tobblue!8, thick,
+              text width=2.9cm, align=center, minimum height=1.5cm, font=\footnotesize},
+  boxg/.style={box, fill=tobblue!16},
+  arrow/.style={-{Stealth[length=3mm]}, thick, tobblue}
+]
+\node[boxg] (c12) {\textbf{Ch.~1--2}\\Foundations\\BCS III resolution\\20-article base};
+\node[box, right=of c12] (c3) {\textbf{Ch.~3}\\Phase I: exploratory engine\\GA + NSGA-II design\\UQ program};
+\node[box, right=of c3] (c4) {\textbf{Ch.~4}\\Phase II: PK-Sim platform\\\#1622 fix $\cdot$ model build\\calibration};
+\node[box, below=1.0cm of c3] (c5) {\textbf{Ch.~5--6}\\Results\\34\% platform $\rightarrow$\\gate 6/6, S01--S06};
+\node[box, right=of c5] (c7) {\textbf{Ch.~7}\\In-loop NSGA-II\\cited bounds\\max x126: F = 97\%};
+\node[boxg, left=of c5] (c8) {\textbf{Ch.~8--9}\\Appraisal\\H1--H5 verdicts\\roadmap};
+\draw[arrow] (c12) -- (c3);
+\draw[arrow] (c3) -- (c4);
+\draw[arrow] (c3) |- (c5);
+\draw[arrow] (c4) |- (c5);
+\draw[arrow] (c5) -- (c7);
+\draw[arrow] (c7) -- (c8);
+\draw[arrow, dashed] (c7) to[bend left=18] node[above, font=\scriptsize] {cross-check 34.0/34.6\%} (c3);
+\end{tikzpicture}
+\caption{Thesis workflow. Two computational phases share one optimization logic: a fast exploratory engine (Phase I) generates the platform hypothesis; the validated PK-Sim platform (Phase II) confirms it mechanistically, calibrates the oral transfer function, and hosts the definitive in-the-loop optimization. The cross-check between engines (dashed) is itself a validation result.}
+\label{fig:synopsis-workflow}
+\end{figure}
+
+\paragraph{Part I (Chapters 1--2) --- foundations.}
+\cref{chap:introduction} frames the clinical problem and states five research questions and hypotheses. \cref{chap:literature} builds the scientific base: BCS science, tobramycin's profile, PK/PD targets, the permeability-targeting formulation toolbox --- and documents the systematic search that found \emph{no} published tobramycin PBPK model, positioning this work.
+
+\paragraph{Part II (Chapters 3 and 5) --- Phase I: the exploratory framework.}
+\cref{chap:methodology} specifies the purpose-built fast engine (two-compartment PK, transit absorption, Hill PD, eight-factor bioavailability model) and the optimization design. \cref{chap:results} reports its outcomes: the 34\% platform, the top-10 formulations, and the full uncertainty program.
+
+\paragraph{Part III (Chapters 4, 6 and 7) --- Phase II: the PK-Sim platform.}
+\cref{chap:methodology-pksim} is the methodological heart of the definitive phase: constructing a tobramycin model in PK-Sim from the validated amikacin base, repairing the macOS snapshot-conversion defect (root-caused to a SQLite view-resolution stack overflow), validating the model against published clinical data (6/6 gate), and calibrating the oral permeability transfer function. \cref{chap:results-pksim} reports the physiological studies (renal, population, sensitivity, food, fractionation --- including the flip-flop kinetics finding). \cref{chap:results-ga} runs the optimizer inside the engine within cited bounds (TOBP-001: $\times$125, $F_{96} = 97.1\%$), evaluates both candidates completely (mass-balance-checked true dosing), and cross-validates the two engines.
+
+\paragraph{Part IV (Chapters 8--9) --- appraisal.}
+\cref{chap:discussion} confronts all five hypotheses with the evidence, benchmarks against the literature, and states the limitations without euphemism --- including the trough liability that the optimized platform creates. \cref{chap:conclusion} condenses the contributions and the experimental roadmap.
+
+\medskip
+\noindent\textbf{Appendices A--L} hold the Phase I numerical record; \textbf{M--R} the Phase II code, data, debugging journal, optimization archive, plausibility audit, and battery data. Every figure and table traces to a committed script and data file (\cref{chap:app-traceability}).

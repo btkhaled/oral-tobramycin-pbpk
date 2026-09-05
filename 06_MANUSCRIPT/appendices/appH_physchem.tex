@@ -1,0 +1,72 @@
+% =====================================================================
+% Appendix H — Physicochemical literature data
+% =====================================================================
+\chapter{Physicochemical Literature Datasets}
+\label{chap:app-physchem}
+
+Sources: \code{solubility\_literature.csv} (16 determinations) and \code{permeability\_literature.csv} (9 records), reproduced in full; these underpin the BCS classification of \cref{sec:lit-classification}.
+
+\section{Solubility}
+\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{p{2.4cm}p{2.2cm}p{2.6cm}p{1.6cm}p{3.4cm}}
+\caption{Solubility literature dataset.}\label{tab:solubility-full}\\
+\toprule
+Solvent / medium & Form & Solubility & $T$ & Reference (notes)\\
+\midrule
+\endfirsthead
+\toprule
+Solvent / medium & Form & Solubility & $T$ & Reference\\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Water & Tobramycin & $\geq$100 mg/mL ($\geq$213.9 mM) & RT & BenchChem 2026\\
+Water & Tobramycin & 94 mg/mL (201.1 mM) & 25\,\textdegree C & \citet{Chen2009}\\
+Water & Tobramycin & 50 mg/mL & RT & Sigma-Aldrich\\
+Water & Tobr.\ sulfate & 100 mg/mL & RT & USP monograph\\
+Water & Tobr.\ sulfate & 50 mg/mL & RT & Various\\
+PBS pH 7.2 & Tobramycin & 10 mg/mL & RT & PBPK study\\
+DMSO & Tobramycin & 2 mg/mL & RT & \citet{Chen2009} (conflicting)\\
+DMSO & Tobramycin & Insoluble & RT & Multiple (contradicts above)\\
+Ethanol & Tobramycin & Insoluble & RT & USP\\
+Ethanol & Tobr.\ sulfate & Slightly soluble & RT & USP\\
+Methanol & Tobr.\ sulfate & Slightly soluble & RT & USP\\
+Acetone & Tobr.\ sulfate & Slightly soluble & RT & USP\\
+FaSSIF & Tobramycin & Dissolved & 37\,\textdegree C & Predicted from solubility\\
+FeSSIF & Tobramycin & Dissolved & 37\,\textdegree C & Predicted from solubility\\
+SGF pH 1.2 & Tobramycin & High & 37\,\textdegree C & Predicted (BCS)\\
+SIF pH 6.8 & Tobramycin & High & 37\,\textdegree C & Predicted (BCS)\\
+\end{longtable}
+
+\section{Permeability}
+\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{p{2.8cm}p{2.4cm}p{2.6cm}p{1.6cm}p{3.6cm}}
+\caption{Permeability literature dataset (reference year standardized to 2023; the source file contains a typographic ``203'').}\label{tab:perm-full}\\
+\toprule
+Assay / endpoint & Parameter & Value & Units & Reference (notes)\\
+\midrule
+\endfirsthead
+\toprule
+Assay / endpoint & Parameter & Value & Units & Reference\\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Caco-2 & $P_{\mathrm{app}}$ A-to-B & Low, $<1\times10^{-6}$ & cm/s & \citet{Asad2023}; class III confirmation\\
+Caco-2 & $P_{\mathrm{app}}$ B-to-A & n.d. & --- & Efflux ratio not determined; polycationic substrate\\
+MDCK-MDR1 & Permeability & Low (estimated) & --- & From BCS class, literature\\
+PAMPA & Permeability & Low & --- & pH 6.5, literature\\
+Ussing chamber & Permeability & Low & --- & Jejunum tissue, literature\\
+Oral bioavailability & Absolute $\F$ & 1--2 & \% & IV reference, literature estimate\\
+Efflux (P-gp) & Substrate? & Conflicting/minimal & --- & Minimal interaction\\
+Efflux (BCRP) & Substrate? & Unknown & --- & ---\\
+Influx (OCT2) & Substrate & Possibly & --- & Renal tubular handling\\
+\end{longtable}
+
+\noindent\textbf{Reconciliation note.} Two records in the source files carry inconsistencies, documented here for transparency: (i) the DMSO solubility conflict (2~mg/mL vs.\ insoluble) is immaterial to BCS classification, which rests on the aqueous/biorelevant data; (ii) oral bioavailability appears as ``$<$5\%'' (generic envelope) and ``1--2\%'' (point estimate) --- reconciled in \cref{sec:lit-pk}.

@@ -1,0 +1,304 @@
+% =====================================================================
+% Chapter 7 — Results III: NSGA-II in the PK-Sim Loop and the Winner
+% =====================================================================
+\chapter{Results III: Optimization in the Simulation Loop and the Winner}
+\label{chap:results-ga}
+
+This chapter closes the computational program: the NSGA-II optimizer of \cref{chap:methodology} is executed \emph{inside} the PK-Sim engine (population 100, seed 42, one \texttt{SimulationBatch} per generation; design budget 100 generations, final state at generation 60 with the best $F$ within 0.1\% of final since generation 20 --- $\approx$6,100 native evaluations). The resulting front is analyzed, the rank-1 candidate is characterized exhaustively in the standard battery (\cref{sec:res-battery}), and the two independent modeling phases are cross-validated.
+
+\section{Convergence and the shape of the front}
+\label{sec:res-ga-convergence}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{battery_pta.png}
+\caption{Steady-state target attainment versus MIC for both candidates (true 7-day once-daily dosing, battery B5 block).}
+\label{fig:res-ga-pta}
+\end{figure}
+
+The optimization now runs \emph{within the literature-bounded enhancement model} of \cref{sec:methods-pksim-enhancement}: every component factor carries a cited range, the logP gene is capped at the measured HIP complex (+1.6), and the emergent multiplier cannot exceed $\times$126.3 (\cref{sec:requirement-map-bounds}). Convergence is fast and decisive: the best-of-generation bioavailability reaches 92\% at generation 1, 96.6\% by generation 10, and plateaus at 97.1\% from generation 20 onward --- exactly the F the response curve assigns to the bounded maximum (\cref{sec:res-reqmap}).
+
+The front \textbf{converges to the cited-bounds corner}: the three exposure objectives are mutually synergistic and outweigh dose minimization, so the final front is a single point at the component maxima --- \textbf{TOBP-001}: 1000 mg once daily, every component at its cited maximum, emergent multiplier $\times$125.0, $F_{96} = 97.1\%$, $\CMIC = 31.2$. The corner is no longer an artifact of a free scalar: it is the \emph{best formulation the cited evidence supports}, and the degeneracy simply states that more exposure is better until dose is priced in. The clinically relevant question --- the minimal dose that still attains the targets on this platform --- is answered by the complete evaluation below and in \cref{sec:res-reqmap}.
+
+\section{S07: The recommended formulation, characterized}
+\label{sec:res-ga-winner}
+
+\subsection{Single-dose pharmacokinetics}
+At the winner's multiplier ($\times$125.0, $P_{int} = 3.75\times10^{-7}$ dm/min), the 1000 mg oral dose delivers \textbf{$F_{96} = 97.1\%$} (24-h window: 91.6\%): systemic exposure within a few percent of intravenous administration of the same dose (relative 24-h exposure 91.2\%, \cref{tab:res-battery-comparison}).
+
+\subsection{The dose--target answer}
+Scanning steady-state peak attainment at the winner's multiplier (\cref{tab:res-dosescan}) yields the clinically decisive number: the \textbf{minimal target-attaining dose is 250 mg once daily} ($\mathrm{Cmax}_{ss}/\mathrm{MIC} = 8.0$ at MIC 1 mg/L) --- a plain therapeutic dose, not a heroic one.
+
+\begin{table}[htbp]
+\centering
+\caption{Dose scan at the winner's permeability multiplier: steady-state peak attainment (MIC 1 mg/L).}
+\label{tab:res-dosescan}
+\begin{tabular}{ccccccccc}
+\toprule
+Dose (mg) & 150 & 250 & 350 & 450 & 550 & 700 & 850 & 1000 \\
+$\mathrm{Cmax}_{ss}$/MIC & 4.8 & \textbf{8.0} & 11.3 & 14.5 & 17.7 & 22.5 & 27.4 & 32.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Steady-state fractionation and PTA}
+\begin{table}[htbp]
+\centering
+\caption{Winner characterization at steady state (MIC 1 mg/L): fractionation options.}
+\label{tab:res-ga-frac}
+\small
+\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccccc}
+\toprule
+Regimen & Daily (mg) & Cmax$_{ss}$/MIC & AUC$_{ss}$/MIC & Cmin$_{ss}$ (mg/L) & PTA$_{Cmax}$ MIC = 1 \\
+\midrule
+QD 550.6 (TOB-161-A) & 550.6 & 13.6 & 87.3 & 1.05 & 99.6\% \\
+QD 1000 (TOBP-001)   & 1000  & 32.2 & 172.3 & 1.21 & 99.6\% \\
+BID 500 (TOBP-001)   & 1000  & 17.6 & 172.2 & 2.34 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{The exposure boundary falls.} At the winner's multiplier, the once-daily 1000 mg regimen delivers $\AMIC = 172.3$ --- \emph{above} the 80--120 intravenous target band that the exploratory phase at 550 mg could not reach (the nominal $\times$20 platform attains it from 993 mg daily, \cref{tab:res-reqmap}). Probability of target attainment across the MIC distribution (\cref{fig:res-ga-pta}): the peak target is attained in 100\% of the dosing interval at MIC $\leq 0.5$ mg/L for every regimen, and interval coverage at MIC 1 mg/L is 99.6\% daily (B5 block of the battery).
+
+\subsection{Virtual population on the winner}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.72\textwidth]{S07_winner_population.png}
+\caption{Virtual population (n = 100, ICRP 2002) on the winner (1000 mg once daily): Cmax/MIC (left) and AUC/MIC (right) distributions with target lines.}
+\label{fig:res-ga-pop}
+\end{figure}
+
+The 100-individual virtual trial on the winner (B6 block of the battery) returns a population median $\CMIC$ of \textbf{40.9} (5th--95th: 15.8--88.8) --- \textbf{peak target attainment in 100\% of virtual subjects} at MIC 1 mg/L --- and a median $\AMIC$ of 238 (5th--95th: 112--580), with 97\% of subjects at or above the 80--120 band floor. Troughs stay at the monitoring line across the population.
+
+\subsection{Food effect}
+At the winner's multiplier the fed state lowers peak by 32\% (31.2 $\rightarrow$ 21.2 mg/L, Tmax 1.4 $\rightarrow$ 2.7 h) with \emph{identical} extent ($F_{96} = 97.1\% / 97.2\%$) --- the BCS III signature persists at the cited maximum (B8 block of the battery). Dosing instructions can therefore recommend intake away from meals for peak assurance without exposure loss.
+
+\section{Cross-platform validation: two engines, one answer}
+\label{sec:res-ga-crosscheck}
+
+\begin{table}[htbp]
+\centering
+\caption{Cross-check of the two independent implementations at the $\times$20 platform multiplier.}
+\label{tab:res-crosscheck}
+\footnotesize
+\begin{tabular}{p{3.4cm}p{4.6cm}p{4.6cm}}
+\toprule
+& Legacy custom engine (Phase I) & PK-Sim 12.4 (Phase II) \\
+\midrule
+Structure & 2-ct ODEs + transit + Hill (RK4, pure R) & Whole-body PBPK (ACAT, GFR process) \\
+Baseline $F_0$ & 1.5--2.8\% & 1.75\% (calibrated, 24-h convention) \\
+Platform $F$ at $\times$20 (24-h) & \textbf{34.0\%} & \textbf{34.6\%} \\
+Agreement & \multicolumn{2}{c}{$\Delta = 0.6$ pp (1.9\% relative)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The exploratory engine --- built first, with phenomenological enhancement factors --- and the whole-body PK-Sim platform, with mechanistic regional absorption, converge on the same platform bioavailability within 2\%. The exploratory phase was therefore not discarded work: it was the \emph{hypothesis generator} whose central number the definitive platform confirmed.
+
+
+\section{Formulation identity cards}
+\label{sec:formulation-cards}
+
+The optimizer speaks in objectives; the pharmacist needs \emph{composition}. This section decodes the converged candidates into formulation identity cards --- the complete galenic specification of each platform state, its PK-Sim implementation, and its measured performance. Three cards span the decision space: the \textbf{GA winner} (maximum exposure), its \textbf{dose-sparing regimen} (peak-only coverage at one quarter of the dose), and the \textbf{nominal benchmark} (the $\times$20 platform that the physiological studies of \cref{chap:results-pksim} characterized).
+
+\begin{formcard}[coltitle=white]{Card 1 — TOBP-001: the GA winner (maximum-exposure platform)}
+\small
+\begin{tabular}{@{}p{5.6cm}p{6.6cm}@{}}
+\multicolumn{2}{@{}l}{\textbf{Composition (decoded chromosome)}}\\[2pt]
+HIP complex (ion pairing) & apparent logP$' = +1.6$ (measured complex; literature logP shifts up to 1500$\times$ in linear units \citep{Asad2023}) \\
+Nanoparticle platform & polymer NPs, particle size $\approx$ 50 nm \\
+SEDDS system & surfactant-rich at the composition ceiling (60 \% surfactant, 29 \% co-surfactant, 70 \% oil phase --- independent saturating levers in the design space) \\
+Permeation enhancer & sodium caprate (C$_{10}$) 50 mM \\
+Mucoadhesive polymer & 29.3 \% loading \\
+Chitosan coating & active (tight-junction modulation) \\
+Enteric coating & active (HPMC-AS; gastric protection) \\
+\textbf{Dose} & \textbf{999.8 mg once daily ($\approx$1000 mg)} \\
+\multicolumn{2}{@{}l}{\textbf{PK-Sim implementation}}\\[2pt]
+Intestinal permeability override & $P_{int} = 3.75\times10^{-7}$ dm/min ($\approx 1.25\times10^{-8}$ cm/s) = $\times$125 (cited-bounds maximum) \\
+\multicolumn{2}{@{}l}{\textbf{Performance (validated model)}}\\[2pt]
+Single dose & $F_{96} = 97.1\%$ (24-h window: 91.6\%); Cmax 31.2 mg/L (Tmax 1.4 h); AUC96 172.3 mg·h/L; flip-flop tail \\
+Steady state (QD 1000, true dosing) & Cmax$_{ss}$/MIC 32.2; \textbf{AUC$_{ss}$/MIC 172.3} (target 80--120: met and exceeded); Cmin$_{ss}$ 1.21 mg/L \\
+Steady state (BID 500) & Cmax$_{ss}$/MIC 17.6; AUC$_{ss}$/MIC 172.2 (above the 80--120 band); Cmin$_{ss}$ 2.34 mg/L \\
+PTA & peak target 100\% of subjects, AUC band floor met in 97\% (population, MIC 1 mg/L) \\
+\end{tabular}
+\end{formcard}
+
+\begin{formcard}[coltitle=white]{Card 2 — TOBP-250: the dose-sparing regimen (same platform, quarter dose)}
+\small
+\begin{tabular}{@{}p{5.6cm}p{6.6cm}@{}}
+\multicolumn{2}{@{}l}{\textbf{Composition}}\\[2pt]
+Identical to Card 1 & same HIP--SEDDS--NP--PE platform, same coatings \\
+\textbf{Dose} & \textbf{250 mg once daily} (dose scan: minimal target-attaining dose) \\
+\multicolumn{2}{@{}l}{\textbf{Performance (steady state, MIC 1 mg/L)}}\\[2pt]
+Peak & Cmax$_{ss}$/MIC = 8.0 --- exactly the efficacy threshold (linear dose scaling of the measured 32.2 at 1000 mg) \\
+Trough & Cmin$_{ss}$ $\approx$ 0.4 mg/L --- below the nephrotoxicity boundary (linear scaling of the measured 1.21 at 1000 mg) \\
+Exposure & AUC$_{ss}$/MIC $\approx$ 43 --- below the 80--120 band (peak-only coverage) \\
+PTA & peak target 100\% at MIC $\leq$ 0.5 mg/L; 99.6\% interval coverage extends to MIC 1 only at the full dose \\
+\end{tabular}
+\end{formcard}
+
+\begin{formcard}[coltitle=white]{Card 3 — TOB-161-N: the nominal benchmark ($\times$20 platform)}
+\small
+\begin{tabular}{@{}p{5.6cm}p{6.6cm}@{}}
+\multicolumn{2}{@{}l}{\textbf{Composition}}\\[2pt]
+HIP complex & apparent logP$' = +1.5$ \\
+Nanoparticles & 50 nm, chitosan-coated, 30\% polymer \\
+SEDDS system & 50/30/20 (surfactant/co-surfactant/oil) \\
+Permeation enhancer & C$_{10}$ 50 mM; enteric coating active \\
+\textbf{Dose} & \textbf{550 mg once daily} \\
+\multicolumn{2}{@{}l}{\textbf{Performance (PK-Sim, Chapters 4 and 6)}}\\[2pt]
+Single dose & $F = 34.6\%$; Cmax 4.41 mg/L; AUC24 33.8 mg·h/L \\
+Steady state & Cmax$_{ss}$/MIC 5.4; AUC$_{ss}$/MIC 49.6; Cmin$_{ss}$ 1.06 mg/L \\
+Role & conservative fallback; the platform the physiological studies (S01--S06) characterized in depth \\
+\end{tabular}
+\end{formcard}
+
+\begin{table}[htbp]
+\centering
+\caption{Identity-card comparison across the decision space (steady state, MIC 1 mg/L).}
+\label{tab:cards-comparison}
+\small
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+Card & Dose (mg) & $P_{int}$ mult & $F$ (\%) & Cmax$_{ss}$/MIC & AUC$_{ss}$/MIC & Cmin$_{ss}$ (mg/L) \\
+\midrule
+TOBP-001 (PK-Sim GA) & 1000 & $\times$125 (cited max) & 97.1 & \textbf{32.2} & 172.3 & 1.21 \\
+TOB-161-A (legacy GA) & 550.6 & $\times$73.9 & 89.3 & 13.6 & \textbf{87.3} & 1.05 \\
+TOB-161-N (nominal ref.) & 550 & $\times$20 & 48.8$^{a}$ & 5.4$^{a}$ & 49.6 & 1.06 \\
+\bottomrule
+\end{tabular}}
+{\footnotesize $^{a}$ 96-h extent convention (Card 3 reports the same platform on the 24-h calibration convention: $F = 34.6\%$, Cmax$_{ss}$/MIC 5.4 --- see \cref{sec:res-calibration}).\par}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\textwidth]{S07_winner_profile.png}
+\caption{Single-dose profile of the winner (TOBP-001 platform, 1000 mg, $\times$125): near-complete oral absorption with flip-flop kinetics --- the pharmacokinetic signature of Card 1.}
+\label{fig:cards-profile}
+\end{figure}
+
+\textbf{Reading the cards together.} The three cards are one platform at three operating points. Card 1 answers ``what is the ceiling'' --- full IV-like exposure; Card 2 answers ``what is the minimum'' --- a quarter of the dose still guards the peak; Card 3 is the conservative platform whose physiology was characterized in depth. The dose--multiplier plane between Cards 2 and 1 is spanned by the PTA tables (\cref{chap:app-pksim-data}); TDM selects the operating point per patient and per local MIC.
+
+
+\subsection{Bounds on the multiplier}
+\label{sec:requirement-map-bounds}
+
+The enhancement model (\cref{sec:methods-pksim-enhancement}) bounds each component by its cited range; the logP gene is capped at the measured HIP complex logP$' = +1.6$. The emergent maximum is therefore $\times$126.3 --- not a free scalar, but the ceiling of the evidence (the optimizer's final chromosome attains $\times$125.0: polymer 29.3\% instead of the ceiling 30\%). Values beyond the ceiling (the historical $\times$313 corner) survive only as sensitivity statements: they are what \emph{would} be required to cut the dose further, not what any cited formulation supports.
+
+\section{The requirement map: what the optimizer actually established}
+\label{sec:res-reqmap}
+
+The requirement map (study S08, \cref{tab:res-reqmap}) separates the formulation requirement from any single optimizer run: at each permeability multiplier it reports the steady-state attainment at 993 mg once daily and the minimal dose attaining the peak target. Read together with the cited-bounds ceiling ($\times$125), it states \emph{what a real formulation must deliver}, dose by dose --- a specification, not a measurement.
+
+\begin{table}[htbp]
+\centering
+\caption{Requirement map (S08): steady-state attainment at 993 mg once daily as a function of the permeability multiplier, and the minimal dose attaining the peak target at each multiplier.}
+\label{tab:res-reqmap}
+\resizebox{0.98\textwidth}{!}{%
+\begin{tabular}{rrrrrl}
+\toprule
+Multiplier & $F$ at 993 mg (\%) & Cmax$_{ss}$/MIC & AUC$_{ss}$/MIC & Cmin$_{ss}$ (mg/L) & Min.\ dose (peak $\geq$8) \\
+\midrule
+$\times$1   & 3.4   & 0.4  & 8.4   & 0.28 & $>$993 mg \\
+$\times$5   & 15.9  & 2.5  & 33.2  & 0.91 & $>$993 mg \\
+$\times$10  & 29.0  & 5.2  & 58.3  & 1.48 & $>$993 mg \\
+$\times$20  & 48.8  & 9.7  & 93.5  & 2.11 & 850 mg \\
+$\times$33  & 65.9  & 14.5 & 121.8 & 2.36 & 550 mg \\
+$\times$50  & 79.4  & 19.4 & 143.4 & 2.28 & 450 mg \\
+$\times$100 & 94.6  & 28.9 & 168.2 & 1.53 & 350 mg \\
+$\times$125$^{b}$ & 96.2 & 32.2 & 172.3 & 1.21 & 250 mg$^{c}$ \\
+\bottomrule
+\end{tabular}}
+{\footnotesize $^{b}$ Cited-bounds maximum: all seven components at their literature ceilings (emergent $\times$126.3; optimizer chromosome $\times$125.0). $^{c}$ Minimal dose for the \emph{peak} target (Cmax$_{ss}$/MIC $\geq$ 8); the exposure band floor (AUC/MIC $\geq$ 80) is attained from 467 mg on this platform.\par}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.82\textwidth]{s08_requirement_map.png}
+\caption{Requirement map (96-h convention): the exposure targets at 993 mg require only $\approx\times$20; beyond $\times$33 the optimizer buys dose reduction, not new attainment.}
+\label{fig:res-reqmap}
+\end{figure}
+
+Three conclusions reframe the headline result:
+
+\begin{enumerate}
+\item \textbf{Both targets are attainable at the nominal multiplier.} At $\times$20 --- the multiplier the formulation literature can plausibly support --- the 993 mg once-daily regimen already meets \emph{both} targets (Cmax$_{ss}$/MIC = 9.7; AUC$_{ss}$/MIC = 93.5, inside the 80--120 band). The exploratory phase's ``exposure boundary'' was an artifact of the 550 mg dose, not of the platform.
+\item \textbf{Beyond $\times$33, the optimizer buys dose reduction, not new attainment.} The cited-bounds maximum ($\times$126, all components at their literature ceilings) delivers both targets at 467 mg --- valuable, but a different claim than ``more permeability is needed''.
+\item \textbf{The trough profile is flat at the top.} The steady-state trough is worst at \emph{intermediate} multipliers ($\times$20--50: Cmin 2.1--2.4 mg/L at 993 mg --- the flip-flop regime feeds the circulation all day) and declines only past $\times$100 as absorption completes within the dosing interval. At the cited maximum ($\times$126) the trough sits at 1.0--1.2 mg/L for doses of 467--1000 mg --- at, not below, the monitoring line, which keeps Bayesian TDM structurally indicated.
+\end{enumerate}
+
+The formulation requirement is therefore tiered and testable: \textbf{$\geq\times$20} suffices for full target attainment at 993 mg/day (with trough monitoring); \textbf{$\times$125} --- the cited-bounds ceiling --- minimizes the dose further (467 mg attains the exposure band floor). Each tier is a falsifiable specification for the experimental program.
+
+
+\section{Complete evaluation of the two candidate formulations}
+\label{sec:res-battery}
+
+The two optimization tracks each produced a candidate formulation, evaluated \emph{in the same PK-Sim model, through the same cited enhancement model, with the same standard battery} (identity card, single dose with NCA, dose proportionality, \emph{true} seven-day repeated dosing QD and BID, PK/PD targets vs a MIC panel, a 100-subject ICRP virtual population, renal impairment, food effect, one-at-a-time component sensitivity, and an intravenous comparison at equal daily dose):
+
+\begin{itemize}
+\item \textbf{TOB-161-A} --- the exploratory GA winner, re-evaluated in PK-Sim: the legacy engine's own transfer function had priced its aggressive composition at only $\times$23; under the calibrated, cited mapping the same chromosome yields $\times$73.9. This 3-fold divergence between engines, at fixed composition, is itself a result (\cref{sec:res-calibration}).
+\item \textbf{TOBP-001} --- the in-loop NSGA-II optimum: every component at its cited ceiling, emergent multiplier $\times$126.3 (the maximum the evidence supports).
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{Head-to-head battery comparison (steady state from true 7-day once-daily dosing; population $n=100$ ICRP; MIC 1 mg/L).}
+\label{tab:res-battery-comparison}
+\small
+\begin{tabular}{p{6.2cm}cc}
+\toprule
+ & TOB-161-A (legacy GA) & TOBP-001 (PK-Sim GA) \\
+\midrule
+Multiplier (emergent) & $\times$73.9 & $\times$125.0 (cited max) \\
+Dose (once daily) & 550.6 mg & 999.8 mg \\
+$F$ (96-h / 24-h window) & 89.3\% / 77.9\% & 97.1\% / 91.6\% \\
+Cmax single dose (mg/L) & 12.7 & 31.2 \\
+Tmax (h) & 1.55 & 1.38 \\
+Cmax$_{ss}$ (mg/L) & 13.6 & 32.2 \\
+Cmin$_{ss}$ (mg/L) & 1.05 & 1.21 \\
+AUC$_{\tau}$/MIC (mass-balance checked) & 87.3 & 172.3 \\
+fT$>$MIC (\%, MIC 1) & 99.6 & 99.6 \\
+Population PTA peak ($\geq$8) & 95\% & 100\% \\
+Population AUC$_{ss}$/MIC $\geq$80 & 79\% & 97\% \\
+Relative 24-h exposure vs IV & 77.7\% & 91.2\% \\
+Food effect (extent / Cmax) & unchanged / $-$31\% & unchanged / $-$32\% \\
+AUC24 at CLCR 100$\to$20 (mg$\cdot$h/L) & 76$\to$260 & 163$\to$572 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Four findings complete the picture:
+
+\begin{enumerate}
+\item \textbf{Both candidates meet both PK/PD targets at steady state} (peak and exposure) at MIC 1 mg/L --- the first configuration in this program for which the exposure band is genuinely attained orally. TOB-161-A lands \emph{inside} the 80--120 band (87.3); TOBP-001 exceeds it (172.4) with a 467 mg option attaining the band floor.
+\item \textbf{Mass balance validates the engine.} At true steady state, AUC$_{\tau}$ must equal $F \cdot$ dose/CL: the simulations reproduce this identity to within 0.1\% (87.25 vs 87.38 mg$\cdot$h/L for TOB-161-A), and superposition --- still used in the screening studies --- deviates from true dosing by only $\approx$3\%.
+\item \textbf{Uncertainty is quantified, not assumed away} (\cref{sec:res-s09}): propagating the cited factor sigmas gives $F_{96} = 88\%$ [35--100] for TOB-161-A and $96\%$ [51--100] for TOBP-001; exposure attainment is robust for TOBP-001 (PTA in-band 99\%) and dose-limited for TOB-161-A (65\%).
+\item \textbf{Troughs sit at the monitoring line for both candidates} (Cmin$_{ss}$ 1.05 and 1.20 mg/L) --- the price of peak-and-exposure attainment from flip-flop absorption is a non-negligible residual concentration at 24 h, keeping Bayesian TDM structurally indicated rather than optional.
+\end{enumerate}
+
+\section{Uncertainty propagation: the attainability frontier (S09)}
+\label{sec:res-s09}
+
+The enhancement model carries an uncertainty per component (lognormal, graded by evidence quality). Propagating 20\,000 draws through the validated response curve yields, for each candidate, the bioavailability and exposure distributions of \cref{tab:res-battery-comparison}. The frontier figure (S09) makes the structure visible: F rises steeply to $\times$20, flattens past $\times$50, and the candidates' credible intervals overlap the target band --- TOBP-001 robustly (99\% model-propagated in-band attainment, S09; 97\% in the ICRP population), TOB-161-A dose-limited (65\% model-propagated).
+
+\section{Results III summary}
+\begin{table}[htbp]
+\centering
+\caption{Target attainment of the in-the-loop optimized program (winner TOBP-001 platform; MIC 1 mg/L unless noted).}
+\label{tab:res-targets-v3}
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{p{4.6cm}p{2.4cm}p{2.2cm}p{4.4cm}}
+\toprule
+Endpoint & Target & Achieved & Verdict \\
+\midrule
+$\CMIC$ (1000 mg QD, population median) & $\geq$8 & 40.9 & \textbf{Met} (100\% of subjects) \\
+$\AMIC$ (1000 mg QD) & 80--120 & 172.3 & \textbf{Met and exceeded} (in-band from 467 mg) \\
+Minimal peak-target dose & --- & 250 mg QD & Cmax$_{ss}$/MIC 8.0 (peak-only; AUC/MIC $\approx$43) \\
+$C_{\min}$ & $<$1 mg/L & 1.21 (1000 QD) & Borderline --- TDM structurally indicated \\
+$F_{96}$ & maximal (cited bounds) & 97.1\% & Bounded maximum ($\times$125) \\\end{tabular}
+\end{table}
+
+The in-the-loop optimization, run inside the literature-bounded enhancement model, transforms the therapeutic proposition: \textbf{both candidate formulations meet both PK/PD targets at steady state} --- TOB-161-A (the legacy winner, re-evaluated in PK-Sim: AUC$_{ss}$/MIC 87.3, inside the 80--120 band) and TOBP-001 (the in-loop optimum at the cited-bounds maximum: AUC$_{ss}$/MIC 172, with a 467 mg option attaining the band). Peak attainment is 100\% of the virtual population on TOBP-001 and 95\% on TOB-161-A. The residual clinical question is trough management: both candidates sit at the 1 mg/L monitoring line (Cmin 1.05--1.20 mg/L once daily), keeping Bayesian TDM structurally indicated. All steady-state values now come from \emph{true} repeated dosing in PK-Sim (seven once-daily applications), validated by mass balance (AUC$_{\tau}$ = $F \cdot$ dose/CL within 0.1\%).

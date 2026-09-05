@@ -1,0 +1,119 @@
+% =====================================================================
+% Preamble — Oral Tobramycin Personal Research
+% Compiler: pdflatex (TeX Live 2024)
+% =====================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ---- Layout ----
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, inner=3cm, outer=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\leftmark}
+\fancyhead[LO]{\rightmark}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}{}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+% ---- Mathematics & units ----
+\usepackage{amsmath, amssymb, bm}
+\usepackage{siunitx}
+\sisetup{per-mode = symbol, detect-all}
+
+% ---- Tables ----
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{pdflscape}
+
+% ---- Figures ----
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{font=small, labelfont=bf, width=0.9\textwidth}
+\usepackage{float}
+\usepackage{placeins}
+
+% ---- Colors, lists, code ----
+\usepackage[table]{xcolor}
+\definecolor{tobblue}{RGB}{0,84,147}
+\definecolor{DARK}{RGB}{26,42,58}
+\definecolor{GREY}{RGB}{90,107,122}
+\definecolor{codegreen}{RGB}{0,110,60}
+\definecolor{codegray}{RGB}{90,90,90}
+\definecolor{codebg}{RGB}{248,248,242}
+\usepackage{enumitem}
+\setlist{itemsep=2pt, topsep=4pt}
+\usepackage{listings}
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{tobblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{codegray},
+  backgroundcolor=\color{codebg},
+  frame=single, rulecolor=\color{codegray},
+  numbers=left, numberstyle=\tiny\color{codegray},
+  breaklines=true, showstringspaces=false, tabsize=2,
+  captionpos=b
+}
+\lstdefinestyle{rstyle}{
+  language=R,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{tobblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{codegray},
+  backgroundcolor=\color{codebg},
+  frame=single, rulecolor=\color{codegray},
+  numbers=left, numberstyle=\tiny\color{codegray},
+  breaklines=true, showstringspaces=false, tabsize=2,
+  captionpos=b
+}
+\usepackage{appendix}
+
+% ---- Cards ----
+\usepackage[most]{tcolorbox}
+\newtcolorbox{formcard}[2][]{colback=tobblue!4, colframe=tobblue, fonttitle=\bfseries,
+  title={#2}, #1}
+
+% ---- TikZ ----
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds}
+
+% ---- Bibliography & cross-references (load last) ----
+\usepackage[numbers, sort&compress, round]{natbib}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true, linkcolor=tobblue, citecolor=tobblue, urlcolor=tobblue,
+  pdftitle={Oral Tobramycin: From BCS III to a Viable Oral Formulation},
+  pdfauthor={Khaled Ben Taieb},
+  pdfsubject={Pharmaceutics -- PBPK modeling -- Formulation optimization},
+  pdfkeywords={tobramycin, BCS class III, oral bioavailability, PBPK, genetic algorithm, NSGA-II}
+}
+\usepackage[nameinlink, capitalize, noabbrev]{cleveref}
+
+% ---- Custom macros ----
+\newcommand{\tofr}{tobramycin}
+\newcommand{\F}{F_{\mathrm{oral}}}
+\newcommand{\Fo}{F_{\mathrm{oral},0}}
+\newcommand{\CMIC}{C_{\max}/\mathrm{MIC}}
+\newcommand{\AMIC}{\mathrm{AUC}_{24}/\mathrm{MIC}}
+\newcommand{\fmic}{f_{T>\mathrm{MIC}}}
+\newcommand{\code}[1]{\texttt{#1}}
+\makeatletter
+\newcommand{\tabinput}[1]{\@@input #1 }
+\makeatother
+\newcommand{\pkg}[1]{\textsf{#1}}
+\newcommand{\tobfig}[1]{Figure~\ref{#1}}
+\newcommand{\tobtab}[1]{Table~\ref{#1}}

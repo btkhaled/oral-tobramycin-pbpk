@@ -1,0 +1,21 @@
+% =====================================================================
+% Appendix M — PK-Sim Platform Code
+% =====================================================================
+\chapter{PK-Sim Platform Code}
+\label{chap:app-pksim-code}
+
+The Phase II pipeline comprises the environment layer, the snapshot generator, the validation gate and the study suite, all committed in the repository under \texttt{pksim/}. This appendix reproduces the platform-defining scripts; the complete set ships with the repository.
+
+\section{Environment: database patch (issue \#1622 workaround)}
+\lstinputlisting[style=rstyle, language=Python, caption={\texttt{patch\_pksimdb.py} --- materializes the 91 views of the bundled PK-Sim database into tables (macOS snapshot-conversion fix).}]{code/patch_pksimdb.py}
+
+\section{Native snapshot runner}
+\lstinputlisting[style=rstyle, caption={\texttt{pk\_sim\_run.R} --- native macOS runner: snapshot $\rightarrow$ conversion/simulation/export (CSV+PKML).}]{code/pk_sim_run.R}
+
+\section{Snapshot generator}
+\lstinputlisting[style=pythonstyle, caption={\texttt{make\_tobramycin\_json.py} --- builds the tobramycin snapshots from the validated amikacin base.}]{code/make_tobramycin_json.py}
+
+\section{Validation gate and studies}
+\lstinputlisting[style=rstyle, caption={\texttt{S00\_validation\_gate.R} --- the six-criterion IV gate.}]{code/S00_validation_gate.R}
+\lstinputlisting[style=rstyle, caption={\texttt{S02\_oral\_calibration.R} --- the $F(P_{int})$ scan.}]{code/S02_oral_calibration.R}
+\lstinputlisting[style=rstyle, caption={\texttt{S07\_winner\_characterization.R} --- winner profile, dose scan, fractionation, PTA, population, food.}]{code/S07_winner_characterization.R}

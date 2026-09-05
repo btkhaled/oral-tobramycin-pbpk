@@ -1,0 +1,59 @@
+% =====================================================================
+% Appendix I — PK literature datasets
+% =====================================================================
+\chapter{Pharmacokinetic Literature Datasets}
+\label{chap:app-pklit}
+
+Sources: \code{iv\_pk.csv} (8 studies) and \code{oral\_pk.csv}; these tables parameterize \cref{sec:lit-pk} and the model of \cref{sec:pk-model}.
+
+\section{Intravenous population PK}
+\begin{landscape}
+\small\setlength{\tabcolsep}{3.6pt}
+\begin{longtable}{p{2.8cm}p{2.6cm}rllllll}
+\caption{Intravenous PopPK literature dataset.}\label{tab:ivpk-full}\\
+\toprule
+Source & Population & $n$ & Model & CL (L/h) & $V_1$ (L) & $Q$ (L/h) & $t_{1/2}$ (h)\\
+\midrule
+\endfirsthead
+\toprule
+Source & Population & $n$ & Model & CL (L/h) & $V_1$ (L) & $Q$ (L/h) & $t_{1/2}$ (h)\\
+\midrule
+\endhead
+\midrule
+\multicolumn{8}{r}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\citet{Li2021} & ICU adults (CF label) & 140 & 2-ct & 3.27 (2.1--4.5) & 21.3 & 2.4 & 4.5--6.0\\
+\citet{Li2021} & Normal adults (reference) & ref. & 2-ct & 6.03 & 15.1 & n.r. & 2.5\\
+Hennig et al. & CF children 0.5--17.8 y & 35 & 2-ct & 6.37/70 kg & 18.7/70 kg & n.r. & 2.0--3.0\\
+Massie et al. & CF children 9 mo--20 y & 44 & 1-ct & 7.21/70 kg & n.r. & n.r. & 2.1\\
+Touw et al. & CF children 5--15 y & 85 & 2-ct & n.r. & n.r. & n.r. & n.r.\\
+Conil et al. & ICU & ref. & 2-ct & 3.83 & 25.5 & n.r. & n.r.\\
+Rosenon-Larsen et al. & CF children & ref. & 2-ct & n.r. & n.r. & n.r. & n.r.\\
+\citet{Ferreira2021} & Hospital inpatients & 82 & PBPK & n.r. & n.r. & n.r. & n.r.\\
+\end{longtable}
+\end{landscape}
+\noindent $V_2$ = 16.3~L (ICU, \citealt{Li2021}); CLCR power-model exponent $\theta = 0.72$; residual error 28.5\%; $V_{d,ss}$ 0.26--0.30~L/kg across studies.
+
+\section{Oral PK literature}
+\begin{table}[htbp]
+\centering
+\caption{Oral PK literature dataset (source: \code{oral\_pk.csv}). No in-vivo human oral PK data exist; NR = not reported.}
+\label{tab:oralpk-full}
+\small
+\begin{tabular}{p{3.2cm}p{3.0cm}p{2.6cm}p{5.0cm}}
+\toprule
+Source & Model/system & Route/formulation & Finding\\
+\midrule
+Literature estimate & Healthy adults & Oral solution & $\F <$5\% (envelope); point estimate 1--2\%\\
+\citet{Asad2023} & In vitro & SEDDS + HIP & Improved lipophilicity; no in-vivo PK\\
+\citet{BlancoCabra2022} & In vitro biofilm & NP complex & Biofilm diffusion enhanced\\
+\citet{Khaled2026} & In vitro & NCA ion pairs & Lipophilicity and activity enhanced\\
+\citet{Hill2019} & In vitro & PLGA NPs & MIC maintained at 1.25~$\mu$g/mL\\
+\midrule
+\multicolumn{4}{l}{\emph{Summary:} $\F$ 1--2\% (point estimate); cause: permeability (polycationic aminoglycoside);}\\
+\multicolumn{4}{l}{\emph{current clinical alternatives:} inhalation (TOBI 300 mg BID), IV (5--7 mg/kg).}\\
+\bottomrule
+\end{tabular}
+\end{table}

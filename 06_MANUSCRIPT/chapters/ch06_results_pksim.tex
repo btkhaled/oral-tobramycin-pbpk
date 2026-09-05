@@ -1,0 +1,168 @@
+% =====================================================================
+% Chapter 6 — Results II: PK-Sim Validation and Physiological Studies
+% =====================================================================
+\chapter{Results II: PK-Sim Validation and Physiological Studies}
+\label{chap:results-pksim}
+
+This chapter reports the outcomes of the PK-Sim program: the intravenous validation gate, the oral permeability calibration, and the physiological studies S01--S06 (design in \cref{chap:methodology-pksim}). The optimization in the simulation loop and the winner characterization follow in \cref{chap:results-ga}.
+
+\section{Intravenous validation gate: 6/6 PASS}
+\label{sec:res-gate}
+
+\begin{table}[htbp]
+\centering
+\caption{IV validation gate for the PK-Sim tobramycin model (577.5 mg = 7 mg/kg, 30-min infusion, 82.5-kg volunteer).}
+\label{tab:res-gate}
+\small
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{p{4.2cm}p{2.6cm}p{4.4cm}p{1.8cm}}
+\toprule
+Metric & PK-Sim & Published target & Verdict \\
+\midrule
+Hartford peak (30 min post-infusion) & 25.3 mg/L & 20--30 mg/L & PASS \\
+Cmax end of infusion & 34.8 mg/L & 20--35 (V1-uncertainty envelope) & PASS \\
+AUC24 $\rightarrow$ implied CL & 102.5 mg·h/L $\rightarrow$ 5.63 L/h & 81--105 (CL 3.27--6.03, Li 2021) & PASS \\
+Trough 24 h & 0.033 mg/L & $<$1 mg/L & PASS \\
+$t_{1/2}$ NCA effective & 2.29 h & 2.0--3.0 h & PASS \\
+Renal excretion 24 h & 99.4 \% & $>$90 \% & PASS \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.82\textwidth]{val_iv_profile.png}
+\caption{Simulated IV profile of the PK-Sim tobramycin model (577.5 mg, 30-min infusion). The Hartford peak (25.3 mg/L, red marker) sits inside the 20--30 mg/L clinical band; the trough at 24 h is 0.033 mg/L.}
+\label{fig:res-gate-profile}
+\end{figure}
+
+\textbf{The gate passes 6/6.} The model reproduces the published clinical envelope of intravenous tobramycin --- peak, exposure, half-life, trough, and the near-complete renal excretion characteristic of aminoglycosides --- and is therefore validated as the substrate for the oral program.
+
+\section{Oral permeability calibration and the F(P$_{int}$) curve}
+\label{sec:res-calibration}
+
+PK-Sim's native intestinal permeability for tobramycin is $1.9\times10^{-12}$ dm/min ($F \approx 0.002\%$): the logP-based correlation saturates for very hydrophilic cations and the paracellular path is off by default. The calibrated baseline is $P_{\mathrm{int},0} = 3\times10^{-9}$ dm/min, reproducing $F_0 = 1.75\%$ on the 24-h reporting convention --- inside the clinical 1--2\% range. Because absorption is flip-flop (substantial residual beyond 24 h), the same parameter yields $F_{96} = 3.5\%$ on the 96-h extent window: both conventions are reported throughout this thesis (calibration at 24 h, extent at 96 h).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{s02_calibration.png}
+\caption{Oral bioavailability as a function of the intestinal permeability override (log scale, 11 points, 96-h extent convention). The native baseline ($F_{96} = 3.5\%$) and the $\times$20 platform ($F_{96} \approx 49\%$) are marked; the extent curve saturates past $\times$100. (Calibration to the clinical 1--2\% uses the 24-h convention: $F_{24} = 1.75\%$ at $P_{\mathrm{int},0}$, $F_{24} = 34.6\%$ at $\times$20.)}
+\label{fig:res-calibration}
+\end{figure}
+
+The curve is the quantitative transfer function between formulation science (apparent permeability multipliers claimed by HIP/SEDDS/NP/PE strategies) and systemic exposure. Its saturation region matters: on the extent convention, additional permeability buys essentially no bioavailability past $\times$100 (the 24-h window saturates earlier).
+
+\section{S01: IV dose $\times$ renal function}
+\label{sec:res-s01}
+
+\begin{table}[htbp]
+\centering
+\caption{IV scenarios at 577.5 mg (selection of the 20-combination sweep; full table in \cref{chap:app-pksim-data}).}
+\label{tab:res-s01}
+\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccc}
+\toprule
+CLCR (mL/min) & Cmax (mg/L) & AUC24 (mg·h/L) & Trough 24 h (mg/L) & Implied CL (L/h) \\
+\midrule
+30    & 38.1 & 315.2 & 3.03 & 1.83 \\
+65    & 36.6 & 166.3 & 0.28 & 3.47 \\
+90    & 35.6 & 124.8 & 0.08 & 4.63 \\
+112.5 & 34.8 & 102.7 & 0.03 & 5.62 \\
+150   & 33.7 & 80.5  & 0.01 & 7.18 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{s01_iv_clcr.png}
+\caption{IV AUC24 by renal function and dose (20 scenarios, native PK-Sim batch). The IV-only target band (80--120, dashed) is reached at every renal function --- the benchmark oral therapy must be judged against.}
+\label{fig:res-s01}
+\end{figure}
+
+Renal function drives exposure exactly as the CLCR power model predicts (implied CL 1.83 $\rightarrow$ 7.18 L/h across CLCR 30 $\rightarrow$ 150 mL/min). Two clinically actionable observations: at CLCR 30 mL/min the 24-h trough (3.0 mg/L) demands interval extension, and even at normal renal function the oral program's IV benchmark (AUC24/MIC 80--120) is only met by the intravenous route itself.
+
+\section{S03: Virtual population on the nominal platform}
+\label{sec:res-s03}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{s03_population.png}
+\caption{Virtual population (n = 100, ICRP 2002) on the nominal platform (550 mg once daily, P$_{int}$ $\times$20).}
+\label{fig:res-s03}
+\end{figure}
+
+On the nominal $\times$20 platform (F = 34.6\%), the population median Cmax/MIC is 4.5 (5th--95th: 1.4--13.2) --- the peak target (Cmax/MIC $\geq$ 8) is met in a minority of subjects, and AUC24/MIC (median 35.9) remains far below the 80--120 band. This quantifies the limitation already identified in the exploratory phase and motivates the optimization push of \cref{chap:results-ga}.
+
+\section{S04: Local sensitivity (elasticities)}
+\label{sec:res-s04}
+
+\begin{table}[htbp]
+\centering
+\caption{Elasticities of peak and exposure endpoints ($\pm$20\% parameter perturbations, platform candidate).}
+\label{tab:res-s04}
+\begin{tabular}{lcc}
+\toprule
+Parameter & Elasticity Cmax & Elasticity AUC24 \\
+\midrule
+P$_{int}$ (platform) & +0.95 & +0.80 \\
+Dose                 & +1.00 & +1.00 \\
+GFR (specific)       & $-$0.30 & $-$0.84 \\
+Fraction unbound     & $-$0.65 & $-$0.88 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The elasticities tell a compact physiological story: peak exposure is permeability-driven (E $\approx$ 0.95, near-proportional) and dose-proportional; systemic exposure is co-driven by renal clearance and protein binding (E $\approx$ $-$0.84, $-$0.88). Formulation work (permeability) and dose titration are therefore the effective levers, while renal function dictates the monitoring intensity --- all three feed the clinical translation discussion.
+
+\section{S05: Food effect}
+\label{sec:res-s05}
+
+\begin{table}[htbp]
+\centering
+\caption{Food effect on the platform candidate (gastric emptying 15 min fasted vs 60 min fed).}
+\label{tab:res-s05}
+\begin{tabular}{lcccc}
+\toprule
+State & Cmax (mg/L) & Tmax (h) & AUC (mg·h/L) & F (\%) \\
+\midrule
+Fasted & 4.41 & 2.1 & 33.8 & 34.6 \\
+Fed    & 3.53 & 2.9 & 32.6 & 33.4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\footnotesize\textit{Note.} Fed is defined here as 60 min gastric emptying; the candidate battery (B8 block) uses 90 min. The conclusion is identical under both definitions: extent unchanged, peak lowered and delayed.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{s05_food.png}
+\caption{Food effect: fed state delays absorption (Tmax +0.8 h) and lowers peak by $\approx$20\%, while extent is essentially unchanged --- the expected BCS III signature (solubility never limiting).}
+\label{fig:res-s05}
+\end{figure}
+
+\section{S06: Fractionation and PTA --- the flip-flop finding}
+\label{sec:res-s06}
+
+The single oral dose exhibits \textbf{flip-flop kinetics}: the terminal decline is absorption-rate-limited (gastro-intestinal transit plus calibrated permeability), with C(24 h) = 0.72 mg/L after a single 550 mg dose. Steady-state superposition over a 96-h window therefore accumulates genuine residual exposure.
+
+\begin{table}[htbp]
+\centering
+\caption{Nominal-platform fractionation at steady state (MIC 1 mg/L).}
+\label{tab:res-s06}
+\small
+\begin{tabular}{lccccc}
+\toprule
+Regimen & Daily (mg) & Cmax$_{ss}$ & AUC$_{ss}$ & Cmin$_{ss}$ & $f_{T>\mathrm{MIC}}$ \\
+\midrule
+QD 550  & 550  & 5.40 & 49.6 & 1.06 & 100\% \\
+BID 275 & 550  & 3.37 & 24.2 & 1.26 & 100\% \\
+TID 200 & 600  & 2.99 & 17.5 & 1.55 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On the nominal $\times$20 platform at 550--600 mg daily, no fractionation reaches the exposure targets at MIC 1 mg/L (AUC$_{ss}$/MIC $\leq$ 50); the requirement map (\cref{tab:res-reqmap}) shows both targets are met from 993 mg daily at this multiplier. Note on the table below: the BID/TID AUC$_{ss}$ rows are reported \emph{per dosing interval} (12 h and 8 h), not per 24 h --- so BID 275 totals 48.4 and TID 200 totals 52.5 mg$\cdot$h/L daily, matching QD 550 by mass balance, as flip-flop kinetics demands. The superposition used here was later validated against true seven-day dosing (QD 550: 48.0 vs 49.6 mg$\cdot$h/L, $\approx$3\% deviation; \cref{sec:res-battery}).
+
+\section{Summary}
+The PK-Sim platform delivers a validated tobramycin model (6/6 gate), a calibrated and mechanistically saturated oral transfer function, correct renal/food/population physiology, and one genuine kinetic discovery (flip-flop absorption). The stage is set for the decisive question: \emph{how far can multi-objective optimization push the platform?}

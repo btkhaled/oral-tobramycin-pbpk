@@ -1,0 +1,228 @@
+% =====================================================================
+% Chapter 3 — Methodology I: Exploratory Computational Framework
+% (custom pure-R engine; superseded by the PK-Sim platform of Chapter 4
+%  and cross-validated against it — see Chapter 7)
+% =====================================================================
+\chapter{Methodology I: The Exploratory Computational Framework}
+\label{chap:methodology}
+
+\section{Software stack and computing environment}
+\label{sec:software}
+
+\begin{table}[htbp]
+\centering
+\caption{Software and environment used throughout the study.}
+\label{tab:software}
+\begin{tabular}{p{4.6cm}p{3.2cm}p{5.6cm}}
+\toprule
+Component & Version & Role\\
+\midrule
+R & 4.6.1 (CRAN, native arm64) & Statistical computing, optimization, visualization\\
+\pkg{ospsuite} / \pkg{PK-Sim} & 12.4.4 & PBPK framework, compound database, ACAT model \citep{OSP2024}\\
+\pkg{rSharp} / .NET runtime & 1.2.2 / .NET~8 & R\texttt{--}.NET bridge for \pkg{ospsuite} (CRAN R required on macOS)\\
+\pkg{GA} \citep{Scrucca2013} & 3.2.5 & Classical genetic algorithm\\
+Custom NSGA-II implementation & --- (this thesis) & Multi-objective optimization (\cref{sec:nsga2})\\
+\pkg{ggplot2}, \pkg{patchwork}, \pkg{viridis} & --- & Publication-grade figures (300 dpi PNG)\\
+\pkg{doParallel} & --- & 7-core parallel fitness evaluation\\
+Hardware & macOS ARM64 (Apple Silicon) & All simulations\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Model development workflow}
+The study followed a six-step workflow (\cref{fig:workflow}): (1) compound definition from literature parameters; (2) two-compartment PK model construction; (3) intravenous validation against published PopPK data \citep{Li2021}; (4) oral absorption model with transit compartments; (5) pharmacodynamic coupling; (6) optimization and uncertainty quantification.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  node distance=0.45cm and 0.5cm,
+  wfstep/.style={rectangle, rounded corners=2pt, draw=tobblue, fill=tobblue!8, thick,
+               text width=2.6cm, align=center, minimum height=1.5cm, font=\footnotesize},
+  wfdone/.style={wfstep, fill=tobblue!18},
+  arrow/.style={-{Stealth[length=2.6mm]}, thick, tobblue}
+]
+\node[wfdone] (s1) {\textbf{1. Compound}\\MW, logP, pKa, S, $f_u$\\(literature values)};
+\node[wfdone, right=of s1] (s2) {\textbf{2. PK model}\\2-compartment\\CL, $V_1$, $Q$, $V_2$};
+\node[wfdone, right=of s2] (s3) {\textbf{3. IV validation}\\vs.\ Li 2021\\PopPK data};
+\node[wfdone, below=of s3] (s4) {\textbf{4. Oral model}\\Transit compartments\\$K_a$, $k_{\mathrm{tr}}$};
+\node[wfdone, left=of s4] (s5) {\textbf{5. PD coupling}\\Hill equation\\MIC-driven targets};
+\node[wfdone, left=of s5] (s6) {\textbf{6. Optimization}\\GA + NSGA-II\\MC, CV, OAT};
+\draw[arrow] (s1) -- (s2);
+\draw[arrow] (s2) -- (s3);
+\draw[arrow] (s3) -- (s4);
+\draw[arrow] (s4) -- (s5);
+\draw[arrow] (s5) -- (s6);
+\end{tikzpicture}
+\caption{Six-step model development workflow. All steps are implemented in versioned R scripts (scripts 00--13, \cref{chap:app-code}); traceability of every output is given in \cref{chap:app-traceability}.}
+\label{fig:workflow}
+\end{figure}
+
+\section{Compound parameterization}
+\label{sec:compound-params}
+
+\begin{table}[htbp]
+\centering
+\caption{PBPK compound and system parameters with sources and confidence ratings (script 00; \texttt{table2\_simulation\_parameters.csv}).}
+\label{tab:compound-params}
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{llllp{1.4cm}p{2.6cm}}
+\toprule
+Parameter & Value & Unit & Source & Confidence & Notes\\
+\midrule
+MW & 467.515 & g/mol & PubChem \citep{PubChem2026} & High & ---\\
+logP & $-2.9$ & --- & PubChem & High & Native (unmodified)\\
+$pK_a$ & 6.7--9.1 & --- & Literature & High & 5 amines (6.7; 7.6; 7.7; 7.8; 9.1)\\
+$S_{\mathrm{water}}$ & 94 & mg/mL & \citet{Chen2009} & High & Class III criterion $\gg$ met\\
+BCS class & III & --- & \citet{Asad2023} & High & \cref{sec:lit-classification}\\
+$f_u$ & 0.95 & fraction & Standard & High & Minimal binding\\
+Renal excretion & $>$90 & \% unchanged & Standard & High & ---\\
+Oral $\F$ (native) & 1.5--2.0 & \% & Literature estimate & Low & Range \cref{sec:lit-pk}; legacy point estimate 1.5, PK-Sim anchor 1.75 \\
+\midrule
+CL & 5.5 & L/h & \citet{Li2021} & High & PopPK reference\\
+$V_1$ & 17 & L & \citet{Li2021} & High & ---\\
+$Q$ & 2.4 & L/h & \citet{Li2021} & High & ---\\
+$V_2$ & 16 & L & \citet{Li2021} & High & ---\\
+CLCR exponent & 0.72 & --- & \citet{Li2021} & High & Power model on CL\\
+$t_{1/2}$ & 2.5 & h & Derived & High & $k_e=0.277$~h$^{-1}$\\
+$V_{d,ss}$ & 0.26 & L/kg & Standard & High & 70~kg adult\\
+MIC (assumed) & 1 & mg/L & EUCAST mid-range & Medium & $\mathrm{MIC}_{90}$ 0.5--2~mg/L\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Pharmacokinetic model}
+\label{sec:pk-model}
+
+\subsection{Structure}
+A two-compartment open model with first-order elimination from the central compartment was adopted, extended by a gastrointestinal depot and a chain of transit compartments for absorption (\cref{eq:depot,eq:elim}). The two-compartment structure is justified by the reference PopPK analysis \citep{Li2021} and required for accurate peak--trough dynamics at 24~h post-dose.
+
+\subsection{System equations}
+\label{sec:ode}
+Let $A_{g}$ denote the drug amount in the GI depot, $A_{\mathrm{tr},i}$ in transit compartment $i$ ($i=1,\dots,N$), $A_c$ and $A_p$ the central and peripheral amounts, and $A_e$ cumulative urinary elimination:
+\begin{align}
+\frac{\mathrm{d}A_{g}}{\mathrm{d}t} &= -K_a A_{g}, \label{eq:depot}\\
+\frac{\mathrm{d}A_{\mathrm{tr},1}}{\mathrm{d}t} &= K_a A_{g} - k_{\mathrm{tr}} A_{\mathrm{tr},1}, \label{eq:tr1}\\
+\frac{\mathrm{d}A_{\mathrm{tr},N}}{\mathrm{d}t} &= k_{\mathrm{tr}} A_{\mathrm{tr},N-1} - k_{\mathrm{tr}} A_{\mathrm{tr},N}, \label{eq:trN}\\
+\frac{\mathrm{d}A_{c}}{\mathrm{d}t} &= k_{\mathrm{tr}} A_{\mathrm{tr},N} - k_e A_c - k_{cp} A_c + k_{pc} A_p, \label{eq:central}\\
+\frac{\mathrm{d}A_{p}}{\mathrm{d}t} &= k_{cp} A_c - k_{pc} A_p, \label{eq:periph}\\
+\frac{\mathrm{d}A_{e}}{\mathrm{d}t} &= k_e A_c. \label{eq:elim}
+\end{align}
+The plasma concentration is $C(t) = A_c(t)/V_1$, with micro-rate constants $k_e = \mathrm{CL}/V_1 = 5.5/17 = 0.277$~h$^{-1}$, $k_{cp} = Q/V_1$, $k_{pc} = Q/V_2$. Intravenous administration is represented by an impulse into $A_c$.
+
+\subsection{Numerical integration}
+The system \cref{eq:depot,eq:elim} is integrated with a fixed-step fourth-order Runge--Kutta (RK4) scheme ($\Delta t = 0.01$~h), verified for step-size independence, and implemented in vectorized R (script \code{09\_advanced\_pk\_model.R}, \cref{chap:app-code}).
+
+\subsection{Pharmacodynamic driver}
+Antibacterial effect follows a Hill (sigmoid $E_{\max}$) function of instantaneous concentration:
+\begin{equation}
+E(t) = \frac{C(t)^{\gamma}}{\mathrm{EC}_{50}^{\gamma} + C(t)^{\gamma}}, \qquad
+\fmic = \frac{100}{T_{\mathrm{interval}}} \int_0^{T_{\mathrm{interval}}} \mathbb{1}\!\left[C(t) > \mathrm{MIC}\right]\,\mathrm{d}t,
+\label{eq:hill}
+\end{equation}
+with the efficacy indices $\CMIC = C_{\max}/\mathrm{MIC}$ and $\AMIC = \mathrm{AUC}_{24}/\mathrm{MIC}$ evaluated against the targets of \cref{tab:pd-targets}.
+
+\section{Oral bioavailability enhancement model}
+\label{sec:F-model}
+Native tobramycin bioavailability ($\Fo = 1.5\%$) is enhanced multiplicatively by eight mechanistic factors, each mapped to one or two chromosome genes (\cref{sec:chromosome}):
+\begin{equation}
+\F = \Fo \cdot f_{\mathrm{HIP}}(\mathrm{logP}') \cdot f_{\mathrm{PS}}(\mathrm{PS}) \cdot f_{\mathrm{SEDDS}} \cdot f_{\mathrm{PE}}(C_{\mathrm{PE}}) \cdot f_{\mathrm{poly}}(L_{\mathrm{poly}}) \cdot f_{\mathrm{chit}} \cdot f_{\mathrm{ent}} \cdot f_{\mathrm{dose}}(D),
+\label{eq:F-factors}
+\end{equation}
+capped at 35\% as a physiological ceiling consistent with the triple-combination estimate in the literature synthesis (\cref{tab:bioavail-estimates}):
+\begin{itemize}
+\item $f_{\mathrm{HIP}}$: sigmoid response of apparent lipophilicity, saturating at logP$'\approx+1.6$ \citep{Asad2023};
+\item $f_{\mathrm{PS}}$: optimum near 50~nm (mucoadhesion without impaired uptake); penalizes sizes $>$200~nm;
+\item $f_{\mathrm{SEDDS}}$: spontaneous-emulsification gain (up to 1.5$\times$), maximal for surfactant-rich compositions;
+\item $f_{\mathrm{PE}}$: saturating response to enhancer concentration (0--50~mM C$_{10}$) with a mucosal-safety penalty near the upper bound \citep{Maher2009, Bohley2024};
+\item $f_{\mathrm{poly}}$: polymer loading gain (mucoadhesion, sustained release), saturating at 30\%;
+\item $f_{\mathrm{chit}}$, $f_{\mathrm{ent}}$: binary switches (chitosan tight-junction modulation; enteric gastric protection);
+\item $f_{\mathrm{dose}}$: sublinear dose scaling reflecting transporter/solvent-capacity saturation at high doses.
+\end{itemize}
+The absorption rate follows $K_a = K_{a,\mathrm{ref}} \cdot g(\mathrm{logP}', \mathrm{PS}, \mathrm{SEDDS})$, and gastric-to-cecal transfer uses $k_{\mathrm{tr}} = 2.24$~h$^{-1}$ at the optimum (\cref{chap:results}).
+
+\section{Optimization problem}
+
+\subsection{Chromosome encoding}
+\label{sec:chromosome}
+Each candidate formulation is a 10-gene chromosome (\cref{tab:bounds}): eight continuous genes and two binary switches. Genes 1--9 define the formulation; gene 10 sets the dose.
+
+\begin{table}[htbp]
+\centering
+\caption{Chromosome definition and parameter bounds (script \code{00\_ga\_setup.R}; \texttt{parameter\_bounds.csv}).}
+\label{tab:bounds}
+\begin{tabular}{clccp{6.6cm}}
+\toprule
+Gene & Name & Min & Max & Rationale\\
+\midrule
+1 & logP$_{\mathrm{mod}}$ & $-2.9$ & $+3.0$ & HIP-complex lipophilicity \citep{Asad2023}\\
+2 & Particle size (nm) & 50 & 500 & Mucoadhesion/uptake trade-off\\
+3 & Surfactant (\%) & 10 & 60 & SEDDS self-emulsification\\
+4 & Co-surfactant (\%) & 5 & 30 & Interfacial film flexibility\\
+5 & Oil (\%) & 20 & 70 & Payload capacity\\
+6 & PE concentration (mM) & 0 & 50 & C$_{10}$ efficacy/safety \citep{Maher2009}\\
+7 & Polymer loading (\%) & 0 & 30 & Mucoadhesive sustained release\\
+8 & Chitosan coating & 0 & 1 & Tight-junction modulation\\
+9 & Enteric coating & 0 & 1 & Gastric protection\\
+10 & Dose (mg) & 200 & 1000 & Practical capsule range\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Genetic algorithm (exploratory stage)}
+A classical GA (\pkg{GA} package \citep{Scrucca2013}) used population 100, up to 200 generations, crossover probability 0.8, mutation 0.1, elitism 10, fitness-sharing diversity preservation, fixed seed 42, and 7-core parallel evaluation. The weighted scalar fitness is
+\begin{equation}
+\mathcal{F}_{\mathrm{GA}} = 0.40\,\widehat{\F} + 0.25\,\widehat{\CMIC} + 0.25\,\widehat{\AMIC} + 0.10\,\widehat{S}_{\mathrm{safety}} - P_{\mathrm{penalty}},
+\label{eq:fitness}
+\end{equation}
+where hats denote min--max normalized objective scores ($\in[0,1]$) and $P_{\mathrm{penalty}}$ accounts for constraint violations (safety thresholds, infeasible compositions). The GA served as (i) sanity check of the simulator, (ii) benchmark for NSGA-II, and (iii) source of the manufacturing/regulatory assessment cohort (\cref{sec:ch4-mfg}).
+
+\subsection{NSGA-II (definitive stage)}
+\label{sec:nsga2}
+The definitive optimization used a full NSGA-II implementation \citep{Deb2002} maximizing four objectives simultaneously:
+\begin{equation}
+\max_{\mathbf{x}} \; \big[\F(\mathbf{x}),\; \CMIC(\mathbf{x}),\; \AMIC(\mathbf{x}),\; -D(\mathbf{x})\big],
+\label{eq:nsga-objectives}
+\end{equation}
+with $\mathbf{x}$ the 10-gene chromosome. Algorithmic components:
+\begin{itemize}
+\item \textbf{Non-dominated sorting}: the population is partitioned into Pareto ranks $\mathcal{R}_1, \mathcal{R}_2, \dots$ where rank $\mathcal{R}_1$ contains all non-dominated solutions; a solution $a$ dominates $b$ iff $a$ is $\geq$ in all objectives and $>$ in at least one.
+\item \textbf{Crowding distance}: for each rank, solutions are sorted per objective and assigned the normalized perimeter of the cuboid formed by their neighbors; boundary solutions receive $\infty$. Selection prefers lower rank, then larger crowding distance, preserving front diversity.
+\item \textbf{Tournament selection}: binary tournament on (rank, crowding distance).
+\item \textbf{Simulated binary crossover (SBX)}: offspring $c_1, c_2$ from parents $p_1, p_2$ with distribution index $\eta_c = 20$:
+\begin{equation}
+c = 0.5\left[(1+\beta)p_1 + (1-\beta)p_2\right], \quad
+\beta = \left(2u\right)^{1/(\eta_c+1)},\; u \sim U(0,1).
+\end{equation}
+\item \textbf{Polynomial mutation}: distribution index $\eta_m = 20$, per-gene probability $1/10$.
+\end{itemize}
+Configuration: population 200, 300 generations, elitism 20 (entire parent rank $\mathcal{R}_1$ carried forward), seed 42, runtime $\approx$5.7~min. The output is a 200-solution Pareto archive (\texttt{pareto\_front\_data.csv}, \cref{chap:app-pareto}).
+
+\section{Uncertainty quantification program}
+\label{sec:uq}
+\begin{enumerate}
+\item \textbf{One-at-a-time (OAT) sensitivity}: seven test values spanning each parameter's plausible range (60 evaluations over 10 parameters); sensitivity index
+\begin{equation}
+S_i = \frac{\max_k \left|\AMIC(\theta_i = v_k) - \AMIC(\theta_i^{\star})\right|}{\AMIC(\theta_i^{\star})},
+\label{eq:sens-index}
+\end{equation}
+where $\theta_i^{\star}$ is the optimal value of parameter $i$ (script \code{12\_sensitivity\_validation.R}).
+\item \textbf{Monte Carlo ($n=200$)}: log-normal perturbation of CL, $V_1$, $V_2$ (CV 20--30\%), mimicking between-subject variability; distributions of $\F$, $C_{\max}$, $\CMIC$, $\AMIC$ summarized as median and 5th--95th percentiles.
+\item \textbf{Cross-validation ($n=50$ designed; 26 informative runs)}: $\pm$20\% simultaneous perturbation of all inputs; robustness of conclusions assessed by fraction of runs preserving $\CMIC \geq 8$ and stability of ranking.
+\end{enumerate}
+
+\section{Validation metrics}
+Predictive performance against reference data is quantified by the average fold error (AFE), absolute average fold error (AAFE), root-mean-square error (RMSE), and coefficient of determination:
+\begin{align}
+\mathrm{AFE} &= 10^{\frac{1}{n}\sum \log_{10}(C_{\mathrm{pred}}/C_{\mathrm{obs}})}, \qquad
+\mathrm{AAFE} = 10^{\frac{1}{n}\sum \left|\log_{10}(C_{\mathrm{pred}}/C_{\mathrm{obs}})\right|}, \nonumber\\
+\mathrm{RMSE} &= \sqrt{\tfrac{1}{n}\sum \left(C_{\mathrm{pred}} - C_{\mathrm{obs}}\right)^2},
+\end{align}
+with acceptance thresholds AFE/AAFE within 0.5--2.0, RMSE $<$30\%, $R^2 > 0.9$ \citep{Ferreira2021}.
+
+\section{Manufacturing and regulatory assessment}
+\label{sec:ch3-manufacturing}
+A ten-step manufacturing route for the combined HIP--SEDDS--NP--coating platform was costed bottom-up (\texttt{manufacturing\_steps.csv}): HIP dissolution $\rightarrow$ polymer NP nanoprecipitation $\rightarrow$ drug loading $\rightarrow$ SEDDS oil phase $\rightarrow$ C$_{10}$ addition $\rightarrow$ homogenization $\rightarrow$ NP incorporation $\rightarrow$ chitosan fluid-bed coating $\rightarrow$ enteric coating $\rightarrow$ capsule filling and QC. Cost per dose combines a \$0.50 base with formulation-complexity surcharges. The regulatory pathway was assessed against FDA 505(b)(2) criteria (literature-referenced safety of tobramycin + novel formulation components), with development cost and timeline estimates (\cref{sec:ch4-reg}).
+
+\section{Methodological limitations}
+\label{sec:ch3-limitations}
+(1) The precise tobramycin $P_{\mathrm{app}}$ is unknown; enhancement factors are calibrated to literature ranges, not measured transport. (2) No oral PK data exist for model validation --- the IV route only. (3) Formulation factors are phenomenological (marginal-effect) models calibrated to published in-vitro outcomes, not mechanistic absorption simulations. (4) Between-subject variability is imposed log-normal rather than estimated from data. (5) MIC is fixed at 1~mg/L; pathogen-level MIC variation is handled qualitatively in \cref{chap:discussion}. These limitations are revisited quantitatively in \cref{sec:ch4-uq} and qualitatively in \cref{sec:ch5-limits}.

@@ -1,0 +1,45 @@
+% =====================================================================
+% Appendix J — PBPK simulation scenario catalog
+% =====================================================================
+\chapter{PBPK Simulation Scenario Catalog}
+\label{chap:app-scenarios}
+
+Scenario catalog of the exploratory PBPK phase (source: \code{03\_PBPK\_MODELING/} \code{simulation\_design/} \code{scenarios.csv}; 20 scenarios; PBPK-module scripts 01--10). These scenarios parameterized the compound definition, IV validation, oral exploration, sensitivity, and population phases that fed the optimization framework of \cref{chap:methodology}.
+
+\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{rp{1.6cm}p{3.2cm}p{3.0cm}p{3.2cm}}
+\caption{Simulation scenario catalog (20 scenarios).}\label{tab:scenarios}\\
+\toprule
+ID & Phase & Purpose & Key variation & Primary output\\
+\midrule
+\endfirsthead
+\toprule
+ID & Phase & Purpose & Key variation & Primary output\\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+S1 & Compound & Parameter entry & Literature values (\cref{tab:compound-params}) & Compound definition\\
+S2 & IV & Bolus validation & 5 mg/kg, 70 kg adult & $C$--$t$ profile\\
+S3 & IV & Infusion validation & 5 mg/kg, 30 min & $C$--$t$ profile\\
+S4 & IV & Extended interval & 7 mg/kg q24h & Peak 20--30, trough $<$1\\
+S5 & Oral & Solution, fasted & 400 mg & Baseline $\F$\\
+S6 & Oral & Solution, fed & 400 mg & Food effect\\
+S7 & Oral & Suspension & 400 mg & Dissolution-limited $\F$\\
+S8 & Oral & SEDDS & 400 mg & Emulsification gain\\
+S9 & Oral & NPs & 400 mg & Mucoadhesion gain\\
+S10 & Sensitivity & $P_{\mathrm{app}}$ OAT & 0.5--5$\times10^{-6}$ cm/s (4 levels) & Tornado rank 1\\
+S11 & Sensitivity & CLCR OAT & 30--150 mL/min (4 levels) & Disposition sensitivity\\
+S12 & Sensitivity & Dose OAT & 200--800 mg (4 levels) & Linearity check\\
+S13 & Sensitivity & Gastric pH & 1--5 (3 levels) & Coating rationale\\
+S14 & Population & Healthy adult & 30 y, 70 kg, CLCR 120 & Reference profile\\
+S15 & Population & CF adult & 30 y, 65 kg, CLCR 100 & Higher clearance\\
+S16 & Population & Renal impairment & 50 y, 70 kg, CLCR 50 & Exposure elevation\\
+S17 & Population & Elderly & 70 y, 70 kg, CLCR 65 & Dose adjustment\\
+S18 & Advanced & Formulation comparison & HIP/SEDDS/NP/PE matrix & Enhancement factors\\
+S19 & Advanced & Dose--fractionation & qd vs bid & $\fmic$ trade-off\\
+S20 & Advanced & Virtual trial & PopPK Monte Carlo & Variability bands\\
+\end{longtable}

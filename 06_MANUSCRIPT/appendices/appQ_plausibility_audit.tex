@@ -1,0 +1,35 @@
+% =====================================================================
+% Appendix Q — Plausibility Audit: Benchmarks for the Enhancement Requirement
+% =====================================================================
+\chapter{Plausibility Audit: Benchmarks and Requirement Data}
+\label{chap:app-audit}
+
+\section{Literature benchmarks for permeability enhancement}
+\begin{table}[htbp]
+\centering
+\caption{What the enhancement literature actually supports, versus what the targets require.}
+\label{tab:app-benchmarks}
+\small
+\begin{tabular}{p{4.6cm}p{3.4cm}p{5.4cm}}
+\toprule
+Benchmark & Claimed/supported enhancement & Transfer to intestinal permeability \\
+\midrule
+HIP logP shift (tobramycin--docusate, in vitro) & 1500$\times$ \emph{partition coefficient} \citep{Asad2023} & Not a permeability multiplier; complex dissociates 20\% at intestinal pH \\
+HIP in vivo (octreotide, pigs) & oral $F$ gain 3--5$\times$ \citep{Bonengel2018} & Closest in-vivo analogue for polycationic peptides \\
+Oral SNAC platform (semaglutide) & $F \approx 1\%$ --- flagship success of oral PE platforms & Regulatory precedent; illustrates domain ceiling \\
+Nominal combination platform (this thesis) & $\times$20 apparent $P_{int}$ & Aggressive; testable (Caco-2/Ussing of HIP complex) \\
+Requirement for both targets @ 993 mg & $\geq\times$20 & S08 requirement map (\cref{chap:results-ga}) \\
+Cited-bounds maximum (GA corner) & $\times$125 & Minimizes dose (467 mg attains the band floor); trough at the monitoring line \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Numerical integrity notes}
+\begin{enumerate}
+\item \textbf{F clamped at 100\%.} The winner needs no clamp ($F_{96} = 97.11\%$); only the top S02 grid point overshoots numerically (100.41\% at $P_{int} = 10^{-6}$ dm/min) and is clamped there. All thesis statements enforce $F \leq 100\%$.
+\item \textbf{Superposition inflation.} Steady-state AUC by superposition agrees with true seven-day dosing within $\approx$3\% (48.0 vs 49.6 mg·h/L at the $\times$20 probe; mass balance AUC$_{\tau}$ = $F \cdot$ dose/CL holds within 0.1\% at true steady state with CL 5.63 L/h). Screening sweeps legitimately use superposition; headline values use true dosing.
+\item \textbf{Stale-run incident.} An earlier S07 run reported winner troughs of 4.2 mg/L; the cause was a silently failing dose override in the first script version (wrong application path). The corrected battery (32.2 / 172.3 / 1.21 on the final platform) agrees with the independent S08 path --- the incident is retained in the debugging journal (\cref{chap:app-debug}) as a lesson on silent override failures.
+\end{enumerate}
+
+\section{Requirement data}
+The complete S08 requirement map (9 multipliers $\times$ 8 doses, 72 native runs) is committed at \texttt{results/studies/S08\_requirement\_map.csv}; the dose-scan per multiplier at \texttt{results/studies/S08\_dose\_scan\_<mult>.csv}. Headline rows appear in \cref{tab:res-reqmap}.

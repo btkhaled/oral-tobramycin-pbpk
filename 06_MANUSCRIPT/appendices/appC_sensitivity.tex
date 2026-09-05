@@ -1,0 +1,28 @@
+% =====================================================================
+% Appendix C — One-at-a-time sensitivity data
+% =====================================================================
+\chapter{Sensitivity Analysis Data}
+\label{chap:app-sensitivity}
+
+Complete OAT sensitivity program (script \code{12\_sensitivity\_validation.R}; source \code{sensitivity\_data.csv}): 60 informative evaluations (7 levels per parameter where defined). AUC/MIC in mg$\cdot$h/L; $\Delta$ relative to the unperturbed optimum (32.1).
+
+\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{lrrrr}
+\caption{Complete OAT sensitivity evaluations.}\label{tab:sens-full}\\
+\toprule
+Parameter & Test value & $\AMIC$ & $\Delta\AMIC$ & SI\\
+\midrule
+\endfirsthead
+\toprule
+Parameter & Test value & $\AMIC$ & $\Delta\AMIC$ & SI\\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\tabinput{tables/sens_rows.tex}
+\end{longtable}
+
+\noindent\textbf{Key pattern.} The logP$'$ series is non-monotone (maximum $\AMIC = 32.0$ at logP$'$~1.37; decline beyond 1.9), confirming the interior optimum discussed in \cref{sec:ch4-sens,sec:ch5-limits}; particle size degrades $\AMIC$ linearly ($-0.5$ per 22.5~nm); all remaining parameters vary $\AMIC$ by less than 1 unit over their full ranges.

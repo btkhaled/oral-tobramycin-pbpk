@@ -1,0 +1,63 @@
+% =====================================================================
+% main.tex — Oral Tobramycin: From BCS III to a Viable Oral Formulation
+% Personal Research — Khaled Ben Taieb
+% Compile: make (pdflatex + bibtex + pdflatex x2)
+% =====================================================================
+\documentclass[12pt, a4paper, oneside, openright]{book}
+
+\input{preamble}
+
+\title{\textbf{Oral Tobramycin: From BCS III to a Viable Oral Formulation}\\[1em]
+\large A Bibliographic Study with Physiologically Based Pharmacokinetic Modeling\\
+and Multi-Objective Formulation Optimization}
+\author{Khaled Ben Taieb}
+\date{\today}
+
+\begin{document}
+
+\frontmatter
+\input{frontmatter/title_page}
+\input{frontmatter/declaration}
+\input{frontmatter/acknowledgements}
+\input{frontmatter/abstract}
+\input{frontmatter/resume_francais}
+\input{frontmatter/nomenclature}
+\input{frontmatter/toc_lof_lot}
+
+\mainmatter
+\input{chapters/ch00_synopsis}
+\input{chapters/ch01_introduction}
+\input{chapters/ch02_literature}
+\input{chapters/ch03_methodology_exploratory}
+\input{chapters/ch04_methodology_pksim}
+\input{chapters/ch05_results_exploratory}
+\input{chapters/ch06_results_pksim}
+\input{chapters/ch07_results_ga}
+\input{chapters/ch08_discussion}
+\input{chapters/ch09_conclusion}
+
+\appendix
+\input{appendices/appA_pareto}
+\input{appendices/appB_montecarlo}
+\input{appendices/appC_sensitivity}
+\input{appendices/appD_validation}
+\input{appendices/appE_evidence}
+\input{appendices/appF_candidates}
+\input{appendices/appG_code}
+\input{appendices/appH_physchem}
+\input{appendices/appI_pk_literature}
+\input{appendices/appJ_scenarios}
+\input{appendices/appK_traceability}
+\input{appendices/appL_glossary}
+\input{appendices/appM_pksim_code}
+\input{appendices/appN_pksim_data}
+\input{appendices/appO_debug_journal}
+\input{appendices/appP_ga_data}
+\input{appendices/appQ_plausibility_audit}
+\input{appendices/appR_battery}
+
+\backmatter
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\end{document}

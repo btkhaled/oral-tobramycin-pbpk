@@ -1,0 +1,459 @@
+% =====================================================================
+% Chapter 4 — Results (written from scratch from the 17 result CSVs
+% and 32 figures produced by scripts 04–13; traceability: App. K)
+% =====================================================================
+\chapter{Results I: Exploratory Optimization and Uncertainty}
+\label{chap:results}
+
+This chapter reports the complete computational outcomes. \cref{sec:ch4-validation} establishes model credibility; \cref{sec:ch4-convergence} documents optimizer behavior; \cref{sec:ch4-pareto} characterizes the Pareto front; \cref{sec:ch4-top10} presents the ranked top-10 formulations; \cref{sec:ch4-clusters}--\ref{sec:ch4-uq} cover clustering, sensitivity, and uncertainty; \cref{sec:ch4-mfg,sec:ch4-reg} translate results into manufacturing and regulatory terms; \cref{sec:ch4-lit} benchmarks against the literature; \cref{sec:ch4-summary} states honestly which targets were met and which were not.
+
+\section{Model credibility and intravenous validation}
+\label{sec:ch4-validation}
+
+The two-compartment model was parameterized directly from the reference PopPK estimates of \citet{Li2021} (CL~5.5~L/h, $V_1$~17~L, $Q$~2.4~L/h, $V_2$~16~L; \cref{tab:compound-params}). Simulated 70-kg adult intravenous administration (5--7~mg/kg, 30-min infusion) reproduces the published clinical envelope: peak concentrations in the 20--30~mg/L target band, troughs $<$1~mg/L at 24~h, and terminal half-life 2.5~h (published 2.5~h for normal adults; 4.5--6.0~h in ICU, recovered by the CLCR power covariate). Because individual observed concentrations are not published, formal GOF metrics (AFE/AAFE/RMSE/$R^2$) could not be computed against raw data; \emph{parameter-level} validation --- the model reproduces the published structural model, parameter values, covariate structure, and derived quantities --- is therefore the appropriate standard here, and residual parameter uncertainty is handled explicitly by the cross-validation program of \cref{sec:ch4-uq}. The renal elimination pathway ($>$90\% unchanged) and $f_u = 0.95$ anchor disposition; the sensitivity analysis (\cref{sec:ch4-sens}) shows disposition parameters affect exposure linearly but are secondary to absorption-side drivers for the oral problem.
+
+\section{Optimization convergence}
+\label{sec:ch4-convergence}
+
+\subsection{Exploratory genetic algorithm}
+The classical GA (population 100, up to 200 generations, \cref{sec:chromosome}) converged after 196 generations in 0.24~min (seed 42). Best scalar fitness reached 0.628, corresponding to $\F = 28.4\%$, $\CMIC = 12.4$, $\AMIC = 60.1$ at a 999~mg dose (\cref{fig:convergence}). Fitness sharing maintained population diversity; the elite cohort clustered into three phenotypes (\cref{sec:ch4-clusters}).
+
+\subsection{Definitive NSGA-II}
+NSGA-II (population 200, 300 generations, runtime 5.7~min) converged rapidly: front evolution stabilized within the first $\approx$100 generations for $\F$ (\cref{fig:pareto-evolution-F}) and by $\approx$150 for $\AMIC$ (\cref{fig:pareto-evolution-F}, right panel), after which crowding-distance selection spread the archive along the trade-off surface rather than improving isolated optima. The final archive contains 200 non-dominated solutions (\texttt{pareto\_front\_data.csv}).
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{convergence_plot.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{fig5_convergence_comparison.png}
+\end{minipage}
+\caption{Optimizer convergence. Left: GA best/mean fitness across generations (script 04; seed 42; convergence at generation 196). Right: comparison of GA and NSGA-II convergence behavior (script 13). NSGA-II trades scalar fitness for front spread after early stabilization.}
+\label{fig:convergence}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{pareto_evolution_F.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{pareto_evolution_AUC.png}
+\end{minipage}
+\caption{NSGA-II front evolution across generations for (left) bioavailability $\F$ and (right) $\AMIC$ (scripts 11, 13). Objectives stabilize by generations 100--150; subsequent generations diversify the front.}
+\label{fig:pareto-evolution-F}
+\end{figure}
+
+\subsection{GA versus NSGA-II: what the comparison reveals}
+The scalar GA pushed $\AMIC$ to 60 at the cost of a 999~mg dose (upper bound region), because its weighted fitness rewards exposure without a dose term. NSGA-II, minimizing dose explicitly, returned solutions at 530--580~mg with $\AMIC$ 31--34 --- a deliberate trade-off, not a failure: at equal $\CMIC$ adequacy ($\geq 8$), the Pareto-optimal choice favors lower dose and lower toxicity exposure (\cref{fig:convergence-comparison}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.72\textwidth]{fitness_ranking.png}
+\caption{Fitness ranking of the final GA population (script 05). Elite individuals (ranks 1--10) form a tight cluster at fitness $\approx$0.60--0.63; diversity (fitness sharing) maintains distinct composition neighborhoods.}
+\label{fig:convergence-comparison}
+\end{figure}
+
+\section{Pareto front analysis}
+\label{sec:ch4-pareto}
+
+\subsection{Geometry of the 200-solution front}
+\cref{fig:pareto-front} displays the archive in the $\F$--$\AMIC$ plane, colored by dose. The front spans $\F$ = 25--34\%, $\AMIC$ = 24--60, and doses 530--1000~mg; $\CMIC$ spans 9.2--12.4. The dominant trade-off axes are exposure-versus-dose: higher $\AMIC$ requires proportionally higher dose at the converged formulation composition.
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{fig2_pareto_front.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{pareto_front_2d.png}
+\end{minipage}
+\caption{Pareto front (200 non-dominated formulations, script 11). Left: front in objective space; right: two-dimensional projection. Color encodes dose --- exposure objectives are dose-coupled.}
+\label{fig:pareto-front}
+\end{figure}
+
+\subsection{Dose stratification}
+Stratifying the front by dose range (\cref{fig:pareto-dose}) shows the 401--700~mg band hosting the recommended candidates (best $\CMIC$ per mg); the 701--1000~mg band buys additional $\AMIC$ (up to 60) at toxicity-relevant exposure; the 200--400~mg band remains below target thresholds and was rejected.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{pareto_facet_dose.png}
+\caption{Pareto front stratified by dose band (script 11). The 401--700~mg band contains the recommended candidates; 200--400~mg fails $\CMIC\geq8$.}
+\label{fig:pareto-dose}
+\end{figure}
+
+\subsection{Design-parameter distribution}
+Across the front (\cref{fig:pareto-params}), parameters converge to narrow optima --- logP$'$ 1.5--1.6, particle size 50~nm, SEDDS composition 50/30/20, PE 47--50~mM, polymer 29--30\%, both coatings active --- while dose and the exposure objectives span wide ranges. This is the signature of a well-posed composition problem with a sharp formulation optimum: \emph{what to make} is settled; \emph{how much to give} remains a choice.
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{pareto_params_distribution.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{pareto_correlation.png}
+\end{minipage}
+\caption{Left: design-parameter distributions across the Pareto archive (violin plots; script 11). Right: parameter--objective correlation structure (script 11). logP$'$, particle size, SEDDS composition and PE concentration are locked near their optima; dose carries the residual trade-off freedom.}
+\label{fig:pareto-params}
+\end{figure}
+
+\section{The top-10 optimized formulations}
+\label{sec:ch4-top10}
+
+\subsection{Headline result}
+Selecting from the converged 401--700~mg band by composite fitness (0.611--0.611; effectively ties, ranked by secondary criteria) yields the ten candidates of \cref{tab:top10} (\texttt{manuscript\_table\_final.csv}; script 13). All share the same converged formulation design --- \textbf{logP$'$~1.50, 50~nm nanoparticles, SEDDS 50/30/20, 50~mM C$_{10}$, 30\% polymer, chitosan + enteric coating} --- and differ only in dose (530--581~mg). \cref{tab:top10-advanced} adds the advanced model outputs ($T_{\max}$, $K_a$, $k_{\mathrm{tr}}$, objective-component scores).
+
+\begin{table}[htbp]
+\centering
+\caption{Top-10 optimized oral tobramycin formulations (scripts 11--13). Enhancement versus native $\Fo\approx1.5$--$1.75\%$ (clinical 1--2\%).}
+\label{tab:top10}
+\footnotesize\setlength{\tabcolsep}{3.6pt}
+\begin{tabular}{lccccccccc}
+\toprule
+ID & Dose & $\F$ & $C_{\max}$ & $\AMIC$ & $\CMIC$ & $\fmic$ & $C_{\min}$ & Enh. & Fitness\\
+ & (mg) & (\%) & (mg/L) & (mg$\cdot$h/L) & ($\times$) & (\%) & (mg/L) & ($\times$) & ---\\
+\midrule
+\rowcolor{tobblue!12}
+\textbf{TOB-161} & \textbf{551} & \textbf{34.0} & \textbf{9.54} & \textbf{32.1} & \textbf{9.5} & \textbf{29.5} & \textbf{0.16} & \textbf{23} & 0.611\\
+TOB-196 & 551 & 34.0 & 9.54 & 32.1 & 9.5 & 29.5 & 0.16 & 23 & 0.611\\
+TOB-22  & 542 & 33.8 & 9.40 & 31.7 & 9.4 & 29.1 & 0.16 & 23 & 0.611\\
+TOB-91  & 536 & 33.9 & 9.31 & 31.3 & 9.3 & 28.9 & 0.15 & 23 & 0.611\\
+TOB-162 & 534 & 33.9 & 9.27 & 31.2 & 9.3 & 28.9 & 0.15 & 23 & 0.611\\
+TOB-158 & 530 & 33.9 & 9.21 & 31.0 & 9.2 & 28.7 & 0.15 & 23 & 0.611\\
+TOB-143 & 571 & 33.7 & 9.88 & 33.3 & 9.9 & 30.1 & 0.16 & 22 & 0.611\\
+TOB-136 & 575 & 33.7 & 9.94 & 33.5 & 9.9 & 30.4 & 0.16 & 22 & 0.611\\
+TOB-179 & 578 & 33.7 & 9.99 & 33.6 & 10.0 & 30.6 & 0.16 & 22 & 0.611\\
+TOB-34  & 581 & 33.7 & 10.03 & 33.8 & 10.0 & 30.6 & 0.17 & 22 & 0.611\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Advanced PK/PD detail of the top-10 (scripts 11--13; \texttt{top10\_advanced.csv}). $K_a$ = absorption rate constant; $k_{\mathrm{tr}}$ = transit transfer rate; objective scores are NSGA-II normalized components (obj$_F$ = 1.0 for all; front-optimal).}
+\label{tab:top10-advanced}
+\footnotesize\setlength{\tabcolsep}{2.6pt}
+\begin{tabular}{lcccccccc}
+\toprule
+ID & Dose (mg) & $T_{\max}$ (h) & $K_a$ (h$^{-1}$) & $k_{\mathrm{tr}}$ (h$^{-1}$) & $\CMIC$ & $\AMIC$ & obj$_{\CMIC}$ & obj$_{\AMIC}$\\
+\midrule
+TOB-161 & 551 & 0.30 & 5.00 & 2.240 & 9.54 & 32.1 & 0.401 & 0.562\\
+TOB-196 & 551 & 0.30 & 5.00 & 2.240 & 9.54 & 32.1 & 0.401 & 0.562\\
+TOB-22  & 542 & 0.30 & 5.00 & 2.241 & 9.40 & 31.7 & 0.396 & 0.572\\
+TOB-91  & 536 & 0.30 & 5.00 & 2.241 & 9.31 & 31.3 & 0.392 & 0.580\\
+TOB-162 & 534 & 0.30 & 5.00 & 2.241 & 9.27 & 31.2 & 0.390 & 0.582\\
+TOB-158 & 530 & 0.30 & 5.00 & 2.241 & 9.21 & 31.0 & 0.388 & 0.587\\
+TOB-143 & 571 & 0.30 & 5.00 & 2.239 & 9.88 & 33.3 & 0.416 & 0.536\\
+TOB-136 & 575 & 0.30 & 5.00 & 2.239 & 9.94 & 33.5 & 0.418 & 0.531\\
+TOB-179 & 578 & 0.30 & 5.00 & 2.239 & 9.99 & 33.6 & 0.420 & 0.527\\
+TOB-34  & 581 & 0.30 & 5.00 & 2.239 & 10.03 & 33.8 & 0.422 & 0.524\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Recommended candidate: TOB-161}
+The lead candidate \textbf{TOB-161} (550~mg enteric-coated HIP--SEDDS capsule delivering 50~nm chitosan-coated polymer nanoparticles with 50~mM C$_{10}$; SEDDS 50/30/20 surfactant/co-surfactant/oil) achieves:
+\begin{itemize}
+\item $\F = 34\%$ (24-h convention) --- \textbf{23-fold enhancement} over native oral absorption ($\Fo \approx 1.5\%$); the same chromosome re-evaluated in PK-Sim yields $\times$73.9 (\cref{sec:res-battery});
+\item $C_{\max} = 9.5$~mg/L at 0.30~h; $\CMIC = 9.5$ at MIC 1~mg/L --- \textbf{exceeding the efficacy threshold of 8} (H3 supported);
+\item $\AMIC = 32$~mg$\cdot$h/L --- below the 80--120 IV target (\cref{sec:ch4-summary});
+\item trough 0.16~mg/L --- far below the 1~mg/L toxicity line;
+\item $\fmic = 29.5\%$ --- near the 30--40\% supportive band.
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{fig1_pk_profiles_top3.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{fig6_radar_top3.png}
+\end{minipage}
+\caption{Left: simulated plasma concentration--time profiles of the top-3 candidates over 24~h (script 13); rapid absorption ($T_{\max}=0.3$~h), mono-exponential decline ($t_{1/2}=2.5$~h), troughs $<$0.2~mg/L. Right: multi-criteria radar of the top-3 (script 13): bioavailability, $\CMIC$, $\AMIC$, safety (inverse trough), $\fmic$, dose efficiency --- normalized 0--1.}
+\label{fig:top3}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{heatmap_top10.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{fig4_enhancement_factors.png}
+\end{minipage}
+\caption{Left: heatmap of the top-10 across design variables and outcomes (script 13): design columns are visually identical --- the composition optimum is unique; only dose varies. Right: bioavailability enhancement by strategy (scripts 07, 13): the combined platform reaches 23$\times$ versus native, consistent with the triple-combination literature band of 20--35\% (\cref{tab:bioavail-estimates}).}
+\label{fig:heatmap-enhancement}
+\end{figure}
+
+\section{Cluster and similarity analysis}
+\label{sec:ch4-clusters}
+Ward-linkage clustering of the elite cohort (from the exploratory GA cohort used for manufacturing/regulatory analysis, \cref{sec:ch4-mfg}) identified three composition clusters (\cref{tab:clusters}; \texttt{cluster\_summary.csv}). Clusters 1--2 are composition twins differing marginally in surfactant ratio; cluster 3 gathers seven near-identical candidates. Average inter-candidate similarity is high (Jaccard 0.92--1.00 for binary genes; Euclidean distance $<$0.05 on normalized continuous genes; full matrix in \texttt{similarity\_matrix.csv}), confirming that the optimizer --- despite diversity preservation --- collapses onto one dominant composition basin. This \emph{lack of front diversity} is a known NSGA-II behavior on sharply peaked design spaces and is treated as a limitation (\cref{sec:ch4-summary}).
+
+\begin{table}[htbp]
+\centering
+\caption{Cluster analysis of the elite cohort (scripts 06, 11; \texttt{cluster\_summary.csv}). Values are cluster means.}
+\label{tab:clusters}
+\begin{tabular}{cccccc}
+\toprule
+Cluster & $n$ & $\F$ (\%) & $\CMIC$ & $\AMIC$ & Fitness\\
+\midrule
+1 & 2 & 28.4 & 12.4 & 60.1 & 0.628\\
+2 & 1 & 28.1 & 12.0 & 58.3 & 0.619\\
+3 & 7 & 27.0 & 11.9 & 57.0 & 0.609\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Sensitivity analysis}
+\label{sec:ch4-sens}
+The OAT program (7 levels per parameter where defined, 60 informative evaluations) ranks the \textbf{dose and modified logP as the dominant drivers} of $\AMIC$: sensitivity index 0.42 for dose (linear exposure scaling, by construction of the model) and 0.34 for logP$'$, with $\AMIC$ peaking at logP$'$ $\approx$ 1.4--1.9 (32.0 at 1.37; 23.8 at 3.0 --- over-lipophilisation traps the complex in the SEDDS phase and reverses gains) and collapsing toward baseline at logP$'$ $\approx -0.3$ (21.2) (\cref{tab:sens}; \cref{fig:sens}). Among the \emph{composition} variables, the binary coatings matter most (chitosan 0.29; enteric 0.20), followed by particle size (0.09, losing 0.50 $\AMIC$ units per 22.5~nm) and PE concentration (0.10); solubility-related parameters rank lowest, consistent with solubility not being limiting.
+
+\begin{table}[htbp]
+\centering
+\caption{OAT sensitivity ranking for the oral endpoint (scripts 12 and 04; full data in \cref{chap:app-sensitivity}).}
+\label{tab:sens}
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{p{2.5cm}p{3.2cm}ccp{6.2cm}}
+\toprule
+Rank & Parameter & Baseline & SI & Interpretation\\
+\midrule
+1 & Dose & 550 mg & 0.42 & Linear exposure scaling (model construction)\\
+2 & logP$_{\mathrm{mod}}$ & 1.5 & 0.341 & Non-monotone optimum $\approx$1.4--1.9; primary composition lever\\
+3 & Chitosan coating & 1 & 0.29 & Binary switch worth 9.2 $\AMIC$ units\\
+4 & Enteric coating & 1 & 0.20 & Binary switch worth 6.4 $\AMIC$ units\\
+5 & PE concentration & 50 mM & 0.10 & Saturating response; 3.2 units over range\\
+6 & Particle size & 50 nm & 0.09 & Moderate penalty above $\approx$100~nm\\
+7 & Surfactant / polymer & 50\% / 30\% & 0.06 & Minor within-range effects\\
+8 & Co-surfactant & 30\% & 0.03 & Minor\\
+9 & Gastric pH, $K_a$, transit, $f_u$, P-gp & --- & $<$0.05 & Negligible (class III: solubility not limiting)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{sensitivity_tornado.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{sensitivity_spider.png}
+\end{minipage}
+\caption{Sensitivity analysis (script 12). Left: tornado plot of $\AMIC$ impact per parameter. Right: spider profiles --- the logP$'$ curve is non-monotone with an interior optimum; all other parameters are flat over their ranges.}
+\label{fig:sens}
+\end{figure}
+
+\section{Uncertainty quantification}
+\label{sec:ch4-uq}
+
+\subsection{Monte Carlo population simulation ($n=200$)}
+Perturbing CL, $V_1$, $V_2$ log-normally (CV 20--30\%) around the optimal formulation while holding $\F$ fixed yields $\CMIC$ spanning 6.9--10.2 (median 8.8) and $\AMIC$ 24.6--44.1 (median 32.5) (\cref{tab:uq}; \texttt{monte\_carlo\_data.csv}). Approximately 55\% of virtual subjects attain $\CMIC \geq 8$; all remain far below trough toxicity.
+
+\subsection{Cross-validation ($\pm$20\% global perturbation; 26 informative runs)}
+Simultaneous $\pm$20\% perturbation of all model inputs produced $\F$ = 27.2--32.7\%, $\CMIC$ = 7.1--12.5, $\AMIC$ = 23.9--42.1 (\texttt{validation\_cv\_data.csv}). The recommended formulation's $\CMIC \geq 8$ conclusion is preserved in $\approx$77\% of runs; the ranking of the top-3 candidates is preserved in 100\%.
+
+\begin{table}[htbp]
+\centering
+\caption{Uncertainty quantification summary (script 12). MC: $n=200$ log-normal CL/$V_1$/$V_2$; CV: 26 informative runs at $\pm$20\% perturbation.}
+\label{tab:uq}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Program & Endpoint & Median & Range & Target status\\
+\midrule
+Monte Carlo & $\CMIC$ & 8.8 & 6.9--10.2 & $\geq$8: 55\% of subjects\\
+Monte Carlo & $\AMIC$ & 32.5 & 24.6--44.1 & 80--120: 0\%\\
+Cross-validation & $\F$ (\%) & 31 & 27.2--32.7 & $>$25\%: robust\\
+Cross-validation & $\CMIC$ & 9.3 & 7.1--12.5 & $\geq$8: 77\% of runs\\
+Cross-validation & $\AMIC$ & 31.7 & 23.9--42.1 & 80--120: 0\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{monte_carlo_tornado.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{correlation_matrix.png}
+\end{minipage}
+\caption{Monte Carlo program (script 12, $n=200$). Left: parameter impact tornado across virtual subjects. Right: parameter--outcome correlation matrix: clearance correlates negatively with all exposure endpoints ($r \approx -0.7$); $\F$ is decorrelated from disposition (held at formulation value), as expected by design.}
+\label{fig:mc}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{validation_cv_boxplot.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{validation_cv_distribution.png}
+\end{minipage}
+\caption{Cross-validation program (script 12, 26 informative runs at $\pm$20\% perturbation). Left: boxplots of outcomes --- medians match the unperturbed optimum; tails remain within clinically interpretable bounds. Right: outcome distributions; $\CMIC$ mass lies at/above the efficacy line in most runs.}
+\label{fig:cv}
+\end{figure}
+
+\section{Manufacturing feasibility and cost}
+\label{sec:ch4-mfg}
+The ten-unit-operation route (\cref{sec:ch3-manufacturing}) is feasible at moderate scale: cycle time 15~h, batch throughput $\approx$10,000~kg of total raw materials (a modeling assumption dominated by process solvents, \texttt{manufacturing\_steps.csv}), and estimated cost per dose of \$4.25--4.35 across the elite cohort (\cref{tab:mfg}; \texttt{manufacturing\_summary.csv}, \texttt{manufacturing\_steps.csv}; scripts 07--08). Feasibility scoring (technology readiness, unit-operation complexity, excipient availability, in-use stability) yields 60--65/100 --- \textbf{grade B}, with cost category ``low''. The most expensive steps are nanoparticle manufacture and double coating (fluid-bed chitosan + enteric); both are standard pharmaceutical unit operations.
+
+\begin{table}[htbp]
+\centering
+\caption{Manufacturing summary for the elite cohort (scripts 07--08).}
+\label{tab:mfg}
+\small
+\begin{tabular}{cccccccc}
+\toprule
+Rank & $\F$ (\%) & $\CMIC$ & $\AMIC$ & Fitness & Cost (\$) & Feasibility & Grade\\
+\midrule
+1 & 28.4 & 12.4 & 60.1 & 0.63 & 4.35 & 65 & B\\
+2 & 28.4 & 12.4 & 60.1 & 0.63 & 4.35 & 65 & B\\
+3 & 28.1 & 12.0 & 58.3 & 0.62 & 4.33 & 65 & B\\
+4 & 27.3 & 12.0 & 57.8 & 0.61 & 4.27 & 62 & B\\
+5 & 27.2 & 12.0 & 57.7 & 0.61 & 4.26 & 62 & B\\
+6 & 27.2 & 12.0 & 57.5 & 0.61 & 4.26 & 62 & B\\
+7 & 27.2 & 12.0 & 57.5 & 0.61 & 4.26 & 62 & B\\
+8 & 26.9 & 11.8 & 56.7 & 0.61 & 4.26 & 62 & B\\
+9 & 26.7 & 11.7 & 56.4 & 0.60 & 4.25 & 62 & B\\
+10 & 26.8 & 11.6 & 55.6 & 0.60 & 4.26 & 62 & B\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{manufacturing_cost.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{feasibility_score.png}
+\end{minipage}
+\caption{Manufacturing assessment (scripts 07--08). Left: cost breakdown per dose --- base processing, NPs, SEDDS excipients, PE, coatings, QC. Right: feasibility scores across candidates; all grade B (60--65/100).}
+\label{fig:mfg}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{cost_vs_efficacy.png}
+\caption{Cost versus efficacy across the cohort (\texttt{cost\_vs\_efficacy} panel, script 07). Within the \$4.25--4.35 band, exposure gains are driven by dose, not cost --- additional expenditure does not buy $\CMIC$ once the composition optimum is reached.}
+\label{fig:cost-efficacy}
+\end{figure}
+
+\section{Regulatory pathway}
+\label{sec:ch4-reg}
+All elite candidates map to a \textbf{505(b)(2)} pathway: tobramycin is a reference-listed drug (IV/inhalation), and the novelty lies in the formulation platform (\cref{tab:reg}; \texttt{regulatory\_framework.csv}; script 08). The proposed first-in-human entry is a Phase~II PK/bioequivalence-type study of the enteric HPMC-AS capsule; estimated development duration is 7~years and direct cost \$4.8~million, with high (elevated) overall risk level driven by formulation novelty, not by the active.
+
+\begin{table}[htbp]
+\centering
+\caption{Regulatory framework assessment (script 08; \texttt{regulatory\_framework.csv}).}
+\label{tab:reg}
+\small
+\begin{tabular}{p{3.2cm}p{9.8cm}}
+\toprule
+Element & Assessment\\
+\midrule
+FDA category & 505(b)(2) (new formulation of approved active)\\
+Clinical entry & Phase~II (PK / bioequivalence design)\\
+Dosage form & Enteric capsule, HPMC-AS\\
+Preclinical package & Acute toxicology; NP biodistribution; GI mucosal toxicity; chitosan safety\\
+Estimated duration & 7 years\\
+Estimated direct cost & \$4.8 M\\
+Risk level & Elevated (formulation novelty; mitigations \cref{tab:risks})\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Risk analysis and mitigations (script 08; \texttt{risk\_analysis.csv}).}
+\label{tab:risks}
+\begin{tabular}{p{4.4cm}p{4.0cm}p{4.6cm}}
+\toprule
+Risk & Source & Mitigation\\
+\midrule
+NP toxicity on accidental inhalation & Nanoparticle platform & 30-day NP toxicology study\\
+GI mucosal irritation & C$_{10}$ permeation enhancer & Dose-escalation GI tolerance trial\\
+Source variability (deacetylation degree) & Chitosan excipient & Certificate-of-analysis QC specification\\
+\midrule
+\multicolumn{3}{l}{\emph{Overall priority: medium.}}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{regulatory_timeline.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{regulatory_cost.png}
+\end{minipage}
+\caption{Regulatory assessment (script 08). Left: 7-year development timeline (preclinical toxicology $\rightarrow$ IND $\rightarrow$ Phase~II PK $\rightarrow$ Phase~III $\rightarrow$ submission). Right: cost distribution (\$4.8~M direct development cost).}
+\label{fig:reg}
+\end{figure}
+
+\section{Benchmarking against the literature}
+\label{sec:ch4-lit}
+\cref{tab:bioavail-estimates} compares the predicted bioavailability of single-strategy platforms (from the literature synthesis) with the optimized combination. The optimized platform ($\F$ = 34\%) sits at the top of the theoretical triple-combination band (20--35\%) and exceeds the strongest single strategy (SNAC PE, 10--25\%) --- the quantitative reward for combining HIP, SEDDS, NPs and PEs rather than choosing among them.
+
+\begin{table}[htbp]
+\centering
+\caption{Predicted oral bioavailability by strategy (literature synthesis; IV for reference).}
+\label{tab:bioavail-estimates}
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lp{3.8cm}ccp{2.4cm}}
+\toprule
+Formulation & Mechanism & $\F$ (\%) & Evidence & Scalability\\
+\midrule
+IV (reference) & --- & 100 & Clinical & Excellent\\
+Oral solution (native) & Passive diffusion & 1--2 & Literature & Excellent\\
+Oral suspension (native) & Dissolution-limited & 2--3 & Predicted & Good\\
+SEDDS (native drug) & Emulsification & 3--5 & Predicted & Good\\
+HIP + SEDDS & Lipophilisation & 10--25 & In vitro \citep{Asad2023} & Moderate\\
+PLGA NPs & Mucoadhesion & 5--15 & In vitro \citep{Hill2019} & Good\\
+KuDa NPs & Charge neutralization & 5--20 & In vitro \citep{BlancoCabra2022} & Moderate\\
+PE (C$_{10}$) & Tight junctions & 10--20 & In vivo (mice) \citep{Maher2009} & Good\\
+PE (SNAC) & Tight junctions & 10--25 & Clinical (other drugs) & Excellent\\
+NCAs & Lipophilisation & 10--20 & In vitro \citep{Khaled2026} & Moderate\\
+Triple combination & HIP+SEDDS+PE & 20--35 & Predicted & Moderate\\
+\rowcolor{tobblue!12}
+\textbf{This thesis (TOB-161)} & \textbf{Full combined platform} & \textbf{34} & \textbf{In silico (this work)} & Moderate\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{fig3_literature_comparison.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}\centering
+\includegraphics[width=\linewidth]{top3_comparison.png}
+\end{minipage}
+\caption{Left: literature benchmarking of enhancement factors (script 13) --- the optimized platform tops the strategy landscape. Right: side-by-side comparison of the top-3 candidates across all endpoints (script 13).}
+\label{fig:lit-comp}
+\end{figure}
+
+\section{Results summary: targets met, targets missed}
+\label{sec:ch4-summary}
+\begin{table}[htbp]
+\centering
+\caption{Target attainment of the recommended candidate TOB-161 against the PK/PD framework of \cref{tab:pd-targets}.}
+\label{tab:targets}
+\small
+\begin{tabular}{p{2.4cm}p{2.2cm}p{1.6cm}p{2.0cm}p{5.6cm}}
+\toprule
+Endpoint & Target & Achieved & Verdict & Consequence\\
+\midrule
+$\CMIC$ & $\geq$8 & 9.5 & \textbf{Met} & Peak-driven efficacy plausible\\
+$C_{\min}$ & $<$1 mg/L & 0.16 & \textbf{Met} & Toxicity margin large\\
+$\F$ & $>$25\% (thesis bar) & 34\% & \textbf{Met} & Viable-class formulation\\
+$\fmic$ & $>$30--40\% & 29.5\% & Borderline & Marginal; fractionation helps\\
+$\AMIC$ & 80--120 & 32 & \textbf{Not met} & Single oral dose insufficient (\cref{chap:discussion})\\
+$C_{\max}$ & 20--30 mg/L & 9.5 & Not applicable & IV-derived target; peak index governs\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Honest accounting.} The optimization demonstrates that a combination platform can plausibly deliver peak concentrations above the antibacterial threshold with a wide toxicity margin at $\approx$550~mg. It equally demonstrates --- and this thesis does not paper over it --- that a single daily oral dose cannot reproduce the systemic exposure ($\AMIC$ 80--120) of intravenous therapy. The consequences, including twice-daily fractionation, AUC-guided TDM, and niche positioning, are developed in \cref{chap:discussion}. A second honest caveat is front diversity: the archive collapsed onto one composition basin (CV of design genes $<$1\%), so the ``200 solutions'' represent dose variants of effectively one formulation; the design conclusion (unique optimum) is strengthened, but alternative basins cannot be excluded by this study alone.

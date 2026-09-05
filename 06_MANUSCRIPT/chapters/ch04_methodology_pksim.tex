@@ -1,0 +1,121 @@
+% =====================================================================
+% Chapter 4 — Methodology II: The PK-Sim Platform
+% =====================================================================
+\chapter{Methodology II: The PK-Sim Platform}
+\label{chap:methodology-pksim}
+
+The exploratory framework of \cref{chap:methodology} established the optimization logic and produced a first bioavailability estimate with a purpose-built, minimal engine. Its limitations --- phenomenological enhancement factors, no mechanistic regional absorption, disposition parameters imposed rather than physiology-derived --- are exactly what a whole-body PBPK platform resolves. This chapter describes the definitive computational phase of the thesis: the construction, validation, and programmatic use of a tobramycin model inside \textbf{PK-Sim 12.4 / Open Systems Pharmacology}, executed entirely from R on macOS (Apple Silicon), including the resolution of a platform defect that had to be overcome along the way. All scripts, snapshots and data are part of the project repository (\cref{chap:app-pksim-code}).
+
+\section{Platform and strategy}
+\label{sec:pksim-strategy}
+
+PK-Sim is the open-source whole-body PBPK suite originally developed at Bayer and maintained by the Open Systems Pharmacology community \citep{OSP2024}. The R interface (\pkg{ospsuite} 12.4.4 with \pkg{rSharp}/.NET 8) loads, modifies and executes simulations created in PK-Sim, and exposes individual and population creation from the integrated physiology database. Two structural constraints shaped the strategy:
+
+\begin{enumerate}
+\item \pkg{ospsuite}-R cannot \emph{create} simulations from the compound database: simulations must come from an existing PK-Sim project (or snapshot). The macOS-bundled package database contains only generic template molecules --- the full compound library ships with the Windows application only.
+\item No published PK-Sim model of tobramycin exists. A structured search (repositories of the Open Systems Pharmacology organization, GitHub code search over \texttt{.pkml}/\texttt{.pksim5} artefacts, and the literature) returned zero shareable tobramycin models; the closest validated model in the official OSP PBPK Model Library is \textbf{amikacin} --- an aminoglycoside sharing tobramycin's defining disposition features (polycation, purely renal GFR-driven clearance, extracellular-limited distribution).
+\end{enumerate}
+
+The strategy was therefore to adopt the \textbf{validated amikacin model} as the structural and physiological base and re-parameterize it to tobramycin --- the same operation a PK-Sim user performs when duplicating a compound and editing its properties. The base snapshot (\texttt{Amikacin-Model.json}, schema version 80, OSP Library v12.3.1) is committed in \texttt{data/snapshots/}; the tobramycin snapshots are generated deterministically by \texttt{pksim/model/make\_tobramycin\_json.py}.
+
+\section{Resolving the macOS snapshot-conversion defect}
+\label{sec:pksim-workaround}
+
+The first execution attempt crashed the R process (SIGSEGV) during snapshot-to-project conversion. Upstream, this is Open Systems Pharmacology issue \#1622 (``Running simulations from snapshots crashes on macOS''), scheduled to be fixed in suite v13. Because the crash blocked the entire platform route, it was diagnosed and worked around locally --- a contribution this thesis documents in full (technical journal in \cref{chap:app-debug}; summary below).
+
+\subsection{Root cause}
+The macOS crash report (\texttt{.ips}, faulting thread) places the fault inside \texttt{SQLite.Interop.dylib}, in a recursion of SQLite's view-name resolution (\texttt{sqlite3ViewGetColumnNames} $\leftrightarrow$ \texttt{selectExpander}), terminating inside \texttt{sqlite3\_log} --- i.e.\ SQLite detects a resolution failure and crashes while reporting it, on a .NET worker thread with a small stack. The PK-Sim project database ships \textbf{91 views}; the failing query resolves nested views at prepare time and overflows the thread stack. The view SQL itself is valid (identical queries execute in the \texttt{sqlite3} CLI); view nesting depth is at most 2 --- the failure is one of stack budget on the interop thread, not of database logic.
+
+\subsection{Fix}
+The workaround (\texttt{pksim/env/patch\_pksimdb.py}) materializes every view into a table (\texttt{DROP VIEW} + \texttt{CREATE TABLE ... AS SELECT}, in topological order) in a patched copy of the bundled database. The database is static template data, so content and column layout are preserved exactly (row counts verified on the critical views). After the patch, snapshot conversion, simulation runs, PKML export, and individual/population creation all operate \emph{natively on macOS}, without containers, virtual machines or emulators. The patch is idempotent, reversible (backup retained), and must be re-applied after upgrading \pkg{ospsuite}; on suite v13 it becomes unnecessary.
+
+\section{Tobramycin model construction}
+\label{sec:pksim-model}
+
+\subsection{Base model and parameterization}
+The amikacin snapshot contains 11 validated simulations (10 individual volunteers and one population, Walker 1979 study) and one compound building block. The generator renames the compound and applies the tobramycin parameter set (\cref{tab:pksim-params}); every simulation reference (compound properties, output selections, observed-data paths) is renamed consistently. Two platform behaviors discovered during construction are documented because they fail \emph{silently}:
+
+\begin{itemize}
+\item renal processes are matched \emph{by name} between the compound definition and each simulation's process selection --- changing the data-source string of the process without renaming the selection silently unlinks clearance;
+\item simulation-level \emph{altered parameters} override their building blocks: the historical Walker simulations carry an altered infusion time (4 min) that silently supersedes the protocol's 30-min setting until the altered value is corrected.
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{Tobramycin parameterization inside PK-Sim (from the validated amikacin base).}
+\label{tab:pksim-params}
+\small
+\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lllp{4.9cm}}
+\toprule
+Parameter & Value & Unit & Note \\
+\midrule
+Molecular weight & 467.515 & g/mol & PubChem \\
+logP & $-2.9$ & --- & PubChem (native drug) \\
+Fraction unbound & 0.95 & --- & minimal plasma binding \\
+Solubility & 94,000 & mg/L (pH 7) & Chen 2009; never limiting (BCS III) \\
+pKa (bases) & 7.7, 7.8, 9.1 & --- & \textbf{3 of 5 amines}: PK-Sim building blocks accept at most three pKa values per ionization type (documented platform limit); precedent: the validated amikacin model retains three of its four-plus amines. Impact negligible here (solubility never limiting; distribution by PK-Sim Standard is pKa-independent; oral permeability is explicitly overridden per candidate). \\
+Renal process & GFR fraction 1.0 & --- & purely renal, $>$90\% unchanged excretion \\
+Distribution / cellular permeability & PK-Sim Standard & --- & default methods \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Validation gate}
+\label{sec:pksim-gate-design}
+The model is accepted only if a six-criterion intravenous validation gate passes (\cref{chap:results-pksim}): Hartford peak (30 min post-infusion) within 20--30 mg/L; end-of-infusion Cmax within the clinical envelope extended by the published $V_1$ uncertainty; AUC24 implying a clearance within the published PopPK range; 24-h trough below 1 mg/L; effective half-life 2.0--3.0 h; renal excretion above 90 \%. The validation scenario is 7 mg/kg (577.5 mg for the 82.5-kg volunteer), 30-min infusion --- the extended-interval clinical standard.
+
+\section{Oral absorption and permeability calibration}
+\label{sec:pksim-oral-calibration}
+
+PK-Sim computes the specific transcellular intestinal permeability from the logP/effective-MW correlation; for tobramycin it returns $1.9\times10^{-12}$ dm/min --- effectively zero, because the correlation saturates for very hydrophilic cations and the paracellular term is zero by default. Clinically, oral bioavailability is $\approx$1--2\%. Following the platform's documented practice for experimental permeability inputs, the simulation parameter \texttt{Specific intestinal permeability (transcellular)} is overridden (mucosal basolateral permeability is rescaled automatically by PK-Sim).
+
+The override is \textbf{calibrated, not fitted silently}: a log-spaced scan over eleven P$_{\mathrm{int}}$ values (1e-11 to 1e-6 dm/min) maps the full dose-normalized bioavailability curve $F(P_{\mathrm{int}})$. The value reproducing the clinical point estimate ($F_0 \approx 1.75\%$ at $P_{\mathrm{int},0} = 3\times10^{-9}$ dm/min, 24-h convention) becomes the calibrated baseline; every formulation candidate in the optimization is then a \emph{multiplier} on this baseline (\cref{sec:pksim-ga-design}).
+
+\subsection{The enhancement model: cited, bounded, emergent}
+\label{sec:methods-pksim-enhancement}
+
+A methodology audit replaced the free multiplier of the first optimization round with a structured mapping from formulation genes to apparent permeability, implemented once in \texttt{enhancement\_model.R} and shared by the optimization, the studies and the uncertainty analysis. Its structure:
+
+\begin{enumerate}
+\item \textbf{Two calibration anchors.} Native drug: $P_{int,0} = 3\times10^{-9}$ dm/min $\rightarrow F = 1.75\%$ (24-h convention; the 96-h extent is 3.5\% --- the difference is the flip-flop tail, and both conventions are reported throughout). Nominal platform: the measured HIP complex (logP$' = +1.6$) on the reference composition $\rightarrow \times$20 ($F_{96} = 48.8\%$ at 993 mg; cross-checked by the exploratory engine at 24 h: 34.0 vs 34.6\%).
+\item \textbf{Seven component factors}, each relative to its nominal value (1.0), each with a cited range and an evidence grade (A: measured for this drug/system; B: measured for a close analogue; C: review-level estimate): logP$'$ of the HIP complex (B; Asad 2023), SEDDS excipient fraction (B; Muhammad 2022; Griesser 2017), nanoparticle size (C; Hill 2019; Khaled 2026), C10 loading (B; Maher 2009; Bohley 2024), mucoadhesive polymer (C), chitosan coating (C; Bohley 2024), enteric coating (galenic).
+\item \textbf{The multiplier is the product of the factors} --- emergent, never free. The logP gene is capped at the \emph{measured} complex (+1.6); the emergent maximum is $\boldsymbol{\times}$\textbf{126.3}. Values beyond it are reported only as sensitivity statements.
+\item \textbf{Uncertainty per component}: lognormal with a graded $\sigma$ (A: 0.10, B: 0.25, C: 0.40), propagated in study S09 to confidence intervals on $F$ and on the PK/PD targets.
+\item \textbf{Backward compatibility}: the mapping reproduces the pre-audit decoding to $2.8\times10^{-14}$ on random chromosomes, so every previously validated study remains valid.
+\end{enumerate}
+
+\section{Programmatic execution patterns}
+\label{sec:pksim-execution}
+
+Three implementation findings generalize to any scripted PK-Sim workflow and are documented for reproducibility:
+
+\begin{enumerate}
+\item \textbf{Native snapshot runner.} The R wrapper blocks \texttt{runSimulationsFromSnapshot()} on Darwin (a consequence of the pre-fix crash). The underlying CLI machinery (\texttt{PKSim.R.Api::RunJson} with \texttt{JsonRunOptions}, export modes CSV/PKML) executes natively once the database is patched; a thin wrapper (\texttt{pk\_sim\_run.R}) restores this functionality.
+\item \textbf{Batch sweeps must target the right parameters.} The renal process rate references \texttt{Organism|Kidney|}
+\texttt{GFR (specific)} (l/min/kg kidney) $\times$ kidney volume --- overriding the plain \texttt{Organism|Kidney|GFR} has no effect (verified). Dose lives at the application schema item in \textbf{kg} (base unit). Run values are supplied as \emph{vectors} per batch run; each generation of the optimization packs its entire population into \emph{one} batch call.
+\item \textbf{Units are base units.} Gastric emptying time is in minutes (default 15); doses in kg; infusion times in minutes. Two silent unit traps were caught by physiological plausibility checks (a ``food effect'' that changed extent, an ``accumulation'' that violated mass balance) and corrected.
+\end{enumerate}
+
+\section{Study program and optimization design}
+\label{sec:pksim-ga-design}
+
+\subsection{Studies S00--S06}
+\begin{description}[labelwidth=2.2cm, style=nextline]
+\item[S00] IV validation gate (six criteria, \cref{sec:pksim-gate-design}).
+\item[S01] IV dose $\times$ renal-function sweep: doses \{200, 400, 577.5, 800\} mg $\times$ CLCR \{30, 65, 90, 112.5, 150\} mL/min via \texttt{GFR (specific)} scaling, native \texttt{SimulationBatch}.
+\item[S02] P$_{\mathrm{int}}$ calibration scan (\cref{sec:pksim-oral-calibration}).
+\item[S03] Virtual population: 100 ICRP-2002 adults (20--50 y, 55--95 kg, 40\% female) on the optimized oral platform; PK-Sim population simulation.
+\item[S04] Local sensitivity: one-at-a-time perturbations ($\pm$20\%) of P$_{\mathrm{int}}$, dose, GFR and $f_u$ on the platform candidate; elasticities of Cmax and AUC24. (The \pkg{ospsuite} sensitivity task requires PK parameters attached to outputs, which the CLI-exported simulation does not carry; the batch design is the equivalent PK-Sim-computed alternative.)
+\item[S05] Food effect: gastric emptying 15 min (fasted) vs 60 min (fed).
+\item[S06] Dose fractionation (QD/BID/TID) at steady state by linear superposition of the single-dose profile over a 96-h window (the oral profile exhibits flip-flop kinetics --- absorption rate-limited elimination --- so the 24-h output window truncates the tail), with probability of target attainment (PTA) across MIC 0.25--4 mg/L.
+\end{description}
+
+\subsection{NSGA-II in the PK-Sim loop}
+The exploratory optimizer of \cref{chap:methodology} is retained (non-dominated sorting, crowding distance, SBX, polynomial mutation; \citealp{Deb2002}) but its fitness function now \textbf{executes PK-Sim}: each generation packs its 100 chromosomes into a single \texttt{SimulationBatch}; the two run-value parameters are the dose (kg) and the intestinal permeability (multiplier on $P_{\mathrm{int},0}$). The gene-to-lever mapping follows the calibrated logic of \cref{chap:methodology}: the logP$_{\mathrm{mod}}$ gene sets the ion-pairing multiplier ($\mathrm{logP}' = +1.6 \Rightarrow \times 20$, log-linear interpolation between native and HIP-complex lipophilicity), the SEDDS/nanoparticle/PE genes contribute bounded saturating factors, chitosan and enteric coatings act as binary multipliers ($\times$1.15, $\times$1.10), and the dose gene maps to the application schema item. Objectives: maximize $\F$, maximize $\CMIC$, maximize $\AMIC$, minimize dose; population 100, 100 generations, seed 42, checkpoint every 10 generations. Budget: $\approx$10,000 PK-Sim evaluations.
+
+\subsection{Winner characterization}
+The rank-1 Pareto candidate is then characterized exhaustively (\textbf{S07}): single-dose profile and absolute bioavailability; steady-state fractionation at the optimized dose; PTA across the MIC distribution; a 100-individual virtual population on the winner; food effect on the winner. This closes the loop between optimization and the clinical translation analysis of \cref{chap:discussion}.
+
+\section{Methodological limitations of the platform phase}
+The P$_{\mathrm{int}}$ baseline is calibrated to clinical F (medium confidence, documented); the paracellular pathway is not represented by default; the 3-pKa simplification is inherited from the platform schema; PK parameters are not attached to CLI-exported simulations, so the sensitivity analysis uses the batch perturbation design; and the amikacin base model, while validated for its own compound, transfers to tobramycin only at the level of disposition class and physiology, not of molecule-specific tissue partitioning.
