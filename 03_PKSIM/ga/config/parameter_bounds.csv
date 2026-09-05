@@ -1,0 +1,11 @@
+gene_id,name,min_val,max_val,type
+1,logP_modified,-2.9,1.6,continuous
+2,particle_size,50,500,continuous
+3,surfactant_pct,10,60,continuous
+4,cosurfactant_pct,5,30,continuous
+5,oil_pct,20,70,continuous
+6,pe_concentration,0,50,continuous
+7,polymer_loading,0,30,continuous
+8,chitosan_coating,0,1,binary
+9,enteric_coating,0,1,binary
+10,dose_mg,200,1000,continuous
