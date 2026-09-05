@@ -1,0 +1,21 @@
+"regimen","MIC","PTA_Cmax","PTA_AUC"
+"QD 450 (min target dose)",0.25,43.25,100
+"QD 450 (min target dose)",0.5,21,100
+"QD 450 (min target dose)",1,7.25,0
+"QD 450 (min target dose)",2,0,0
+"QD 450 (min target dose)",4,0,0
+"QD 878 (GA winner)",0.25,95.75,100
+"QD 878 (GA winner)",0.5,42,100
+"QD 878 (GA winner)",1,20.5,100
+"QD 878 (GA winner)",2,6.5,0
+"QD 878 (GA winner)",4,0,0
+"BID 439",0.25,100,100
+"BID 439",0.5,58.25,100
+"BID 439",1,21.25,0
+"BID 439",2,0,0
+"BID 439",4,0,0
+"BID 878",0.25,100,100
+"BID 878",0.5,100,100
+"BID 878",1,58.25,100
+"BID 878",2,21.25,0
+"BID 878",4,0,0

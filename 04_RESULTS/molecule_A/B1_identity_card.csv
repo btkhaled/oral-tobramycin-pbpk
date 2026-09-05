@@ -1,0 +1,8 @@
+"component","value","factor","min","max","grade","reference","P_int_dm_min","multiplier","dose_mg"
+"logP_modified",1.5,18.712,1,20,"B","[2] Asad 2023 (measured logP' <= +1.6); A2 anchor",2.21556549176007e-07,73.8521830586689,550.57
+"sedds_sum",100,1,0.2,1.6,"B","[10] Muhammad 2022; [17] Griesser 2017",2.21556549176007e-07,73.8521830586689,550.57
+"particle_size",50,1.5,1,1.5,"C","[3] Hill 2019; [9] Khaled 2026",2.21556549176007e-07,73.8521830586689,550.57
+"pe_concentration",50,1.6,1,1.6,"B","[16] Maher 2009; [8] Bohley 2024",2.21556549176007e-07,73.8521830586689,550.57
+"polymer_loading",30,1.3,1,1.3,"C","[8] Bohley 2024",2.21556549176007e-07,73.8521830586689,550.57
+"chitosan_coating",1,1.15,1,1.15,"C","[8] Bohley 2024",2.21556549176007e-07,73.8521830586689,550.57
+"enteric_coating",1,1.1,1,1.1,"C","galenic (dose dumping guard)",2.21556549176007e-07,73.8521830586689,550.57
