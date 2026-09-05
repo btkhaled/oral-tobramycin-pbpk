@@ -248,7 +248,7 @@ If you use this repository, please cite both the software and the thesis — Git
 }
 ```
 
-See [`CITATION.cff`](CITATION.cff) (Khaled Ben Taieb — Independent Research Program — MIT for code, CC BY-NC-ND 4.0 for data/manuscript — 21 keywords, abstract, `preferred-citation`, `references` to PK-Sim and Asad et al. 2023). Replace `orcid`/`email` TODOs with your own; add a Zenodo DOI later if you archive (see `CITATION.cff` `identifiers`).
+See [`CITATION.cff`](CITATION.cff) (Khaled Ben Taieb — Independent Research Program — MIT for code, CC BY-NC-ND 4.0 for data/manuscript — 21 keywords, abstract, `preferred-citation`, `references` to PK-Sim and Asad et al. 2023).
 
 ---
 
