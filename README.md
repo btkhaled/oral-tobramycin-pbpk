@@ -234,7 +234,6 @@ If you use this repository, please cite both the software and the thesis — Git
   version      = {v1.2.0},
   publisher    = {Independent Research Program — Computational Pharmaceutics},
   url          = {https://github.com/btkhaled/oral-tobramycin-pbpk},
-  doi          = {10.5281/zenodo.0000000},
   note         = {PBPK modeling in PK-Sim (OSP) + NSGA-II formulation optimization, 04_RESULTS/MANIFEST.csv 90 artifacts, 06_MANUSCRIPT/main.pdf 185 pp}
 }
 
@@ -245,12 +244,11 @@ If you use this repository, please cite both the software and the thesis — Git
   month  = {9},
   school = {Independent Research Program — Computational Pharmaceutics},
   url    = {https://github.com/btkhaled/oral-tobramycin-pbpk/blob/main/06_MANUSCRIPT/main.pdf},
-  doi    = {10.5281/zenodo.0000000},
   note   = {185 pp, 10 chapters (ch00 synopsis → ch09 conclusion) + Appendices A–R, 46 figures, 7 tables, 11 code listings. See also BIBLIOGRAPHY_SUMMARY.md, COMPOUND_SUMMARY.md, ENGINE_SUMMARY.md, PKSIM_SUMMARY.md}
 }
 ```
 
-See [`CITATION.cff`](CITATION.cff) (Khaled Ben Taieb — Independent Research Program — MIT for code, CC BY-NC-ND 4.0 for data/manuscript — 21 keywords, abstract, `preferred-citation`, `references` to PK-Sim and Asad et al. 2023). Replace `orcid`/`email`/`doi` TODOs with your own before archiving on Zenodo.
+See [`CITATION.cff`](CITATION.cff) (Khaled Ben Taieb — Independent Research Program — MIT for code, CC BY-NC-ND 4.0 for data/manuscript — 21 keywords, abstract, `preferred-citation`, `references` to PK-Sim and Asad et al. 2023). Replace `orcid`/`email` TODOs with your own; add a Zenodo DOI later if you archive (see `CITATION.cff` `identifiers`).
 
 ---
 
