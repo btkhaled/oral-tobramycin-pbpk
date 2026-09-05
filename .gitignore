@@ -1,0 +1,51 @@
+# --- R ---
+.Rhistory
+.RData
+.Rproj.user
+*.Rproj
+
+# --- OS / IDE ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# --- PK-Sim / OSP large binaries (regenerable, see 03_PKSIM/env/README.md) ---
+*.sqlite
+*.pksim5
+PKSim-Portable*.zip
+pksim_portable/
+
+# --- LaTeX build artifacts (06_MANUSCRIPT/) ---
+06_MANUSCRIPT/*.aux
+06_MANUSCRIPT/*.log
+06_MANUSCRIPT/*.bbl
+06_MANUSCRIPT/*.blg
+06_MANUSCRIPT/*.toc
+06_MANUSCRIPT/*.lof
+06_MANUSCRIPT/*.lot
+06_MANUSCRIPT/*.out
+06_MANUSCRIPT/*.synctex.gz
+06_MANUSCRIPT/**/*.aux
+06_MANUSCRIPT/**/*.log
+
+# --- R junk ---
+Rplots.pdf
+
+# --- Temp / secrets ---
+tmp/
+99_TMP/
+*.tmp
+*.log
+.env
+*.key
+*.pem
+
+# --- slides ---
+07_SLIDES/node_modules/
+07_SLIDES/.astro/
+
+# --- legacy large zips (do not commit) ---
+*.zip
+__MACOSX/

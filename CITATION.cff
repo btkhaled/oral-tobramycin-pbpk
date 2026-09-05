@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+title: "Oral Tobramycin: From BCS III to a Viable Oral Formulation"
+message: "PBPK modeling of oral tobramycin in PK-Sim (Open Systems Pharmacology) with NSGA-II formulation optimization"
+type: software
+authors:
+  - name: "Ben Taieb, Khaled"
+    affiliation: "Independent research program"
+    orcid: "https://orcid.org/[to-be-completed]"
+repository-code: "https://github.com/btkhaled/oral-tobramycin-pbpk"
+license: MIT
+version: v1.2.0
+date-released: "2026-09-05"
+keywords:
+  - tobramycin
+  - PBPK modeling
+  - PK-Sim
+  - Open Systems Pharmacology
+  - BCS classification
+  - oral bioavailability
+  - hydrophobic ion pairing
+  - SEDDS
+  - permeation enhancers
+  - NSGA-II
+  - multi-objective optimization
+  - cystic fibrosis
+  - aminoglycoside
+preferred-citation:
+  type: article
+  title: "Oral Tobramycin: From BCS III to a Viable Oral Formulation — a PK-Sim modeling and multi-objective optimization study"
+  authors:
+    - name: "Ben Taieb, Khaled"
+  year: 2026
+  journal: "PhD thesis"
