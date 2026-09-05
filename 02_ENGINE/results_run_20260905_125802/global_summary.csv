@@ -1,0 +1,11 @@
+rank,F_oral,Cmax_MIC,AUC_MIC,fitness,estimated_cost_usd,feasibility_grade,fda_category,est_years,est_cost_m_usd,risk_level,priority
+1,0.28,12.41,60.05,0.63,4.35,B,505(b)(2),7,4.8,Élevé,Moyenne
+2,0.28,12.41,60.05,0.63,4.35,B,505(b)(2),7,4.8,Élevé,Moyenne
+3,0.28,12.37,59.85,0.63,4.34,B,505(b)(2),7,4.8,Élevé,Moyenne
+4,0.28,12.37,59.85,0.63,4.34,B,505(b)(2),7,4.8,Élevé,Moyenne
+5,0.28,12.38,59.89,0.63,4.34,B,505(b)(2),7,4.8,Élevé,Moyenne
+6,0.25,10.98,53.63,0.59,4.14,B,505(b)(2),7,4.8,Élevé,Moyenne
+7,0.25,10.28,51.81,0.58,4.1,B,505(b)(2),7,4.8,Élevé,Moyenne
+8,0.25,9.76,48.64,0.57,4.09,B,505(b)(2),7,4.8,Élevé,Moyenne
+9,0.25,8.98,45,0.56,4.1,B,505(b)(2),7,4.8,Élevé,Moyenne
+10,0.23,9.72,48.66,0.56,3.97,B,505(b)(2),7,4.8,Élevé,Moyenne

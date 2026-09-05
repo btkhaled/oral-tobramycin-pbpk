@@ -1,0 +1,11 @@
+rank,F_oral,Cmax_MIC,AUC_MIC,fitness,estimated_cost_usd,cost_category,feasibility_score,feasibility_grade
+1,0.28,12.41,60.05,0.63,4.35,Faible,62,B
+2,0.28,12.41,60.05,0.63,4.35,Faible,62,B
+3,0.28,12.37,59.85,0.63,4.34,Faible,62,B
+4,0.28,12.37,59.85,0.63,4.34,Faible,62,B
+5,0.28,12.38,59.89,0.63,4.34,Faible,62,B
+6,0.25,10.98,53.63,0.59,4.14,Faible,65,B
+7,0.25,10.28,51.81,0.58,4.1,Faible,65,B
+8,0.25,9.76,48.64,0.57,4.09,Faible,65,B
+9,0.25,8.98,45,0.56,4.1,Faible,65,B
+10,0.23,9.72,48.66,0.56,3.97,Faible,65,B
