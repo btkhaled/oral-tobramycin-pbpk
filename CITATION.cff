@@ -1,33 +1,119 @@
+# =============================================================================
+# CITATION.cff — Oral Tobramycin: From BCS III to a Viable Oral Formulation
+# Cite this repository and the thesis manuscript. See also 06_MANUSCRIPT/
+# Generated for oral-tobramycin-pbpk v1.2.0 — 2026-09-05
+# =============================================================================
 cff-version: 1.2.0
 title: "Oral Tobramycin: From BCS III to a Viable Oral Formulation"
-message: "PBPK modeling of oral tobramycin in PK-Sim (Open Systems Pharmacology) with NSGA-II formulation optimization"
+message: |
+  If you use this repository, please cite both the software and the thesis.
+  For the thesis, use the preferred-citation below. For the code, cite this
+  repository via its GitHub URL and version. See CITATION.cff for BibTeX and
+  RIS export via GitHub's Cite this repository button.
+
 type: software
 authors:
-  - name: "Ben Taieb, Khaled"
-    affiliation: "Independent research program"
-    orcid: "https://orcid.org/[to-be-completed]"
+  - family-names: "Ben Taieb"
+    given-names: "Khaled"
+    affiliation: "Independent Research Program — Computational Pharmaceutics"
+    orcid: "https://orcid.org/0009-0000-0000-0000"  # TODO: replace with your ORCID
+    email: "khaled.bentaieb@example.com"            # TODO: replace with your contact
+    # role: Conceptualization, Methodology, Software, Validation, Writing
+
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.0000000
+    description: "Concept DOI for oral-tobramycin-pbpk (replace after Zenodo archiving)"
+
 repository-code: "https://github.com/btkhaled/oral-tobramycin-pbpk"
+repository-artifact: "https://github.com/btkhaled/oral-tobramycin-pbpk/releases/tag/v1.2.0"
+url: "https://github.com/btkhaled/oral-tobramycin-pbpk#readme"
+
 license: MIT
+# Data and manuscript are CC BY-NC-ND 4.0 — see DATA-LICENSE
+# PK-Sim / Open Systems Pharmacology is GPLv2 (external, not redistributed)
+
 version: v1.2.0
 date-released: "2026-09-05"
+commit: 0692ae8  # main @ 2026-09-05 — build finale 00-07
+
 keywords:
   - tobramycin
+  - aminoglycoside
+  - BCS classification
+  - BCS class III
+  - oral bioavailability
   - PBPK modeling
+  - physiologically based pharmacokinetics
   - PK-Sim
   - Open Systems Pharmacology
-  - BCS classification
-  - oral bioavailability
+  - ospsuite
   - hydrophobic ion pairing
   - SEDDS
+  - SMEDDS
+  - nanoparticles
   - permeation enhancers
+  - sodium caprate
   - NSGA-II
   - multi-objective optimization
+  - formulation optimization
   - cystic fibrosis
-  - aminoglycoside
+  - Pseudomonas aeruginosa
+
+abstract: |
+  Tobramycin is a WHO essential aminoglycoside restricted to intravenous
+  and inhaled routes (oral F ≈ 1–2%). This repository resolves its BCS
+  classification as Class III (high solubility 94–100 mg/mL, low permeability
+  Papp < 1×10⁻⁶ cm/s), builds a validated whole-body PBPK model in PK-Sim
+  from the OSP amikacin model (gate 6/6 PASS, 577.5 mg, 30-min infusion),
+  calibrates transcellular intestinal permeability to the clinical baseline
+  (Pint0 3×10⁻⁹ dm/min → F0 1.75%), and optimizes a 10-dimensional formulation
+  design space (HIP complex, SEDDS, nanoparticles, permeation enhancers,
+  coatings, dose) with NSGA-II inside the PK-Sim loop under a cited-bounded
+  enhancement model (cap ×126.3 at logP +1.6, Asad et al. 2023). Winner
+  TOBP-001 ×125, 999.8 mg QD, F96 97.1%, Cmax/MIC 31.2, AUC/MIC 172;
+  legacy re-evaluated A ×73.9, 550.6 mg QD, AUC/MIC 87.3; requirement map
+  shows ×33 already attains AUC≥80 at 993 mg.
+
 preferred-citation:
   type: article
-  title: "Oral Tobramycin: From BCS III to a Viable Oral Formulation — a PK-Sim modeling and multi-objective optimization study"
+  title: "Oral Tobramycin: From BCS III to a Viable Oral Formulation — A Bibliographic Study with Physiologically Based Pharmacokinetic Modeling in PK-Sim and Multi-Objective Formulation Optimization"
   authors:
-    - name: "Ben Taieb, Khaled"
+    - family-names: "Ben Taieb"
+      given-names: "Khaled"
+      affiliation: "Independent Research Program — Computational Pharmaceutics"
+      orcid: "https://orcid.org/0009-0000-0000-0000"
   year: 2026
+  month: 9
   journal: "PhD thesis"
+  publisher:
+    name: "Independent Research Program"
+  url: "https://github.com/btkhaled/oral-tobramycin-pbpk/blob/main/06_MANUSCRIPT/main.pdf"
+  doi: "10.5281/zenodo.0000000"
+  notes: "185 pp, 06_MANUSCRIPT/main.pdf — 10 chapters (ch00 synopsis → ch09 conclusion) + Appendices A–R, 46 figures, 7 tables, 11 code listings. See also BIBLIOGRAPHY_SUMMARY.md, COMPOUND_SUMMARY.md, ENGINE_SUMMARY.md, PKSIM_SUMMARY.md, and 04_RESULTS/MANIFEST.csv (90 artifacts)."
+
+references:
+  - type: software
+    title: "Open Systems Pharmacology Suite — PK-Sim"
+    authors:
+      - name: "Open Systems Pharmacology Community"
+    url: "https://www.open-systems-pharmacology.org"
+    license: GPL-2.0
+    notes: "External dependency, not redistributed — see 03_PKSIM/env/README.md"
+
+  - type: article
+    title: "Self-emulsifying drug delivery systems: A versatile approach to enhance the oral delivery of BCS class III drug via hydrophobic ion pairing"
+    authors:
+      - family-names: "Asad"
+        given-names: "Muhammad"
+    journal: "PLoS ONE"
+    year: 2023
+    volume: 18
+    issue: 6
+    doi: "10.1371/journal.pone.0286668"
+    notes: "Key paper — HIP 1500×, BCS III, docusate 1:5"
+
+contact:
+  - family-names: "Ben Taieb"
+    given-names: "Khaled"
+    email: "khaled.bentaieb@example.com"

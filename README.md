@@ -223,17 +223,34 @@ Conventions: `F24` = 24-h window (calibration), `F96` = 96-h window (extent, fli
 
 ## Citation
 
+If you use this repository, please cite both the software and the thesis — GitHub's *Cite this repository* button exports `CITATION.cff` as BibTeX/RIS.
+
 ```bibtex
-@phdthesis{bentaieb2026oral,
-  title  = {Oral Tobramycin: From BCS III to a Viable Oral Formulation},
+@software{bentaieb2026oral-software,
+  title        = {Oral Tobramycin: From BCS III to a Viable Oral Formulation},
+  author       = {Ben Taieb, Khaled},
+  year         = {2026},
+  month        = {9},
+  version      = {v1.2.0},
+  publisher    = {Independent Research Program — Computational Pharmaceutics},
+  url          = {https://github.com/btkhaled/oral-tobramycin-pbpk},
+  doi          = {10.5281/zenodo.0000000},
+  note         = {PBPK modeling in PK-Sim (OSP) + NSGA-II formulation optimization, 04_RESULTS/MANIFEST.csv 90 artifacts, 06_MANUSCRIPT/main.pdf 185 pp}
+}
+
+@phdthesis{bentaieb2026oral-thesis,
+  title  = {Oral Tobramycin: From BCS III to a Viable Oral Formulation — A Bibliographic Study with Physiologically Based Pharmacokinetic Modeling in PK-Sim and Multi-Objective Formulation Optimization},
   author = {Ben Taieb, Khaled},
   year   = {2026},
-  school = {Independent research program},
-  note   = {A bibliographic study with PBPK modeling in PK-Sim and multi-objective optimization, 185 pp, oral-tobramycin-pbpk v1.2}
+  month  = {9},
+  school = {Independent Research Program — Computational Pharmaceutics},
+  url    = {https://github.com/btkhaled/oral-tobramycin-pbpk/blob/main/06_MANUSCRIPT/main.pdf},
+  doi    = {10.5281/zenodo.0000000},
+  note   = {185 pp, 10 chapters (ch00 synopsis → ch09 conclusion) + Appendices A–R, 46 figures, 7 tables, 11 code listings. See also BIBLIOGRAPHY_SUMMARY.md, COMPOUND_SUMMARY.md, ENGINE_SUMMARY.md, PKSIM_SUMMARY.md}
 }
 ```
 
-See `CITATION.cff` (Ben Taieb, Khaled — Independent research program — MIT, CC BY-NC-ND 4.0).
+See [`CITATION.cff`](CITATION.cff) (Khaled Ben Taieb — Independent Research Program — MIT for code, CC BY-NC-ND 4.0 for data/manuscript — 21 keywords, abstract, `preferred-citation`, `references` to PK-Sim and Asad et al. 2023). Replace `orcid`/`email`/`doi` TODOs with your own before archiving on Zenodo.
 
 ---
 
