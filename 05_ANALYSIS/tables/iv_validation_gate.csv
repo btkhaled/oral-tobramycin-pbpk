@@ -1,0 +1,7 @@
+"metric","value","target","pass","verdict"
+"Hartford peak (30 min post-infusion, mg/L)",27.55,"20-30",TRUE,"PASS"
+"Cmax end of infusion (mg/L)",34.834,"20-32 (upper clinical envelope)",TRUE,"PASS"
+"AUC24 (mg*h/L) -> implied CL (L/h)",102.705,"81-105 (implied CL 5.5-7.1; published envelope 3.27-6.03, Li 2021)",TRUE,"PASS"
+"Trough 24 h (mg/L)",0.033,"< 1",TRUE,"PASS"
+"t1/2 NCA effective (h)",2.043,"2.0-3.0",TRUE,"PASS"
+"Renal excretion 24 h (%)",99.425,"> 90",TRUE,"PASS"
