@@ -1,0 +1,9 @@
+source,population,n,compartment_model,CL_L_h,V1_L,V2_L,Q_L_h,t1_2_h,Vd_ss_L_kg,method,notes
+Li et al. 2021 (JAC),CF patients (adults),140,2-compartment,3.27 (range 2.1-4.5),21.3,16.3,2.4,4.5-6.0,0.30,PopPK NONMEM,ICU patients; CLCR covariate on CL
+Li et al. 2021 (JAC),Normal adults,reference,2-compartment,6.03,15.1,NA,NA,2.5,0.26,PopPK NONMEM,reference for comparison
+Hennig et al.,CF children (0.5-17.8 yr),35,2-compartment,6.37/70kg,18.7/70kg,NA,NA,2.0-3.0,0.267,PopPK NONMEM,once daily 10 mg/kg/day
+Massie et al.,CF children (9mo-20yr),44,1-compartment,7.21/70kg,NA,NA,NA,2.1,0.267,Standard PK,12 mg/kg/day EID
+Touw et al.,CF children (5-15yr),85,2-compartment,NA,NA,NA,NA,NA,0.354-0.401,PopPK,once vs thrice daily
+Conil et al.,ICU patients,reference,2-compartment,3.83,25.5,NA,NA,NA,NA,PopPK,critically ill
+Rosenon-Larsen et al.,CF children,reference,2-compartment,NA,NA,NA,NA,NA,NA,GastroPlus PBPK,pulmonary absorption model
+Ferreira et al. 2021 (Life),Hospital inpatients,82,PBPK model,NA,NA,NA,NA,NA,NA,GastroPlus 9.5,IV infusion 30min

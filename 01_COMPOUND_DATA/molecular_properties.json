@@ -1,0 +1,39 @@
+{
+  "compound_name": "Tobramycin",
+  "synonyms": ["Obramycin", "Tobradex", "Nebcin", "TOBI"],
+  "cas_number": "32986-56-4",
+  "molecular_formula": "C18H37N5O9",
+  "molecular_weight": 467.515,
+  "smiles": "NC[C@H]1O[C@H](O[C@@H]2OC(CO)[C@@H](O)[C@H](O)[C@@H]2O)[C@H](N)[C@@H](O)[C@@H]1O",
+  "inchi": "InChI=1S/C18H37N5O9/c1-26-14-7(22)3-24(4-8(14)23)16-10(25)12(20)18(28-16)6-9(21)13(11(5-27)29-17(6)19)30-15(9)27/h7-18,23-25H,3-6,19-22H2,1-2H3/p+5/t7-,8-,9-,10-,11-,12+,13-,14-,15-,16-,17-,18-/m1/s1",
+  "iupac_name": "(1R,2R,3S,4R,6S)-4,6-diamino-3-[(2S,3R,4S,5S,6R)-4-amino-3,5-dihydroxy-6-methyloxan-2-yl]oxy-2-hydroxycyclohexyl 2-deoxy-4-O-methyl-3-C-methyl-3-L-arabinopyranoside",
+  "functional_groups": [
+    "hydroxyl",
+    "primary amine",
+    "secondary amine",
+    "ether",
+    "glycosidic bond"
+  ],
+  "stereochemistry": {
+    "chiral_centers": 10,
+    "stereospecific": true
+  },
+  "classification": {
+    "therapeutic_class": "Aminoglycoside antibiotic",
+    "chemical_class": "Aminoglycoside",
+    "bcs_class": "III",
+    "who_essential_medicine": true,
+    "atc_code": "J01GB04"
+  },
+  "targets": {
+    "primary": "30S ribosomal subunit",
+    "mechanism": "Inhibition of protein synthesis",
+    "bacteria": ["Pseudomonas aeruginosa", "Escherichia coli", "Klebsiella", "Proteus", "Enterobacter", "Serratia"]
+  },
+  "sources": {
+    "pubchem_cid": 36294,
+    "chebi_id": "CHEBI:28950",
+    "drugbank_id": "DB00710",
+    "unii": "VZ8RRV54WK"
+  }
+}

@@ -1,0 +1,10 @@
+assay_type,cell_line,parameter,value,units,conditions,reference,notes
+Caco-2,Papp_AtoB,low,<1e-6,cm/s,pH 7.4 literature estimate,Asad et al. 2023,BCS Class III confirmation
+Caco-2,Papp_BtoA,NA,NA,NA,efflux ratio not determined,,polycationic substrate
+MDCK-MDR1,perm_coefficient,low,NA,NA,estimated from BCS class,literature,
+PAMPA,perm_coefficient,low,NA,NA,pH 6.5,literature,
+Ussing_chamber,perm_coefficient,low,NA,NA,jejunum tissue,literature,
+oral_bioavailability,human,absolute,1-2,%,IV reference,estimated from literature,
+efflux_transporters,P-gp,substrate,conflicting,NA,in vitro,unknown,Tobramycin minimal P-gp interaction
+efflux_transporters,BCRP,substrate,unknown,NA,in vitro,unknown,
+influx_transporters,OCT2,substrate,possibly,NA,renal tubular,known,renal reabsorption

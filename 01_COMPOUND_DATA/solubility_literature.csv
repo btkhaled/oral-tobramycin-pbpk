@@ -1,0 +1,17 @@
+solvent,form,solubility_mg_mL,concentration_mM,temperature_C,method,reference,notes
+Water,Tobramycin,>=100,>=213.9,RT,shake-flask,BenchChem 2026,
+Water,Tobramycin,94,201.1,25,shake-flask,Chen et al. 2009,
+Water,Tobramycin,50,106.9,RT,shake-flask,Sigma-Aldrich,
+Water,Tobramycin sulfate,100,213.9,RT,shake-flask,USP monograph,
+Water,Tobramycin sulfate,50,106.9,RT,shake-flask,Various,
+PBS pH 7.2,Tobramycin,10,21.4,RT,shake-flask,PBPK study,
+DMSO,Tobramycin,2,4.28,RT,ultrasound-assisted,Chen et al. 2009,conflict — immaterial for BCS III (solubility never limiting; 94-100 mg/mL ≫ 1.6 mg/mL criterion; see 06_MANUSCRIPT/appendices/appH_physchem.tex)
+DMSO,Tobramycin,insoluble,NA,RT,shake-flask,Multiple,conflict — immaterial for BCS III (see above; highly soluble across pH 1.2-6.8 per bcs_classification.md)
+Ethanol,Tobramycin,insoluble,NA,RT,shake-flask,USP,
+Ethanol,Tobramycin sulfate,slightly soluble,NA,RT,shake-flask,USP,
+Methanol,Tobramycin sulfate,slightly soluble,NA,RT,shake-flask,USP,
+Acetone,Tobramycin sulfate,slightly soluble,NA,RT,shake-flask,USP,
+FaSSIF,Tobramycin,dissolved,NA,37,shake-flask,predicted based on solubility,
+FeSSIF,Tobramycin,dissolved,NA,37,shake-flask,predicted based on solubility,
+SGF pH 1.2,Tobramycin,high,NA,37,predicted,BCS classification,highly soluble across pH range
+SIF pH 6.8,Tobramycin,high,NA,37,predicted,BCS classification,highly soluble across pH range

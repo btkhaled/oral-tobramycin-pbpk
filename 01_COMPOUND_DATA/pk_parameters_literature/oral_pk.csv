@@ -1,0 +1,12 @@
+source,population,dose,route,F_oral_%,Cmax_mg_L,Tmax_h,AUC_mg_h_L,t1_2_h,notes
+Estimated from literature,healthy adults,variable,oral solution,<5,very low,variable,very low,2-3,poor oral bioavailability due to low permeability
+Asad et al. 2023,in vitro model,variable,SEDDS+HIP,NR,NR,NR,NR,NR,improved lipophilicity but no in vivo PK reported
+Blanco-Cabra et al. 2022,in vitro biofilm,variable,NP complex,NR,NR,NR,NR,NR,diffusion into biofilm enhanced
+Khaled et al. 2026,in vitro,variable,NCA ion pairs,NR,NR,NR,NR,NR,enhanced lipophilicity and antimicrobial activity
+Hill et al. 2019,in vitro,variable,PLGA NPs,NR,NR,NR,NR,NR,MIC maintained at 1.25 ug/mL
+,,
+SUMMARY,,
+Oral bioavailability,1-2% estimated from IV reference,
+Reason,low permeability - polycationic aminoglycoside,
+Clinical use,currently IV-only (no approved oral formulation),
+Therapeutic alternatives,inhalation (TOBI 300mg BID), IV (5-7 mg/kg),
