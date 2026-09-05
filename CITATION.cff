@@ -16,17 +16,10 @@ authors:
   - family-names: "Ben Taieb"
     given-names: "Khaled"
     affiliation: "Independent Research Program — Computational Pharmaceutics"
-    orcid: "https://orcid.org/0009-0000-0000-0000"  # TODO: replace with your ORCID
-    email: "khaled.bentaieb@example.com"            # TODO: replace with your contact
-    # role: Conceptualization, Methodology, Software, Validation, Writing
-
-identifiers:
-  - type: doi
-    value: 10.5281/zenodo.0000000
-    description: "Concept DOI for oral-tobramycin-pbpk (replace after Zenodo archiving)"
+    email: "bt.khaled@gmail.com"
+    # orcid: "https://orcid.org/0009-0000-0000-0000"  # TODO: add your ORCID if available
 
 repository-code: "https://github.com/btkhaled/oral-tobramycin-pbpk"
-repository-artifact: "https://github.com/btkhaled/oral-tobramycin-pbpk/releases/tag/v1.2.0"
 url: "https://github.com/btkhaled/oral-tobramycin-pbpk#readme"
 
 license: MIT
@@ -89,7 +82,6 @@ preferred-citation:
   publisher:
     name: "Independent Research Program"
   url: "https://github.com/btkhaled/oral-tobramycin-pbpk/blob/main/06_MANUSCRIPT/main.pdf"
-  doi: "10.5281/zenodo.0000000"
   notes: "185 pp, 06_MANUSCRIPT/main.pdf — 10 chapters (ch00 synopsis → ch09 conclusion) + Appendices A–R, 46 figures, 7 tables, 11 code listings. See also BIBLIOGRAPHY_SUMMARY.md, COMPOUND_SUMMARY.md, ENGINE_SUMMARY.md, PKSIM_SUMMARY.md, and 04_RESULTS/MANIFEST.csv (90 artifacts)."
 
 references:
@@ -116,4 +108,4 @@ references:
 contact:
   - family-names: "Ben Taieb"
     given-names: "Khaled"
-    email: "khaled.bentaieb@example.com"
+    email: "bt.khaled@gmail.com"
