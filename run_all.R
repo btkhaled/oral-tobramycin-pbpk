@@ -10,7 +10,14 @@
 # NOTE:   on this macOS setup only the CRAN R build works (Homebrew R's rSharp
 #         crashes in sexp_to_parameters); the CRAN Rscript path is preferred.
 # ============================================================================
-PROJ <- (function(){d<-getwd();for(i in 1:6){if(file.exists(file.path(d,"pksim/env/pk_sim_run.R")))return(normalizePath(d));d<-dirname(d)};stop("repo root not found")})()
+PROJ <- (function(){
+  d<-getwd()
+  for(i in 1:6){
+    if(file.exists(file.path(d,"03_PKSIM/env/pk_sim_run.R")) || file.exists(file.path(d,"pksim/env/pk_sim_run.R"))) return(normalizePath(d))
+    d<-dirname(d)
+  }
+  stop("repo root not found (expected 03_PKSIM/env/pk_sim_run.R)")
+})()
 setwd(PROJ)
 args <- commandArgs(TRUE)
 skip_ga    <- "--skip-ga" %in% args
@@ -25,22 +32,22 @@ cat(sprintf("root: %s\nRscript: %s\nGA: %s\n\n", PROJ, RS,
             ifelse(skip_ga, "--skip-ga (reuse committed results/ga/)", "NSGA-II in the PK-Sim loop (~1-2 h)")))
 
 steps <- c(
-  "pksim/env/check_env.R",
-  "pksim/studies/S00_validation_gate.R",
-  "pksim/studies/S01_iv_scenarios.R",
-  "pksim/studies/S02_oral_calibration.R",
-  "pksim/studies/S03_population.R",
-  "pksim/ga/run_ga.R",
-  "pksim/studies/S04_sensitivity.R",
-  "pksim/studies/S05_food_effect.R",
-  "pksim/studies/S06_fractionation_pta.R",
-  "pksim/studies/S07_winner_characterization.R",
-  "pksim/studies/S08_requirement_map.R",
-  "pksim/studies/S09_multiplier_uncertainty.R",
-  "pksim/studies/molecule_battery.R A pksim/studies/molecules/A_legacy_winner.csv",
-  "pksim/studies/molecule_battery.R B pksim/studies/molecules/B_pksim_winner.csv"
+  "03_PKSIM/env/check_env.R",
+  "03_PKSIM/studies/S00_validation_gate.R",
+  "03_PKSIM/studies/S01_iv_scenarios.R",
+  "03_PKSIM/studies/S02_oral_calibration.R",
+  "03_PKSIM/studies/S03_population.R",
+  "03_PKSIM/ga/run_ga.R",
+  "03_PKSIM/studies/S04_sensitivity.R",
+  "03_PKSIM/studies/S05_food_effect.R",
+  "03_PKSIM/studies/S06_fractionation_pta.R",
+  "03_PKSIM/studies/S07_winner_characterization.R",
+  "03_PKSIM/studies/S08_requirement_map.R",
+  "03_PKSIM/studies/S09_multiplier_uncertainty.R",
+  "03_PKSIM/studies/molecule_battery.R A 03_PKSIM/studies/molecules/A_legacy_winner.csv",
+  "03_PKSIM/studies/molecule_battery.R B 03_PKSIM/studies/molecules/B_pksim_winner.csv"
 )
-if (skip_ga) steps <- steps[steps != "pksim/ga/run_ga.R"]
+if (skip_ga) steps <- steps[steps != "03_PKSIM/ga/run_ga.R"]
 
 status <- data.frame(step = steps, exit = NA_integer_, seconds = NA_real_)
 for (i in seq_along(steps)) {
@@ -59,8 +66,8 @@ for (i in seq_along(steps)) {
 }
 
 # --- manifest: every artifact with size + md5 ------------------------------
-cat("\n=== writing results/MANIFEST.csv ===\n")
-artifacts <- list.files(c("results", "pksim/model", "data/snapshots"),
+cat("\n=== writing 04_RESULTS/MANIFEST.csv ===\n")
+artifacts <- list.files(c("04_RESULTS", "03_PKSIM/model", "01_COMPOUND_DATA/snapshots"),
                         recursive = TRUE, full.names = TRUE)
 artifacts <- artifacts[!dir.exists(artifacts)]
 manifest <- data.frame(
@@ -70,11 +77,13 @@ manifest <- data.frame(
   md5    = tools::md5sum(artifacts),
   row.names = NULL
 )
-write.csv(manifest, "results/MANIFEST.csv", row.names = FALSE)
+write.csv(manifest, "04_RESULTS/MANIFEST.csv", row.names = FALSE)
+# Also keep legacy path via symlink for compatibility if it exists
+if (dir.exists("results")) write.csv(manifest, "results/MANIFEST.csv", row.names = FALSE)
 cat("manifest:", nrow(manifest), "artifacts\n")
 
 print(status)
 fail <- status$step[which(status$exit != 0)]
 if (length(fail)) { cat("\nFAILED STEPS:", paste(fail, collapse = ", "), "\n")
   quit(save = "no", status = 1) }
-cat("\n=== pipeline complete — see results/ and results/MANIFEST.csv ===\n")
+cat("\n=== pipeline complete — see 04_RESULTS/ and 04_RESULTS/MANIFEST.csv ===\n")

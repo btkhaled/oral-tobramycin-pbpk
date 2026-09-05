@@ -49,3 +49,13 @@ tmp/
 # --- legacy large zips (do not commit) ---
 *.zip
 __MACOSX/
+
+# --- local symlinks (numbered folders are canon, symlinks are for local convenience only) ---
+/data
+/docs
+/pksim
+/results
+/manuscript
+/slides
+/archive
+/audit
