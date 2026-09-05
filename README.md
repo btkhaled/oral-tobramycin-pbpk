@@ -114,18 +114,23 @@ python3 03_PKSIM/env/patch_pksimdb.py   # 91 views → tables, ~2s, idempotent
 
 ## Usage
 
-### One-command full reproduction (via `run_all.R` at repository root)
+> **⚠️ `run_all.R` at the repository root is NOT FINISHED — please run each dossier one by one (see below).**
+
+### One-command full reproduction (via `run_all.R` at repository root) — ⚠️ INCOMPLETE
 
 ```bash
 export DOTNET_ROOT="$HOME/.dotnet"
 RS=/Library/Frameworks/R.framework/Resources/bin/Rscript  # CRAN R — NOT Homebrew
 
-$RS run_all.R                     # full 14 steps incl. GA (~1–2 h, pop100×gen100)
-$RS run_all.R --skip-ga           # reuse committed 04_RESULTS/ga/ (~2 min, same downstream)
-$RS run_all.R --keep-going        # don't abort on first failing step
+# ⚠️  NOT FINISHED — use the modular pipelines below instead
+$RS run_all.R                     # full 14 steps incl. GA (~1–2 h, pop100×gen100) — INCOMPLETE
+$RS run_all.R --skip-ga           # reuse committed 04_RESULTS/ga/ (~2 min) — INCOMPLETE
+$RS run_all.R --keep-going        # don't abort on first failing step — INCOMPLETE
 ```
 
-`run_all.R` runs `03_PKSIM/env/check_env.R` → `S00` gate (6/6) → `S01`/`S02`/`S03` → `GA` → `S04`–`S09` → `molecule_battery.R A/B` → `04_RESULTS/MANIFEST.csv`.
+> **Recommended:** run each dossier one by one — `02_ENGINE` → `03_PKSIM` → `05_ANALYSIS` → `06_MANUSCRIPT` → `07_SLIDES`.
+
+`run_all.R` (when finished) will run `03_PKSIM/env/check_env.R` → `S00` gate (6/6) → `S01`/`S02`/`S03` → `GA` → `S04`–`S09` → `molecule_battery.R A/B` → `04_RESULTS/MANIFEST.csv` — **for now, use the modular pipelines**.
 
 ### Modular pipelines
 

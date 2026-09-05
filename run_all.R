@@ -1,6 +1,20 @@
 # ============================================================================
-# run_all.R — Master pipeline (hardened, Phase 0)
-# Stages: env check -> DB patch -> S00 gate -> S01..S03 -> GA -> S04..S09
+# run_all.R — Master pipeline (hardened, Phase 0) — ⚠️  NOT FINISHED
+# ----------------------------------------------------------------------------
+# ⚠️  ANNOUNCEMENT — 2026-09-05
+# This root `run_all.R` is NOT FINISHED and is NOT the recommended way to
+# reproduce the build finale. It will remain incomplete until the modular
+# pipelines are fully validated.
+#
+# 👉  Please run each pipeline dossier by dossier, one by one:
+#     - 02_ENGINE :  Rscript 02_ENGINE/run_engine.R            (11 steps, ~6 min)
+#     - 03_PKSIM  :  Rscript 03_PKSIM/run_pksim.R               (14 steps, ~1-2 h)
+#     - 05_ANALYSIS: Rscript 05_ANALYSIS/run_all.R             (13 steps, ~1 min)
+#     - 06_MANUSCRIPT: make -C 06_MANUSCRIPT                    (185 pp)
+#     - 07_SLIDES:    cd 07_SLIDES && node make_deck.mjs        (28 slides)
+# See README.md “Quickstart — 3 blocs” and each folder’s README.md / *_SUMMARY.md.
+#
+# Stages (when finished): env check -> DB patch -> S00 gate -> S01..S03 -> GA -> S04..S09
 #         -> molecule batteries -> manifest. The NSGA-II GA runs in the
 #         PK-Sim loop by default (pop 100 x gen 100, ~1-2 h).
 # Usage:  Rscript run_all.R [--skip-ga] [--keep-going]
@@ -27,7 +41,17 @@ keep_going <- "--keep-going" %in% args
 RS <- "/Library/Frameworks/R.framework/Resources/bin/Rscript"
 if (!file.exists(RS)) RS <- file.path(R.home("bin"), "Rscript")
 
-cat("=== oral-tobramycin-pbpk — master pipeline ===\n")
+cat("========================================================================\n")
+cat("⚠️  WARNING — run_all.R at repository root is NOT FINISHED\n")
+cat("========================================================================\n")
+cat("This root pipeline is a placeholder. Please run each dossier one by one:\n")
+cat("  Rscript 02_ENGINE/run_engine.R     (11 steps, ~6 min, hypothesis generator)\n")
+cat("  Rscript 03_PKSIM/run_pksim.R       (14 steps, ~1-2 h, gate 6/6, 10 checkpoints)\n")
+cat("  Rscript 05_ANALYSIS/run_all.R     (13 steps, ~1 min, 126 artifacts)\n")
+cat("  make -C 06_MANUSCRIPT              (185 pp)\n")
+cat("See README.md and 02_ENGINE/README.md, 03_PKSIM/PKSIM_SUMMARY.md, 05_ANALYSIS/README.md\n")
+cat("========================================================================\n\n")
+cat("=== oral-tobramycin-pbpk — master pipeline (INCOMPLETE) ===\n")
 cat(sprintf("root: %s\nRscript: %s\nGA: %s\n\n", PROJ, RS,
             ifelse(skip_ga, "--skip-ga (reuse committed results/ga/)", "NSGA-II in the PK-Sim loop (~1-2 h)")))
 
